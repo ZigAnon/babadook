@@ -17,6 +17,8 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('------\nPress [Ctrl+C] to view servers\n')
+    # to_leave = client.get_server(id)
+    # await client.leave_server(to_leave)
 
 client.run(TOKEN)
 
