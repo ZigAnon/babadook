@@ -1,5 +1,5 @@
+#!/usr/local/bin/python3.6
 # Author: TehZig#1949
-# Work with Python 3.6
 import discord
 import asyncio
 import os
@@ -10,7 +10,7 @@ rmRole = '506261279921668136'  # I'm New Here Role
 addRole = '506264946418384907'  # Not a Lurker Role
 
 curDir = os.path.dirname(os.path.realpath(__file__))
-config = open(curDir + "/config")
+config = open(curDir + "/include/config")
 lines = config.readlines()
 TOKEN = lines[0].rstrip()
 zigID = lines[1].rstrip()
