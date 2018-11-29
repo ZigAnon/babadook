@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # Author: TehZig#1949
 import discord
+import time
 import os
 
 curDir = os.path.dirname(os.path.realpath(__file__))
@@ -20,9 +21,10 @@ async def on_ready():
     # to_leave = client.get_server(id)
     # await client.leave_server(to_leave)
 
-client.run(TOKEN)
+    servers = list(client.servers)
+    print("\nConnected on " + str(len(client.servers)) + " servers:")
+    for x in range(len(servers)):
+        print('  ' + servers[x-1].name + '\n    id: ' + servers[x-1].id)
+    client.close()
 
-servers = list(client.servers)
-print("\nConnected on " + str(len(client.servers)) + " servers:")
-for x in range(len(servers)):
-    print('  ' + servers[x-1].name + '\n    id: ' + servers[x-1].id)
+client.run(TOKEN)
