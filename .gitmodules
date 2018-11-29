@@ -1,0 +1,3 @@
+[submodule "include/github"]
+	path = include/github
+	url = https://github.com/nodejs/github-bot
