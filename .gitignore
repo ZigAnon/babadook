@@ -2,3 +2,4 @@
 logs/*
 test.py
 include/config
+include/github/*
