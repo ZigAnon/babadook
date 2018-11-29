@@ -68,7 +68,6 @@ async def main_loop():
                 bumChan = cStrip[0].rstrip()
                 c.close()
                 channel = discord.Object(id=bumChan)
-                admins = 'Frank'
 
                 # Check Time
                 if lastBump < curTime:
@@ -77,7 +76,7 @@ async def main_loop():
 
                     # Ping all Admins
                     if lastBump < curTime:
-                        await bot.send_message(channel, '<@!' + admins + '>: ' + '\n Please \'!disboard bump\' again!')
+                        await bot.send_message(channel, '@here, helps us grow: ' + '\n Please \`!disboard bump\` again!')
 
                     # Ping member only
                     else:
@@ -86,7 +85,7 @@ async def main_loop():
                         bumMemb = mStrip[0].rstrip()
                         m.close()
                         pMemb = '<@' + bumMemb + '>'
-                        await bot.send_message(channel, '%s Friendly reminder to \'!disboard bump\' again!' % pMemb)
+                        await bot.send_message(channel, '%s Friendly reminder to \`!disboard bump\` again!' % pMemb)
 
 
             # Failed to open file, skip it all
@@ -103,7 +102,7 @@ async def main_loop():
 
 @bot.event
 async def on_message(message):
-    if message.content.startswith('!disboard bump') and ((message.server.id == testServ) or (message.server.id == mainServ)):
+    if message.content.startswith('!disboard bump'):
         # Needed vars
         bumServ = message.server.id
         bumChan = message.channel.id
