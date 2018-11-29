@@ -1,3 +1,15 @@
+###############
+# Config Data #
+###############
+Token lines[4]:
 <Bot Token>
+User ID lines[6]:
 <User ID>
+Whitelist:
+<Server IDs>
+Exempt:
+<Server IDs>
+Test:
+<Server IDs>
+Unique:
 <Additional information not to be synced>
