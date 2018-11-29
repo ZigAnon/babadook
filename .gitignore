@@ -1,4 +1,5 @@
 # ignore database folder
+*.swp
 logs/*
 test.py
 include/config
