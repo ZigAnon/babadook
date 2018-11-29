@@ -1,4 +1,4 @@
-#!/usr/bin/env /bin/bash
+#!/usr/bin/env bash
 
 # Replace with your version
 pythonVersion='python3.6'
@@ -6,6 +6,7 @@ pythonVersion='python3.6'
 PWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PY3=$(which $pythonVersion)
 PID=`cat $PWD/../logs/main.pid`
+PURGE=`find $PWD/../logs/db/ -mtime +10 -type f ! -name README -delete`
 
 echo "Checking"
 echo $(date)
