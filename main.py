@@ -26,6 +26,10 @@ testServ = lines[3].rstrip()
 oldServ = lines[4].rstrip()
 mainServ = lines[5].rstrip()
 
+# Special Servers
+serv1 = 0 # open(list)
+serv2 = 0 # open(list)
+
 zdesc = '''Thanks for using ZigBot!'''
 bot = commands.Bot(command_prefix='zb!', description=zdesc)
 
