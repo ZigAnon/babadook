@@ -259,7 +259,7 @@ async def on_message(message):
         # If not, it lets you know it'll remind you later
         # It always updates member and channel
         if curTime < lastBump:
-            diff = int(int((lastBump - curTime).seconds)/60)
+            diff = int(int((lastBump - curTime).seconds)/60) + 1
             await bot.send_message(channel, 'I\'ll remind you to bump here in ' + str(diff) + ' minutes.')
         else:
             await bot.send_message(channel, 'I\'ll remind you in 120 mins to bump disboard again.')
