@@ -41,7 +41,6 @@ bot = commands.Bot(command_prefix='.', description=zdesc)
 async def main_loop():
     await bot.wait_until_ready()
 
-    counter = 0
     channel = discord.Object(id=testChan)
     servers = list(bot.servers)
     pinged = [0] * len(servers)
@@ -66,43 +65,52 @@ async def main_loop():
                 found = 0
 
             # If time file exists
-            if found and pinged[x-1] == 0:
-                lastBump = datetime.strptime(oldTime, dateFormat)
-                c = open(filePath + '.channel')
-                cStrip = c.readlines()
-                bumChan = cStrip[0].rstrip()
-                c.close()
-                channel = discord.Object(id=bumChan)
+            if found:
+                if pinged[x-1] == 0:
+                    lastBump = datetime.strptime(oldTime, dateFormat)
+                    c = open(filePath + '.channel')
+                    cStrip = c.readlines()
+                    bumChan = cStrip[0].rstrip()
+                    c.close()
+                    channel = discord.Object(id=bumChan)
 
-                # Check Time
-                if lastBump < curTime:
-                    pinged[x-1] = 1
-                    lastBump += timedelta(hours=1)
-
-                    # Ping all Admins
+                    # Check Time
                     if lastBump < curTime:
-                        await bot.send_message(channel, '@here, helps us grow: ' + '\n Please \`!disboard bump\` again!')
+                        pinged[x-1] = 1
+                        lastBump += timedelta(hours=1)
 
-                    # Ping member only
-                    else:
-                        m = open(filePath + '.member')
-                        mStrip = m.readlines()
-                        bumMemb = mStrip[0].rstrip()
-                        m.close()
-                        pMemb = '<@' + bumMemb + '>'
-                        await bot.send_message(channel, '%s Friendly reminder to \`!disboard bump\` again!' % pMemb)
+                        # Ping all Admins
+                        if lastBump < curTime:
+                            await bot.send_message(channel, '@here, helps us grow: ' + '\n Please \`!disboard bump\` again!')
 
+                        # Ping member only
+                        else:
+                            m = open(filePath + '.member')
+                            mStrip = m.readlines()
+                            bumMemb = mStrip[0].rstrip()
+                            m.close()
+                            pMemb = '<@' + bumMemb + '>'
+                            await bot.send_message(channel, '%s Friendly reminder to \`!disboard bump\` again!' % pMemb)
 
-            # Failed to open file, skip it all
-            # await bot.send_message(channel, str(servers[x-1]) + ' doesn\'t have a ' + str(servers[x-1].id) + '.time file.')
+                # Has it been an hour since last ping?
+                else:
+                    try:
+                        l = open(filePath + '.lping')
+                        lStrip = l.readlines()
+                        lPing = lStrip[0].rstrip()
+                        l.close()
+                        lastPing = datetime.strptime(lPing, dateFormat) + timedelta(hours=1)
+                    except:
+                        l = open(filePath + '.lping', 'w+')
+                        l.write("%s\r\n" % (curTime))
+                        l.close()
+                        lastPing = curTime + timedelta(hours=1)
 
-        # Resets alert
-        counter += 1
-        if counter > 60:
-            for i in range(len(pinged)):
-                pinged[i-1] = 0
-                counter = 1
+                    # Resets ping timer
+                    if lastPing < curTime:
+                        pinged[x-1] = 0
 
+        # checks again in one min
         await asyncio.sleep(60) # task runs every 60 seconds
 
 # Need to add scanner on server join to issue punishments
