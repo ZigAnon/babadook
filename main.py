@@ -259,12 +259,19 @@ async def on_message(message):
             t.write("%s\r\n" % (str(newTime)))
             t.close()
 
-    if message.content.startswith('.iam') and discord.utils.get(message.author.roles, id = addRole) is None and (message.server.id == oldServ):
-        rmrole = discord.utils.get(message.server.roles, id = rmRole)
-        addrole = discord.utils.get(message.server.roles, id = addRole)
-        await bot.add_roles(message.author, addrole)
-        await asyncio.sleep(1)
-        await bot.remove_roles(message.author, rmrole)
+    if message.content.startswith('.iam'):
+        if discord.utils.get(message.author.roles, id = addRole) is None and (message.server.id == oldServ):
+            rmrole = discord.utils.get(message.server.roles, id = rmRole)
+            addrole = discord.utils.get(message.server.roles, id = addRole)
+            await bot.add_roles(message.author, addrole)
+            await asyncio.sleep(1)
+            await bot.remove_roles(message.author, rmrole)
+        if (message.server.id == '509242768401629204') and discord.utils.get(message.author.roles, id = '513156267024449556') is None and discord.utils.get(message.author.roles, id = '517140313408536576') is None and discord.utils.get(message.author.roles, id = '509865272283496449') is None and discord.utils.get(message.author.roles, id = '509865275705917440') is None:
+            Snow1 = discord.utils.get(message.server.roles, id = '513156267024449556')
+            Snow2 = discord.utils.get(message.server.roles, id = '517850437626363925')
+            await bot.add_roles(message.author, Snow1)
+            await asyncio.sleep(1)
+            await bot.remove_roles(message.author, Snow2)
     else:
         # https://discordpy.readthedocs.io/en/latest/faq.html#why-does-on-message-make-my-commands-stop-working
         await bot.process_commands(message)

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Replace with your version
-pythonVersion='python3.6'
+pythonVersion="python3.6"
 
 PWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PY3=$(which $pythonVersion)
