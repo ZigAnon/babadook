@@ -108,6 +108,7 @@ async def main_loop():
                     # Resets ping timer
                     if lastPing < curTime:
                         pinged[x-1] = 0
+                        os.remove(filePath + '.lping')
 
         # checks again in one min
         await asyncio.sleep(60) # task runs every 60 seconds
