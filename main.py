@@ -25,13 +25,14 @@ testChan = lines[2].rstrip()
 testServ = lines[3].rstrip()
 oldServ = lines[4].rstrip()
 mainServ = lines[5].rstrip()
+config.close()
 
 # Special Servers
 serv1 = 0 # open(list)
 serv2 = 0 # open(list)
 
 zdesc = '''Thanks for using ZigBot!'''
-bot = commands.Bot(command_prefix='zb!', description=zdesc)
+bot = commands.Bot(command_prefix='.', description=zdesc)
 
 ############################
 # Code to be added
@@ -104,6 +105,113 @@ async def main_loop():
 
         await asyncio.sleep(60) # task runs every 60 seconds
 
+# Need to add scanner on server join to issue punishments
+# This will prevent leaving and rejoining to remove punishment
+@bot.command(pass_context = True)
+async def mute(ctx, member: discord.Member):
+    if ctx.message.author.server_permissions.administrator and ctx.message.server.id == '509242768401629204':
+        mute = discord.utils.get(member.server.roles, id = '517140313408536576')
+        Snow1 = discord.utils.get(member.server.roles, id = '513156267024449556')
+        Snow2 = discord.utils.get(member.server.roles, id = '517850437626363925')
+        embed=discord.Embed(title="User Muted!", description="**{0}** was muted by **{1}**!".format(member, ctx.message.author), color=0xff00f6)
+        await bot.say(embed=embed)
+        await bot.add_roles(member, mute)
+        await asyncio.sleep(1)
+        await bot.remove_roles(member, Snow1)
+        await asyncio.sleep(1)
+        await bot.remove_roles(member, Snow2)
+#    else:
+        # embed=discord.Embed(title="Permission Denied.", description="You don't have permission to use this command.", color=0xff00f6)
+        # await bot.say(embed=embed)
+
+@bot.command(pass_context = True)
+async def unmute(ctx, member: discord.Member):
+    if ctx.message.author.server_permissions.administrator and ctx.message.server.id == '509242768401629204':
+        mute = discord.utils.get(member.server.roles, id = '517140313408536576')
+        Snow1 = discord.utils.get(member.server.roles, id = '513156267024449556')
+        Snow2 = discord.utils.get(member.server.roles, id = '517850437626363925')
+        embed=discord.Embed(title="User unmuted.", description="**{0}** follow the rules.".format(member, ctx.message.author), color=0xff00f6)
+        await bot.say(embed=embed)
+        await bot.add_roles(member, Snow1)
+        await asyncio.sleep(1)
+        await bot.remove_roles(member, mute)
+        await asyncio.sleep(1)
+        await bot.remove_roles(member, Snow2)
+#    else:
+        # embed=discord.Embed(title="Permission Denied.", description="You don't have permission to use this command.", color=0xff00f6)
+        # await bot.say(embed=embed)
+
+@bot.command(pass_context = True)
+async def jail(ctx, member: discord.Member):
+    if ctx.message.author.server_permissions.administrator and ctx.message.server.id == '509242768401629204':
+        jail = discord.utils.get(member.server.roles, id = '509865275705917440')
+        Snow1 = discord.utils.get(member.server.roles, id = '513156267024449556')
+        Snow2 = discord.utils.get(member.server.roles, id = '517850437626363925')
+        embed=discord.Embed(title="User Jailed!", description="**{0}** was jailed by **{1}**!".format(member, ctx.message.author), color=0xff00f6)
+        await bot.say(embed=embed)
+        await bot.add_roles(member, jail)
+        await asyncio.sleep(1)
+        await bot.remove_roles(member, Snow1)
+        await asyncio.sleep(1)
+        await bot.remove_roles(member, Snow2)
+#    else:
+        # embed=discord.Embed(title="Permission Denied.", description="You don't have permission to use this command.", color=0xff00f6)
+        # await bot.say(embed=embed)
+
+@bot.command(pass_context = True)
+async def free(ctx, member: discord.Member):
+    if ctx.message.author.server_permissions.administrator and ctx.message.server.id == '509242768401629204':
+        jail = discord.utils.get(member.server.roles, id = '509865275705917440')
+        Snow1 = discord.utils.get(member.server.roles, id = '513156267024449556')
+        Snow2 = discord.utils.get(member.server.roles, id = '517850437626363925')
+        embed=discord.Embed(title="User Freed!", description="**{0}** was freed by **{1}**!".format(member, ctx.message.author), color=0xff00f6)
+        await bot.say(embed=embed)
+        await bot.add_roles(member, Snow1)
+        await asyncio.sleep(1)
+        await bot.remove_roles(member, jail)
+        await asyncio.sleep(1)
+        await bot.remove_roles(member, Snow2)
+#    else:
+        # embed=discord.Embed(title="Permission Denied.", description="You don't have permission to use this command.", color=0xff00f6)
+        # await bot.say(embed=embed)
+
+@bot.command(pass_context = True)
+async def shitpost(ctx, member: discord.Member):
+    if ctx.message.author.server_permissions.administrator and ctx.message.server.id == '509242768401629204':
+        shit = discord.utils.get(member.server.roles, id = '509865272283496449')
+        Snow1 = discord.utils.get(member.server.roles, id = '513156267024449556')
+        Snow2 = discord.utils.get(member.server.roles, id = '517850437626363925')
+        embed=discord.Embed(title="Shitposter!", description="**{0}** was given Shitposter by **{1}**!".format(member, ctx.message.author), color=0xff00f6)
+        channel = discord.Object(id='509243584143425537')
+        msg = '<@' + member.id + '>'
+        await bot.send_message(channel, 'Looks like you pushed it too far ' + msg + '. You live here now. Enjoy!!')
+        await bot.say(embed=embed)
+        await bot.add_roles(member, shit)
+        await asyncio.sleep(1)
+        await bot.remove_roles(member, Snow1)
+        await asyncio.sleep(1)
+        await bot.remove_roles(member, Snow2)
+#    else:
+        # embed=discord.Embed(title="Permission Denied.", description="You don't have permission to use this command.", color=0xff00f6)
+        # await bot.say(embed=embed)
+
+@bot.command(pass_context = True)
+async def cleanpost(ctx, member: discord.Member):
+    if ctx.message.author.server_permissions.administrator and ctx.message.server.id == '509242768401629204':
+        shit = discord.utils.get(member.server.roles, id = '509865272283496449')
+        Snow1 = discord.utils.get(member.server.roles, id = '513156267024449556')
+        Snow2 = discord.utils.get(member.server.roles, id = '517850437626363925')
+        embed=discord.Embed(title="Good Job!", description="**{0}** it seems **{1}** has faith in you.".format(member, ctx.message.author), color=0xff00f6)
+        await bot.say(embed=embed)
+        await bot.add_roles(member, Snow1)
+        await asyncio.sleep(1)
+        await bot.remove_roles(member, shit)
+        await asyncio.sleep(1)
+        await bot.remove_roles(member, Snow2)
+#    else:
+        # embed=discord.Embed(title="Permission Denied.", description="You don't have permission to use this command.", color=0xff00f6)
+        # await bot.say(embed=embed)
+
 @bot.event
 async def on_message(message):
     if message.content.startswith('!disboard bump'):
@@ -151,7 +259,7 @@ async def on_message(message):
             t.write("%s\r\n" % (str(newTime)))
             t.close()
 
-    if message.content.startswith('.iam') and (discord.utils.get(message.author.roles, id = addRole) is None) and (message.server.id == oldServ):
+    if message.content.startswith('.iam') and discord.utils.get(message.author.roles, id = addRole) is None and (message.server.id == oldServ):
         rmrole = discord.utils.get(message.server.roles, id = rmRole)
         addrole = discord.utils.get(message.server.roles, id = addRole)
         await bot.add_roles(message.author, addrole)
