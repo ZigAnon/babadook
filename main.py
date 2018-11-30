@@ -98,13 +98,12 @@ async def main_loop():
                         l = open(filePath + '.lping')
                         lStrip = l.readlines()
                         lPing = lStrip[0].rstrip()
-                        l.close()
                         lastPing = datetime.strptime(lPing, dateFormat) + timedelta(hours=1)
                     except:
                         l = open(filePath + '.lping', 'w+')
                         l.write("%s\r\n" % (curTime))
-                        l.close()
                         lastPing = curTime + timedelta(hours=1)
+                    l.close()
 
                     # Resets ping timer
                     if lastPing < curTime:
