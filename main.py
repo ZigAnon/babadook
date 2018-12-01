@@ -1,5 +1,6 @@
 #!/usr/local/bin/python3.6
 # Author: TehZig#1949
+# v0.4
 import discord
 from discord.ext import commands
 from datetime import datetime
