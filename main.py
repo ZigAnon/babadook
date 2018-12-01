@@ -99,7 +99,7 @@ async def main_loop():
                         l = open(filePath + '.lping')
                         lStrip = l.readlines()
                         lPing = lStrip[0].rstrip()
-                        lastPing = datetime.strptime(lPing, dateFormat) + timedelta(hours=1)
+                        lastPing = datetime.strptime(lPing, dateFormat) + timedelta(hours=1) - timedelta(minutes=2)
                     except:
                         l = open(filePath + '.lping', 'w+')
                         l.write("%s\r\n" % (curTime))
