@@ -103,7 +103,7 @@ async def main_loop():
                     except:
                         l = open(filePath + '.lping', 'w+')
                         l.write("%s\r\n" % (curTime))
-                        lastPing = curTime + timedelta(hours=1)
+                        lastPing = curTime + timedelta(hours=1) - timedelta(minutes=2)
                     l.close()
 
                     # Resets ping timer
