@@ -118,7 +118,7 @@ async def main_loop():
 # This will prevent leaving and rejoining to remove punishment
 @bot.command(pass_context = True)
 async def mute(ctx, member: discord.Member):
-    if ctx.message.author.server_permissions.administrator and ctx.message.server.id == '509242768401629204':
+    if ctx.message.author.server_permissions.administrator and ctx.message.server.id == mainServ:
         mute = discord.utils.get(member.server.roles, id = '517140313408536576')
         Snow1 = discord.utils.get(member.server.roles, id = '513156267024449556')
         Snow2 = discord.utils.get(member.server.roles, id = '517850437626363925')
@@ -135,7 +135,7 @@ async def mute(ctx, member: discord.Member):
 
 @bot.command(pass_context = True)
 async def unmute(ctx, member: discord.Member):
-    if ctx.message.author.server_permissions.administrator and ctx.message.server.id == '509242768401629204':
+    if ctx.message.author.server_permissions.administrator and ctx.message.server.id == mainServ:
         mute = discord.utils.get(member.server.roles, id = '517140313408536576')
         Snow1 = discord.utils.get(member.server.roles, id = '513156267024449556')
         Snow2 = discord.utils.get(member.server.roles, id = '517850437626363925')
@@ -152,7 +152,7 @@ async def unmute(ctx, member: discord.Member):
 
 @bot.command(pass_context = True)
 async def jail(ctx, member: discord.Member):
-    if ctx.message.author.server_permissions.administrator and ctx.message.server.id == '509242768401629204':
+    if ctx.message.author.server_permissions.administrator and ctx.message.server.id == mainServ:
         jail = discord.utils.get(member.server.roles, id = '509865275705917440')
         Snow1 = discord.utils.get(member.server.roles, id = '513156267024449556')
         Snow2 = discord.utils.get(member.server.roles, id = '517850437626363925')
@@ -169,7 +169,7 @@ async def jail(ctx, member: discord.Member):
 
 @bot.command(pass_context = True)
 async def free(ctx, member: discord.Member):
-    if ctx.message.author.server_permissions.administrator and ctx.message.server.id == '509242768401629204':
+    if ctx.message.author.server_permissions.administrator and ctx.message.server.id == mainServ:
         jail = discord.utils.get(member.server.roles, id = '509865275705917440')
         Snow1 = discord.utils.get(member.server.roles, id = '513156267024449556')
         Snow2 = discord.utils.get(member.server.roles, id = '517850437626363925')
@@ -186,7 +186,7 @@ async def free(ctx, member: discord.Member):
 
 @bot.command(pass_context = True)
 async def shitpost(ctx, member: discord.Member):
-    if ctx.message.author.server_permissions.administrator and ctx.message.server.id == '509242768401629204':
+    if ctx.message.author.server_permissions.administrator and ctx.message.server.id == mainServ:
         shit = discord.utils.get(member.server.roles, id = '509865272283496449')
         Snow1 = discord.utils.get(member.server.roles, id = '513156267024449556')
         Snow2 = discord.utils.get(member.server.roles, id = '517850437626363925')
@@ -206,7 +206,7 @@ async def shitpost(ctx, member: discord.Member):
 
 @bot.command(pass_context = True)
 async def cleanpost(ctx, member: discord.Member):
-    if ctx.message.author.server_permissions.administrator and ctx.message.server.id == '509242768401629204':
+    if ctx.message.author.server_permissions.administrator and ctx.message.server.id == mainServ:
         shit = discord.utils.get(member.server.roles, id = '509865272283496449')
         Snow1 = discord.utils.get(member.server.roles, id = '513156267024449556')
         Snow2 = discord.utils.get(member.server.roles, id = '517850437626363925')
@@ -227,7 +227,7 @@ async def on_message(message):
     if message.author == bot.user:
         return
 
-    if 'iq' in message.content.lower():
+    if 'iq' in message.content.lower() and message.server.id == mainServ:
         await bot.send_message(message.channel, message.author.mention + ', there are better arguments than IQ to make your case.\nhttps://www.independent.co.uk/news/science/iq-tests-are-fundamentally-flawed-and-using-them-alone-to-measure-intelligence-is-a-fallacy-study-8425911.html\nhttps://www.cell.com/neuron/fulltext/S0896-6273(12)00584-3')
 
     if message.content.startswith('!disboard bump'):
@@ -282,7 +282,7 @@ async def on_message(message):
             await bot.add_roles(message.author, addrole)
             await asyncio.sleep(1)
             await bot.remove_roles(message.author, rmrole)
-        if (message.server.id == '509242768401629204') and discord.utils.get(message.author.roles, id = '513156267024449556') is None and discord.utils.get(message.author.roles, id = '517140313408536576') is None and discord.utils.get(message.author.roles, id = '509865272283496449') is None and discord.utils.get(message.author.roles, id = '509865275705917440') is None:
+        if (message.server.id == mainServ) and discord.utils.get(message.author.roles, id = '513156267024449556') is None and discord.utils.get(message.author.roles, id = '517140313408536576') is None and discord.utils.get(message.author.roles, id = '509865272283496449') is None and discord.utils.get(message.author.roles, id = '509865275705917440') is None:
             Snow1 = discord.utils.get(message.server.roles, id = '513156267024449556')
             Snow2 = discord.utils.get(message.server.roles, id = '517850437626363925')
             await bot.add_roles(message.author, Snow1)
