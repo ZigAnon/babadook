@@ -25,6 +25,7 @@ oldServ = lines[4].rstrip()
 mainServ = lines[5].rstrip()
 config.close()
 
+# Assigns role to add and remove
 try:
     r = open(curDir + '/logs/db/' + oldServ + '.roles')
     oldRoles = r.readlines()
@@ -40,6 +41,7 @@ bot = commands.Bot(command_prefix='.', description=zdesc)
 ############################
 ############################
 
+# Main loop, do not comment this area out
 async def main_loop():
     await bot.wait_until_ready()
 
