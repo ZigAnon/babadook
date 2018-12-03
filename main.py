@@ -9,9 +9,6 @@ import asyncio
 import os
 
 timeout = 60*120  # 120 minutes
-role_id = '506479342537146368'
-rmRole = '506261279921668136'  # I'm New Here Role
-addRole = '506264946418384907'  # Not a Lurker Role
 dateFormat = '%Y-%m-%d %H:%M:%S.%f'
 
 curDir = os.path.dirname(os.path.realpath(__file__))
@@ -28,19 +25,26 @@ oldServ = lines[4].rstrip()
 mainServ = lines[5].rstrip()
 config.close()
 
-# Special Servers
-serv1 = 0 # open(list)
-serv2 = 0 # open(list)
+try:
+    r = open(curDir + '/logs/db/' + oldServ + '.roles')
+    oldRoles = r.readlines()
+    rmRole = oldRoles[0].rstrip() # I'm New Here Role
+    addRole = oldRoles[1].rstrip() # Not a Lurker Role
+except:
+    pass
+r.close()
 
 zdesc = '''Thanks for using ZigBot!'''
 bot = commands.Bot(command_prefix='.', description=zdesc)
 
 ############################
-# Code to be added
 ############################
 
 async def main_loop():
     await bot.wait_until_ready()
+
+############################
+############################
 
     channel = discord.Object(id=testChan)
     servers = list(bot.servers)
@@ -221,11 +225,17 @@ async def cleanpost(ctx, member: discord.Member):
         # embed=discord.Embed(title="Permission Denied.", description="You don't have permission to use this command.", color=0xff00f6)
         # await bot.say(embed=embed)
 
+############################
+############################
+
 @bot.event
 async def on_message(message):
     # Stops bot from replying to self
     if message.author == bot.user:
         return
+
+############################
+############################
 
     if 'iq' in message.content.lower() and message.server.id == mainServ:
         await bot.send_message(message.channel, message.author.mention + ', there are better arguments than IQ to make your case.\nhttps://www.independent.co.uk/news/science/iq-tests-are-fundamentally-flawed-and-using-them-alone-to-measure-intelligence-is-a-fallacy-study-8425911.html\nhttps://www.cell.com/neuron/fulltext/S0896-6273(12)00584-3')
@@ -288,12 +298,16 @@ async def on_message(message):
             await bot.add_roles(message.author, Snow1)
             await asyncio.sleep(1)
             await bot.remove_roles(message.author, Snow2)
+
+############################
+############################
+
+    # If no on_message command invoked, check bot commands
     else:
         # https://discordpy.readthedocs.io/en/latest/faq.html#why-does-on-message-make-my-commands-stop-working
         await bot.process_commands(message)
 
 ############################
-# Code to be added
 ############################
 
 @bot.event
