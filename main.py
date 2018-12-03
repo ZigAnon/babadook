@@ -228,7 +228,7 @@ async def on_message(message):
         return
 
     if 'iq' in message.content.lower():
-        await bot.send_message(message.channel, message.author.mention + ', there are better arguments than IQ to make your case. https://www.cell.com/neuron/fulltext/S0896-6273(12)00584-3')
+        await bot.send_message(message.channel, message.author.mention + ', there are better arguments than IQ to make your case.\nhttps://www.independent.co.uk/news/science/iq-tests-are-fundamentally-flawed-and-using-them-alone-to-measure-intelligence-is-a-fallacy-study-8425911.html\nhttps://www.cell.com/neuron/fulltext/S0896-6273(12)00584-3')
 
     if message.content.startswith('!disboard bump'):
         # Needed vars
