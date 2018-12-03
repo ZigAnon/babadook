@@ -223,6 +223,13 @@ async def cleanpost(ctx, member: discord.Member):
 
 @bot.event
 async def on_message(message):
+    # Stops bot from replying to self
+    if message.author == bot.user:
+        return
+
+    if 'iq' in message.content.lower():
+        await bot.send_message(message.channel, message.author.mention + ', there are better arguments than IQ to make your case. https://www.cell.com/neuron/fulltext/S0896-6273(12)00584-3')
+
     if message.content.startswith('!disboard bump'):
         # Needed vars
         bumServ = message.server.id
