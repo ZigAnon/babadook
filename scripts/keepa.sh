@@ -6,7 +6,7 @@ pythonVersion="python3.6"
 PWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PY3=$(which $pythonVersion)
 PID=`cat $PWD/../logs/main.pid`
-PURGE=`find $PWD/../logs/db/ -mtime +2 -type f ! -name README *.mute -delete`
+PURGE=`find $PWD/../logs/db/ -mtime +2 -type f ! -name README *.mute *.roles -delete`
 
 echo "Checking"
 echo $(date)
