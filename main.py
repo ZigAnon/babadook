@@ -35,6 +35,14 @@ except:
     pass
 r.close()
 
+try:
+    r = open(curDir + '/logs/db/' + mainServ + '.roles')
+    newRoles = r.readlines()
+    servMod = newRoles[0].rstrip() # Moderator
+except:
+    pass
+r.close()
+
 zdesc = '''Thanks for using ZigBot!'''
 bot = commands.Bot(command_prefix='.', description=zdesc)
 
@@ -124,7 +132,7 @@ async def main_loop():
 # This will prevent leaving and rejoining to remove punishment
 @bot.command(pass_context = True)
 async def mute(ctx, member: discord.Member):
-    if ctx.message.author.server_permissions.administrator and ctx.message.server.id == mainServ:
+    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod)) and ctx.message.server.id == mainServ:
         mute = discord.utils.get(member.server.roles, id = '517140313408536576')
         Snow1 = discord.utils.get(member.server.roles, id = '513156267024449556')
         Snow2 = discord.utils.get(member.server.roles, id = '517850437626363925')
@@ -141,7 +149,7 @@ async def mute(ctx, member: discord.Member):
 
 @bot.command(pass_context = True)
 async def unmute(ctx, member: discord.Member):
-    if ctx.message.author.server_permissions.administrator and ctx.message.server.id == mainServ:
+    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod)) and ctx.message.server.id == mainServ:
         mute = discord.utils.get(member.server.roles, id = '517140313408536576')
         Snow1 = discord.utils.get(member.server.roles, id = '513156267024449556')
         Snow2 = discord.utils.get(member.server.roles, id = '517850437626363925')
@@ -158,7 +166,7 @@ async def unmute(ctx, member: discord.Member):
 
 @bot.command(pass_context = True)
 async def jail(ctx, member: discord.Member):
-    if ctx.message.author.server_permissions.administrator and ctx.message.server.id == mainServ:
+    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod)) and ctx.message.server.id == mainServ:
         jail = discord.utils.get(member.server.roles, id = '509865275705917440')
         Snow1 = discord.utils.get(member.server.roles, id = '513156267024449556')
         Snow2 = discord.utils.get(member.server.roles, id = '517850437626363925')
@@ -175,7 +183,7 @@ async def jail(ctx, member: discord.Member):
 
 @bot.command(pass_context = True)
 async def free(ctx, member: discord.Member):
-    if ctx.message.author.server_permissions.administrator and ctx.message.server.id == mainServ:
+    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod)) and ctx.message.server.id == mainServ:
         jail = discord.utils.get(member.server.roles, id = '509865275705917440')
         Snow1 = discord.utils.get(member.server.roles, id = '513156267024449556')
         Snow2 = discord.utils.get(member.server.roles, id = '517850437626363925')
@@ -192,7 +200,7 @@ async def free(ctx, member: discord.Member):
 
 @bot.command(pass_context = True)
 async def shitpost(ctx, member: discord.Member):
-    if ctx.message.author.server_permissions.administrator and ctx.message.server.id == mainServ:
+    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod)) and ctx.message.server.id == mainServ:
         shit = discord.utils.get(member.server.roles, id = '509865272283496449')
         Snow1 = discord.utils.get(member.server.roles, id = '513156267024449556')
         Snow2 = discord.utils.get(member.server.roles, id = '517850437626363925')
@@ -212,7 +220,7 @@ async def shitpost(ctx, member: discord.Member):
 
 @bot.command(pass_context = True)
 async def cleanpost(ctx, member: discord.Member):
-    if ctx.message.author.server_permissions.administrator and ctx.message.server.id == mainServ:
+    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod)) and ctx.message.server.id == mainServ:
         shit = discord.utils.get(member.server.roles, id = '509865272283496449')
         Snow1 = discord.utils.get(member.server.roles, id = '513156267024449556')
         Snow2 = discord.utils.get(member.server.roles, id = '517850437626363925')
