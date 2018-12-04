@@ -6,10 +6,11 @@ pythonVersion="python3.6"
 PWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PY3=$(which $pythonVersion)
 PID=`cat $PWD/../logs/main.pid`
-PURGE=rm $(find /home/zb/zigbot/logs/db/ -mtime +2 -type f ! -name \*.roles | grep -v 'README\|*.mute\|*.roles\|*.html')
+PURGE=`find $PWD/../logs/db/ -mtime +2 -type f ! -name \*.roles | grep -v 'README\|*.mute\|*.roles\|*.html'`
 
 echo "Checking"
 echo $(date)
+rm $PURGE
 
 if ! ps -p $PID > /dev/null
 then
