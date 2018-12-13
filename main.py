@@ -29,6 +29,14 @@ jailRole = lines[8].rstrip()
 shetRole = lines[9].rstrip()
 config.close()
 
+fun = open(curDir + "/include/eastereggs")
+funEggs = fun.readlines()
+fun.close()
+
+fun = open(curDir + "/include/easterlinks")
+funLinks = fun.readlines()
+fun.close()
+
 # Assigns role to add and remove
 try:
     r = open(curDir + '/logs/db/' + mainServ + '.roles')
@@ -247,10 +255,16 @@ async def on_message(message):
         await asyncio.sleep(timeout)
         await bot.delete_message(msg)
 
-    if 'santa' in message.content.lower():
-        msg = await bot.send_message(message.channel, message.author.mention + ' You better watch out.\nhttps://cdn.discordapp.com/attachments/509245339664908299/522461036687785991/2osxez.png')
-        await asyncio.sleep(8)
-        await bot.delete_message(msg)
+    for x in range(len(funEggs)):
+        eEgg = funEggs[x-1].rstrip()
+        if eEgg in message.content.lower():
+            y = (x-1) * 2
+            z = y+1
+            phrase = funLinks[y].rstrip()
+            phraseURL = funLinks[z].rstrip()
+            msg = await bot.send_message(message.channel, message.author.mention + ' ' + phrase + '\n' + phraseURL)
+            await asyncio.sleep(8)
+            await bot.delete_message(msg)
 
     if message.content.startswith('!disboard bump'):
         # Needed vars
