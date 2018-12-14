@@ -67,6 +67,8 @@ async def main_loop():
     channel = discord.Object(id=testChan)
     servers = list(bot.servers)
     pinged = [0] * len(servers)
+    count = 0
+    timeoff = 0
     
     # Checks each server for disboard bump
     # Uses existing data to remind if needed
@@ -133,8 +135,30 @@ async def main_loop():
                         pinged[x-1] = 0
                         os.remove(filePath + '.lping')
 
+            if found is 1 and count > 4:
+                count = 0
+                members = list(servers[x-1].members)
+                memNum = 0
+                for i in range(len(members)):
+                    rolNum = 0
+                    roles = list(members[i-1].roles)
+                    for j in range(len(roles)):
+                        rolNum += 1
+                    if rolNum is 2:
+                        # set roles
+                        member = members[i-1]
+                        Snow1 = discord.utils.get(member.server.roles, id = talkRole)
+                        Snow2 = discord.utils.get(member.server.roles, id = joinRole)
+                        await bot.add_roles(member, Snow2)
+                        await asyncio.sleep(1)
+                        await bot.remove_roles(member, Snow1)
+                        timeoff += 1
+                    rolNum = 0
+
         # checks again in one min
-        await asyncio.sleep(60) # task runs every 60 seconds
+        count += 1
+        reboot = 60 - timeoff
+        await asyncio.sleep(reboot) # task runs every 60 seconds less mx time
 
 # Need to add scanner on server join to issue punishments
 # This will prevent leaving and rejoining to remove punishment
