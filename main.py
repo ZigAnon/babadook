@@ -47,6 +47,7 @@ try:
     r = open(curDir + '/logs/db/' + mainServ + '.roles')
     newRoles = r.readlines()
     servMod = newRoles[0].rstrip() # Moderator
+    servRep = newRoles[1].rstrip() # Representative
 except:
     pass
 r.close()
@@ -67,8 +68,8 @@ async def main_loop():
     channel = discord.Object(id=testChan)
     servers = list(bot.servers)
     pinged = [0] * len(servers)
-    count = 0
     timeoff = 0
+    count = 0
     
     # Checks each server for disboard bump
     # Uses existing data to remind if needed
@@ -135,7 +136,7 @@ async def main_loop():
                         pinged[x-1] = 0
                         os.remove(filePath + '.lping')
 
-            if found is 1 and count > 4:
+            '''if found is 1 and count > 4:
                 count = 0
                 members = list(servers[x-1].members)
                 memNum = 0
@@ -153,10 +154,10 @@ async def main_loop():
                         await asyncio.sleep(1)
                         await bot.remove_roles(member, Snow1)
                         timeoff += 1
-                    rolNum = 0
+                    rolNum = 0'''
 
         # checks again in one min
-        count += 1
+        # count += 1
         reboot = 60 - timeoff
         await asyncio.sleep(reboot) # task runs every 60 seconds less mx time
 
@@ -164,7 +165,7 @@ async def main_loop():
 # This will prevent leaving and rejoining to remove punishment
 @bot.command(pass_context = True, description = "Removes all write permissions from all channels.")
 async def mute(ctx, member: discord.Member):
-    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod)) and ctx.message.server.id == mainServ:
+    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ:
         mute = discord.utils.get(member.server.roles, id = muteRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
         Snow2 = discord.utils.get(member.server.roles, id = joinRole)
@@ -181,7 +182,7 @@ async def mute(ctx, member: discord.Member):
 
 @bot.command(pass_context = True, description = "Removes mute status.")
 async def unmute(ctx, member: discord.Member):
-    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod)) and ctx.message.server.id == mainServ:
+    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ:
         mute = discord.utils.get(member.server.roles, id = muteRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
         Snow2 = discord.utils.get(member.server.roles, id = joinRole)
@@ -198,7 +199,7 @@ async def unmute(ctx, member: discord.Member):
 
 @bot.command(pass_context = True, description = "Removes all chats and allows user to state case in jail chat.")
 async def jail(ctx, member: discord.Member):
-    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod)) and ctx.message.server.id == mainServ:
+    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ:
         jail = discord.utils.get(member.server.roles, id = jailRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
         Snow2 = discord.utils.get(member.server.roles, id = joinRole)
@@ -215,7 +216,7 @@ async def jail(ctx, member: discord.Member):
 
 @bot.command(pass_context = True, description = "Frees member from jail")
 async def free(ctx, member: discord.Member):
-    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod)) and ctx.message.server.id == mainServ:
+    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ:
         jail = discord.utils.get(member.server.roles, id = jailRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
         Snow2 = discord.utils.get(member.server.roles, id = joinRole)
@@ -232,7 +233,7 @@ async def free(ctx, member: discord.Member):
 
 @bot.command(pass_context = True, description = "Banishes member to shitpost chat.")
 async def shitpost(ctx, member: discord.Member):
-    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod)) and ctx.message.server.id == mainServ:
+    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ:
         shit = discord.utils.get(member.server.roles, id = shetRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
         Snow2 = discord.utils.get(member.server.roles, id = joinRole)
@@ -252,7 +253,7 @@ async def shitpost(ctx, member: discord.Member):
 
 @bot.command(pass_context = True, description = "Removes shitpost tag.")
 async def cleanpost(ctx, member: discord.Member):
-    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod)) and ctx.message.server.id == mainServ:
+    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ:
         shit = discord.utils.get(member.server.roles, id = shetRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
         Snow2 = discord.utils.get(member.server.roles, id = joinRole)
