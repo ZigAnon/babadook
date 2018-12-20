@@ -281,7 +281,7 @@ async def cleanpost(ctx, member: discord.Member):
 @bot.event
 async def on_message(message):
     # Stops bot from replying to self
-    if message.author == bot.user:
+    if message.author == bot.user or message.author.bot:
         return
 
 ############################
