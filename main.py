@@ -137,26 +137,6 @@ async def main_loop():
                         pinged[x-1] = 0
                         os.remove(filePath + '.lping')
 
-            '''if found is 1 and count > 4:
-                count = 0
-                members = list(servers[x-1].members)
-                memNum = 0
-                for i in range(len(members)):
-                    rolNum = 0
-                    roles = list(members[i-1].roles)
-                    for j in range(len(roles)):
-                        rolNum += 1
-                    if rolNum is 2:
-                        # set roles
-                        member = members[i-1]
-                        Snow1 = discord.utils.get(member.server.roles, id = talkRole)
-                        Snow2 = discord.utils.get(member.server.roles, id = joinRole)
-                        await bot.add_roles(member, Snow2)
-                        await asyncio.sleep(1)
-                        await bot.remove_roles(member, Snow1)
-                        timeoff += 1
-                    rolNum = 0'''
-
         # checks again in one min
         # count += 1
         reboot = 60 - timeoff
@@ -360,10 +340,29 @@ async def on_message(message):
             Snow1 = discord.utils.get(message.server.roles, id = talkRole)
             Snow2 = discord.utils.get(message.server.roles, id = joinRole)
             await bot.add_roles(message.author, Snow1)
-            print('Snow1 add is: ' + str(Snow1))
             await asyncio.sleep(1)
             await bot.remove_roles(message.author, Snow2)
-            print('Snow2 remove is: ' + str(Snow2))
+            await asyncio.sleep(1)
+            roles = list(message.author.roles)
+            rolNum = len(roles)
+            if rolNum is 2:
+                # No role assigned, revert
+                msg = await bot.send_message(message.channel, 'This role does not exist.  Please chose a role from #roles or `.lsar`')
+                await bot.add_roles(message.author, Snow2)
+                await asyncio.sleep(1)
+                await bot.remove_roles(message.author, Snow1)
+                await asyncio.sleep(7)
+                await bot.delete_message(msg)
+
+    if message.content.startswith('.iam nazi'):
+        shit = discord.utils.get(message.server.roles, id = shetRole)
+        Snow1 = discord.utils.get(message.server.roles, id = talkRole)
+        Snow2 = discord.utils.get(message.server.roles, id = joinRole)
+        await bot.add_roles(message.author, shit)
+        await asyncio.sleep(1)
+        await bot.remove_roles(message.author, Snow1)
+        await asyncio.sleep(1)
+        await bot.remove_roles(message.author, Snow2)
 
 ############################
 ############################
