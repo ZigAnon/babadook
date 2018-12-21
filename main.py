@@ -279,7 +279,8 @@ async def on_message(message):
         await asyncio.sleep(5)
         await bot.delete_message(msg)
 
-    for x in range(len(funEggs)):
+    # Eastereggs - disabled 181221 due to distracting
+    '''for x in range(len(funEggs)):
         eEgg = funEggs[x-1].rstrip()
         if eEgg in message.content.lower():
             y = (x-1) * 2
@@ -288,7 +289,7 @@ async def on_message(message):
             phraseURL = funLinks[z].rstrip()
             msg = await bot.send_message(message.channel, message.author.mention + ' ' + phrase + '\n' + phraseURL)
             await asyncio.sleep(8)
-            await bot.delete_message(msg)
+            await bot.delete_message(msg)'''
 
     if message.content.startswith('!disboard bump'):
         # Needed vars
