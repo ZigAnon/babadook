@@ -153,6 +153,7 @@ async def main_loop():
 @bot.command(pass_context = True, description = "Removes all write permissions from all channels.")
 async def mute(ctx, member: discord.Member):
     if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ:
+        filePath = curDir + '/logs/db/' + member.id
         mute = discord.utils.get(member.server.roles, id = muteRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
         Snow2 = discord.utils.get(member.server.roles, id = joinRole)
@@ -164,6 +165,10 @@ async def mute(ctx, member: discord.Member):
         await bot.remove_roles(member, Snow1)
         await asyncio.sleep(1)
         await bot.remove_roles(member, Snow2)
+
+        # punishment evasion
+        p = open(filePath + '.punish', 'w+')
+        p.close()
 
         # Kick from voice channel
         kick_channel = await bot.create_channel(ctx.message.server, "kick", type=discord.ChannelType.voice)
@@ -177,6 +182,7 @@ async def mute(ctx, member: discord.Member):
 @bot.command(pass_context = True, description = "Removes mute status.")
 async def unmute(ctx, member: discord.Member):
     if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ:
+        filePath = curDir + '/logs/db/' + member.id
         mute = discord.utils.get(member.server.roles, id = muteRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
         Snow2 = discord.utils.get(member.server.roles, id = joinRole)
@@ -188,6 +194,12 @@ async def unmute(ctx, member: discord.Member):
         await bot.remove_roles(member, mute)
         await asyncio.sleep(1)
         await bot.remove_roles(member, Snow2)
+
+        # Clear punishment
+        try:
+            os.remove(filePath + '.punish')
+        except:
+            pass
 #    else:
         # embed=discord.Embed(title="Permission Denied.", description="You don't have permission to use this command.", color=0xff00f6)
         # await bot.say(embed=embed)
@@ -195,6 +207,7 @@ async def unmute(ctx, member: discord.Member):
 @bot.command(pass_context = True, description = "Removes all chats and allows user to state case in jail chat.")
 async def jail(ctx, member: discord.Member):
     if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ:
+        filePath = curDir + '/logs/db/' + member.id
         jail = discord.utils.get(member.server.roles, id = jailRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
         Snow2 = discord.utils.get(member.server.roles, id = joinRole)
@@ -206,6 +219,10 @@ async def jail(ctx, member: discord.Member):
         await bot.remove_roles(member, Snow1)
         await asyncio.sleep(1)
         await bot.remove_roles(member, Snow2)
+
+        # punishment evasion
+        p = open(filePath + '.punish', 'w+')
+        p.close()
 
         # Kick from voice channel
         kick_channel = await bot.create_channel(ctx.message.server, "kick", type=discord.ChannelType.voice)
@@ -219,6 +236,7 @@ async def jail(ctx, member: discord.Member):
 @bot.command(pass_context = True, description = "Frees member from jail")
 async def free(ctx, member: discord.Member):
     if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ:
+        filePath = curDir + '/logs/db/' + member.id
         jail = discord.utils.get(member.server.roles, id = jailRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
         Snow2 = discord.utils.get(member.server.roles, id = joinRole)
@@ -230,6 +248,13 @@ async def free(ctx, member: discord.Member):
         await bot.remove_roles(member, jail)
         await asyncio.sleep(1)
         await bot.remove_roles(member, Snow2)
+
+        # Clear punishment
+        try:
+            os.remove(filePath + '.punish')
+        except:
+            pass
+
 #    else:
         # embed=discord.Embed(title="Permission Denied.", description="You don't have permission to use this command.", color=0xff00f6)
         # await bot.say(embed=embed)
@@ -237,6 +262,7 @@ async def free(ctx, member: discord.Member):
 @bot.command(pass_context = True, description = "Banishes member to shitpost chat.")
 async def shitpost(ctx, member: discord.Member):
     if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ:
+        filePath = curDir + '/logs/db/' + member.id
         shit = discord.utils.get(member.server.roles, id = shetRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
         Snow2 = discord.utils.get(member.server.roles, id = joinRole)
@@ -252,6 +278,10 @@ async def shitpost(ctx, member: discord.Member):
         await asyncio.sleep(1)
         await bot.remove_roles(member, Snow2)
 
+        # punishment evasion
+        p = open(filePath + '.punish', 'w+')
+        p.close()
+
         # Kick from voice channel
         kick_channel = await bot.create_channel(ctx.message.server, "kick", type=discord.ChannelType.voice)
         await bot.move_member(member, kick_channel)
@@ -264,6 +294,7 @@ async def shitpost(ctx, member: discord.Member):
 @bot.command(pass_context = True, description = "Removes shitpost tag.")
 async def cleanpost(ctx, member: discord.Member):
     if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ:
+        filePath = curDir + '/logs/db/' + member.id
         shit = discord.utils.get(member.server.roles, id = shetRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
         Snow2 = discord.utils.get(member.server.roles, id = joinRole)
@@ -275,6 +306,13 @@ async def cleanpost(ctx, member: discord.Member):
         await bot.remove_roles(member, shit)
         await asyncio.sleep(1)
         await bot.remove_roles(member, Snow2)
+
+        # Clear punishment
+        try:
+            os.remove(filePath + '.punish')
+        except:
+            pass
+
 #    else:
         # embed=discord.Embed(title="Permission Denied.", description="You don't have permission to use this command.", color=0xff00f6)
         # await bot.say(embed=embed)
