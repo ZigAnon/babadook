@@ -355,7 +355,7 @@ async def on_message(message):
             t.close()
 
     # allow disboard bump stop
-    if message.content.startswith('!disboard stop'):
+    if message.content.startswith('!disboard stop') and message.author.server_permissions.administrator:
         bumServ = message.server.id
         filePath = curDir + '/logs/db/' + bumServ
         bumChan = message.channel.id
