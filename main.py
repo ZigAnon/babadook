@@ -355,9 +355,24 @@ async def on_message(message):
             t.close()
 
     if message.content.startswith('.iam'):
+        Snow1 = discord.utils.get(message.server.roles, id = talkRole)
+        Snow2 = discord.utils.get(message.server.roles, id = joinRole)
+        # Checks for single role or if user removed all roles
+        if message.content.startswith('.iamn'):
+            await asyncio.sleep(1)
+            roles = list(message.author.roles)
+            rolNum = len(roles)
+            if rolNum is 2:
+                # User removed role, revert
+                msg = await bot.send_message(message.channel, 'You aren\'t allowed to chat without an ideology.  Please chose a role from #roles or `.lsar`')
+                await bot.add_roles(message.author, Snow2)
+                await asyncio.sleep(1)
+                await bot.remove_roles(message.author, Snow1)
+                await asyncio.sleep(7)
+                await bot.delete_message(msg)
+
+        # Checks for initial role to remove undecided
         if discord.utils.get(message.author.roles, id = talkRole) is None and discord.utils.get(message.author.roles, id = joinRole) is not None:
-            Snow1 = discord.utils.get(message.server.roles, id = talkRole)
-            Snow2 = discord.utils.get(message.server.roles, id = joinRole)
             await bot.add_roles(message.author, Snow1)
             await asyncio.sleep(1)
             await bot.remove_roles(message.author, Snow2)
