@@ -11,6 +11,7 @@ import os
 
 timeout = 60*5  # 5 minutes
 dateFormat = '%Y-%m-%d %H:%M:%S.%f'
+newAccount = 48 # 48 hours
 
 curDir = os.path.dirname(os.path.realpath(__file__))
 
@@ -29,6 +30,7 @@ muteRole = lines[7].rstrip()
 jailRole = lines[8].rstrip()
 shetRole = lines[9].rstrip()
 logAct = lines[10].rstrip()
+adminChan = lines[11].rstrip()
 config.close()
 
 brain = open(curDir + "/include/brainlet")
@@ -364,10 +366,10 @@ async def on_message(message):
         msg = await bot.wait_for_message(timeout=3, author=disboard)
         try:
             os.remove(filePath + '.time')
+            await bot.delete_message(msg)
             await bot.send_message(channel, 'I\'ll stop reminding you for now. `!disboard bump` to start again.')
         except:
             await bot.send_message(channel, 'I\'m already set to not remind you. Please `!disboard bump` to start again.')
-        await bot.delete_message(msg)
 
     if message.content.startswith('.iam'):
         Snow1 = discord.utils.get(message.server.roles, id = talkRole)
@@ -423,6 +425,16 @@ async def on_message(message):
 
 ############################
 ############################
+
+@bot.event
+async def on_member_join(member):
+
+    # kicks new accounts to prevent raid
+    if datetime.utcnow() - timedelta(hours=newAccount) < member.created_at:
+        channel = discord.utils.get(member.server.channels, id = adminChan)
+        await bot.send_message(member, 'Your account is too new to for "Coffee & Politics".  If you wish to join our discussions please wait a few days and try again.  :D')
+        await bot.send_message(channel, '@here\nI kicked ' + member.mention + ' because account was made in the last ' + str(newAccount) + ' hours.')
+        await bot.kick(member)
 
 @bot.event
 async def on_ready():
