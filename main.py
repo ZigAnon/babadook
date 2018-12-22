@@ -158,6 +158,12 @@ async def mute(ctx, member: discord.Member):
         await bot.remove_roles(member, Snow1)
         await asyncio.sleep(1)
         await bot.remove_roles(member, Snow2)
+
+        # Kick from voice channel
+        kick_channel = await bot.create_channel(ctx.message.server, "kick", type=discord.ChannelType.voice)
+        await bot.move_member(member, kick_channel)
+        await bot.delete_channel(kick_channel)
+                    
 #    else:
         # embed=discord.Embed(title="Permission Denied.", description="You don't have permission to use this command.", color=0xff00f6)
         # await bot.say(embed=embed)
@@ -194,6 +200,12 @@ async def jail(ctx, member: discord.Member):
         await bot.remove_roles(member, Snow1)
         await asyncio.sleep(1)
         await bot.remove_roles(member, Snow2)
+
+        # Kick from voice channel
+        kick_channel = await bot.create_channel(ctx.message.server, "kick", type=discord.ChannelType.voice)
+        await bot.move_member(member, kick_channel)
+        await bot.delete_channel(kick_channel)
+ 
 #    else:
         # embed=discord.Embed(title="Permission Denied.", description="You don't have permission to use this command.", color=0xff00f6)
         # await bot.say(embed=embed)
@@ -233,6 +245,12 @@ async def shitpost(ctx, member: discord.Member):
         await bot.remove_roles(member, Snow1)
         await asyncio.sleep(1)
         await bot.remove_roles(member, Snow2)
+
+        # Kick from voice channel
+        kick_channel = await bot.create_channel(ctx.message.server, "kick", type=discord.ChannelType.voice)
+        await bot.move_member(member, kick_channel)
+        await bot.delete_channel(kick_channel)
+ 
 #    else:
         # embed=discord.Embed(title="Permission Denied.", description="You don't have permission to use this command.", color=0xff00f6)
         # await bot.say(embed=embed)
