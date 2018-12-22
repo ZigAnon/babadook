@@ -37,6 +37,12 @@ logAct = lines[10].rstrip()
 adminChan = lines[11].rstrip()
 config.close()
 
+jR = open(curDir + "/include/jailRoles")
+lines = jR.readlines()
+memeRoles = map(str.strip, lines)
+memeRoles = ['.iam ' + x for x in memeRoles]
+jR.close()
+
 brain = open(curDir + "/include/brainlet")
 brainlet = brain.readlines()
 brain.close()
@@ -447,15 +453,22 @@ async def on_message(message):
                 await asyncio.sleep(7)
                 await bot.delete_message(msg)
 
-    if message.content.startswith('.iam nazi'):
-        shit = discord.utils.get(message.server.roles, id = shetRole)
-        Snow1 = discord.utils.get(message.server.roles, id = talkRole)
-        Snow2 = discord.utils.get(message.server.roles, id = joinRole)
-        await bot.add_roles(message.author, shit)
-        await asyncio.sleep(1)
-        await bot.remove_roles(message.author, Snow1)
-        await asyncio.sleep(1)
-        await bot.remove_roles(message.author, Snow2)
+        # Checks for meme roles to shitpost
+        message.content = message.content.lower()
+        for x in range(len(memeRoles)):
+            if message.content.startswith(memeRoles[x-1]):
+                shit = discord.utils.get(message.server.roles, id = shetRole)
+                Snow1 = discord.utils.get(message.server.roles, id = talkRole)
+                Snow2 = discord.utils.get(message.server.roles, id = joinRole)
+                await bot.add_roles(message.author, shit)
+                await bot.send_message(message.channel, '**' + message.author.name + '** was shitposted pending manual approval.')
+                msg = await bot.send_message(message.channel, message.author.mention + ', this role is commonly used by memers and raiders. Please contact admin/mod to regain access.')
+                await asyncio.sleep(1)
+                await bot.remove_roles(message.author, Snow1)
+                await asyncio.sleep(1)
+                await bot.remove_roles(message.author, Snow2)
+                await asyncio.sleep(30)
+                await bot.delete_message(msg)
 
 ############################
 ############################
