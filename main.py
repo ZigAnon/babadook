@@ -1,5 +1,9 @@
 #!/usr/local/bin/python3.6
 # Author: TehZig#1949
+# Use at your own risk.
+# This bot was used with multiple servers and then coded for single
+# Much of this bot is now server specific 'github' is more for archive
+# I may rewrite it some day to work for multiple servers again
 # v0.4
 import discord
 from discord.ext import commands
@@ -435,6 +439,27 @@ async def on_member_join(member):
         await bot.send_message(member, 'Your account is too new to for "Coffee & Politics".  If you wish to join our discussions please wait a few days and try again.  :D')
         await bot.send_message(channel, '@here\nI kicked ' + member.mention + ' because account was made in the last ' + str(newAccount) + ' hours.')
         await bot.kick(member)
+
+    # Checks for punishment evasion
+    try:
+        filePath = curDir + '/logs/db/' + str(member.id)
+
+        # Looks for punish file
+        t = open(filePath + '.punish')
+        t.close()
+        jail = discord.utils.get(member.server.roles, id = jailRole)
+        Snow1 = discord.utils.get(member.server.roles, id = talkRole)
+        Snow2 = discord.utils.get(member.server.roles, id = joinRole)
+        embed=discord.Embed(title="User Jailed!", description="**{0}** was jailed for punishment evasion!".format(member), color=0xd30000)
+        # await bot.say(embed=embed)
+        await bot.send_message(discord.Object(id=logAct),embed=embed)
+        await bot.add_roles(member, jail)
+        await asyncio.sleep(1)
+        await bot.remove_roles(member, Snow1)
+        await asyncio.sleep(1)
+        await bot.remove_roles(member, Snow2)
+    except:
+        pass
 
 @bot.event
 async def on_ready():
