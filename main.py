@@ -356,17 +356,18 @@ async def on_message(message):
 
     # allow disboard bump stop
     if message.content.startswith('!disboard stop') and message.author.server_permissions.administrator:
+        disboard = discord.utils.get(message.server.members, name='DISBOARD')
         bumServ = message.server.id
-        filePath = curDir + '/logs/db/' + bumServ
         bumChan = message.channel.id
+        filePath = curDir + '/logs/db/' + bumServ
         channel = discord.Object(id=bumChan)
+        msg = await bot.wait_for_message(timeout=3, author=disboard)
         try:
             os.remove(filePath + '.time')
             await bot.send_message(channel, 'I\'ll stop reminding you for now. `!disboard bump` to start again.')
-            print('Removed ' + filePath)
         except:
             await bot.send_message(channel, 'I\'m already set to not remind you. Please `!disboard bump` to start again.')
-            print('Unable to find file')
+        await bot.delete_message(msg)
 
     if message.content.startswith('.iam'):
         Snow1 = discord.utils.get(message.server.roles, id = talkRole)
