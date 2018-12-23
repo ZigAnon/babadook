@@ -437,11 +437,11 @@ async def on_message(message):
                 await bot.delete_message(msg)
 
         # Checks for initial role to remove undecided
-        if discord.utils.get(message.author.roles, id = talkRole) is None and discord.utils.get(message.author.roles, id = joinRole) is not None:
+        elif discord.utils.get(message.author.roles, id = talkRole) is None and discord.utils.get(message.author.roles, id = joinRole) is not None:
             await bot.add_roles(message.author, Snow1)
             await asyncio.sleep(1)
             await bot.remove_roles(message.author, Snow2)
-            await asyncio.sleep(7)
+            await asyncio.sleep(10)
             roles = list(message.author.roles)
             rolNum = len(roles)
             if rolNum is 2:
