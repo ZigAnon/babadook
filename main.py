@@ -441,7 +441,7 @@ async def on_message(message):
             await bot.add_roles(message.author, Snow1)
             await asyncio.sleep(1)
             await bot.remove_roles(message.author, Snow2)
-            await asyncio.sleep(1)
+            await asyncio.sleep(3)
             roles = list(message.author.roles)
             rolNum = len(roles)
             if rolNum is 2:
