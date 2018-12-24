@@ -4,14 +4,16 @@
 # This bot was used with multiple servers and then coded for single
 # Much of this bot is now server specific 'github' is more for archive
 # I may rewrite it some day to work for multiple servers again
-# v0.4
+# v0.5
 import discord
 from discord.ext import commands
 from datetime import datetime
 from datetime import timedelta
 from random import randint
 import asyncio
+import json
 import os
+import requests
 
 timeout = 60*5  # 5 minutes
 dateFormat = '%Y-%m-%d %H:%M:%S.%f'
@@ -35,6 +37,8 @@ jailRole = lines[8].rstrip()
 shetRole = lines[9].rstrip()
 logAct = lines[10].rstrip()
 adminChan = lines[11].rstrip()
+ox_id = lines[12].rstrip()
+ox_key = lines[13].rstrip()
 config.close()
 
 jR = open(curDir + "/include/jailRoles")
@@ -155,8 +159,41 @@ async def main_loop():
         reboot = 60 - timeoff
         await asyncio.sleep(reboot) # task runs every 60 seconds less mx time
 
-# Need to add scanner on server join to issue punishments
-# This will prevent leaving and rejoining to remove punishment
+
+############################
+############################
+
+#   Start of Bot Commands  #
+
+############################
+############################
+
+@bot.command(pass_context = True, description = "Defines word using Oxford Living Dictionary.")
+async def define(ctx):
+    raw = ctx.message.clean_content.lower()
+    word_id = raw.split('.define ')[1]
+    word_id = word_id.replace(' ', '_')
+    language = 'en'
+    url = 'https://od-api.oxforddictionaries.com:443/api/v1/entries/'  + language + '/'  + word_id.lower()
+
+    #url Normalized frequency
+    urlFR = 'https://od-api.oxforddictionaries.com:443/api/v1/stats/frequency/word/'  + language + '/?corpus=nmc&lemma=' + word_id.lower()
+    r = requests.get(url, headers = {'app_id' : ox_id, 'app_key' : ox_key})
+    word_id = word_id.replace('_', ' ')
+    if r.status_code is 200:
+        try:
+            data = r.json()
+            howmany = list(data['results'][0]['lexicalEntries'][0]['entries'][0]['senses'])
+        except:
+            howmany = [None]
+        await bot.say('__**' + word_id.capitalize() + ':**__')
+        for x in range(len(howmany)):
+            # await asyncio.sleep(1)
+            oxford = data['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][x-1]['definitions']
+            await bot.say('**Definition ' + str(x+1) + ':** \n`' + oxford[0] + '`')
+    else:
+        await bot.say('Unable to find **' + word_id.capitalize() + '** in Oxford Living')
+
 @bot.command(pass_context = True, description = "Removes all write permissions from all channels.")
 async def mute(ctx, member: discord.Member):
     if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ:
