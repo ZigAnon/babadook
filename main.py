@@ -444,14 +444,14 @@ async def on_message(message):
             await asyncio.sleep(10)
             roles = list(message.author.roles)
             rolNum = len(roles)
-            if rolNum is 2:
+            '''if rolNum is 2:
                 # No role assigned, revert
                 msg = await bot.send_message(message.channel, 'This role does not exist.  Please chose a role from #roles or `.lsar`')
                 await bot.add_roles(message.author, Snow2)
                 await asyncio.sleep(1)
                 await bot.remove_roles(message.author, Snow1)
                 await asyncio.sleep(7)
-                await bot.delete_message(msg)
+                await bot.delete_message(msg)'''
 
         # Checks for meme roles to shitpost
         message.content = message.content.lower()
