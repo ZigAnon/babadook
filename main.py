@@ -67,6 +67,7 @@ r.close()
 
 zdesc = '''Thanks for using ZigBot!'''
 bot = commands.Bot(command_prefix='.', description=zdesc)
+bot.remove_command("help")
 
 ############################
 ############################
@@ -120,7 +121,7 @@ async def main_loop():
 
                         # Ping all Admins
                         if lastBump < curTime:
-                            await bot.send_message(channel, '@here, helps us grow: ' + '\n Please \`!disboard bump\` again!')
+                            await bot.send_message(channel, '@here, helps us grow: ' + '\n Please `!disboard bump` again!')
 
                         # Ping member only
                         else:
