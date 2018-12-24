@@ -10,6 +10,7 @@ from discord.ext import commands
 from datetime import datetime
 from datetime import timedelta
 from random import randint
+from time import sleep
 import asyncio
 import json
 import os
@@ -171,6 +172,8 @@ async def main_loop():
 @bot.command(pass_context = True, description = "Defines word using Oxford Living Dictionary.")
 async def define(ctx):
     raw = ctx.message.clean_content.lower()
+    curTime = datetime.now()
+    endTime = curTime + timedelta(seconds=10)
     word_id = raw.split('.define ')[1]
     word_id = word_id.replace(' ', '_')
     language = 'en'
@@ -180,20 +183,94 @@ async def define(ctx):
     #url Normalized frequency
     urlFR = 'https://od-api.oxforddictionaries.com:443/api/v1/stats/frequency/word/'  + language + '/?corpus=nmc&lemma=' + word_id.lower()
     r = requests.get(url, headers = {'app_id' : ox_id, 'app_key' : ox_key})
-    word_id = word_id.replace('_', ' ')
+
+    # Checks for 404 or if Definitions is found
     if r.status_code is 200:
+        # Builds the list to reduce API calls
         try:
             data = r.json()
             howmany = list(data['results'][0]['lexicalEntries'][0]['entries'][0]['senses'])
-            await bot.say('__Oxford Living Dictionary - **' + word_id.capitalize() + '**__:\n' + linkurl)
+            exit = False
         except:
             howmany = [None]
-        for x in range(len(howmany)):
-            # await asyncio.sleep(1)
-            oxford = data['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][x-1]['definitions']
-            await bot.say('Definition ' + str(x+1) + ': \n`' + oxford[0] + '`')
+            exit = True
+
+        # Skips if error
+        if exit is False:
+            word_str = word_id.replace('_', ' ')
+            defNumb = 0
+            change = 1
+            addReact = 1
+            first = True
+            firstSet = True
+            forward = 'right'
+            step = 'left'
+
+            # Checks for definition change, if none, it stops
+            while True:
+                if change is 1:
+                    change = 0
+                    embed=discord.Embed(title="Oxford Living Dictionary:", url='https://' + language + '.oxforddictionaries.com/definition/' + word_id, color=0xf5d28a)
+                    oxford = data['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][defNumb]['definitions']
+                    embed.add_field(name=word_str.capitalize() + ':', value=oxford[0], inline=False)
+                    embed.set_footer(text=str(defNumb+1) + ' of ' + str(len(howmany)))
+                    if addReact is 0:
+                        await bot.edit_message(msg, embed=embed)
+
+                if addReact is 1:
+                    addReact = 0
+                    msg = await bot.say(embed=embed)
+                    l = await bot.add_reaction(msg, '\U00002B05')
+                    m = await bot.add_reaction(msg, '\U000027A1')
+                    nav = None
+                else:
+                    nav = await bot.wait_for_reaction(timeout=1, emoji=['\U00002B05','\U000027A1'], message=msg)
+                    if first:
+                        first = False
+                        nav = None
+
+                    if nav and firstSet:
+                        firstSet = False
+                        forward = nav.reaction
+                        step = nav.reaction
+                    elif nav:
+                        step = nav.reaction
+
+
+                    if forward is step:
+                        endTime = curTime + timedelta(seconds=10)
+                        nav = None
+                        step = None
+                        change = 1
+                        if defNumb < len(howmany)-1:
+                            defNumb += 1
+                    elif step:
+                        endTime = curTime + timedelta(seconds=10)
+                        nav = None
+                        step = None
+                        change = 1
+                        if defNumb > 0:
+                            defNumb -= 1
+                    else:
+                        pass
+
+                    # time check
+                    # if time is > 10 secs
+                    # exit = True
+
+                curTime = datetime.now()
+                if curTime > endTime:
+                    exit = True
+
+                if exit is True or len(howmany) is 1:
+                    break
+            await bot.clear_reactions(msg)
+
     else:
-        await bot.say('Unable to find **' + word_id.capitalize() + '** in Oxford Living')
+        word_id = word_id.replace('_', ' ')
+        msg = await bot.say('Unable to find **' + word_id.capitalize() + '** in Oxford Living')
+        await asyncio.sleep(15)
+        await bot.delete_message(msg)
 
 @bot.command(pass_context = True, description = "Removes all write permissions from all channels.")
 async def mute(ctx, member: discord.Member):
