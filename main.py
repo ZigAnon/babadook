@@ -184,13 +184,13 @@ async def define(ctx):
         try:
             data = r.json()
             howmany = list(data['results'][0]['lexicalEntries'][0]['entries'][0]['senses'])
+            await bot.say('__Oxford Living Dictionary - **' + word_id.capitalize() + '**__:')
         except:
             howmany = [None]
-        await bot.say('__**' + word_id.capitalize() + ':**__')
         for x in range(len(howmany)):
             # await asyncio.sleep(1)
             oxford = data['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][x-1]['definitions']
-            await bot.say('**Definition ' + str(x+1) + ':** \n`' + oxford[0] + '`')
+            await bot.say('Definition ' + str(x+1) + ': \n`' + oxford[0] + '`')
     else:
         await bot.say('Unable to find **' + word_id.capitalize() + '** in Oxford Living')
 
