@@ -175,6 +175,7 @@ async def define(ctx):
     word_id = word_id.replace(' ', '_')
     language = 'en'
     url = 'https://od-api.oxforddictionaries.com:443/api/v1/entries/'  + language + '/'  + word_id.lower()
+    linkurl = '<https://' + language + '.oxforddictionaries.com/definition/' + word_id + '>'
 
     #url Normalized frequency
     urlFR = 'https://od-api.oxforddictionaries.com:443/api/v1/stats/frequency/word/'  + language + '/?corpus=nmc&lemma=' + word_id.lower()
@@ -184,7 +185,7 @@ async def define(ctx):
         try:
             data = r.json()
             howmany = list(data['results'][0]['lexicalEntries'][0]['entries'][0]['senses'])
-            await bot.say('__Oxford Living Dictionary - **' + word_id.capitalize() + '**__:')
+            await bot.say('__Oxford Living Dictionary - **' + word_id.capitalize() + '**__:\n' + linkurl)
         except:
             howmany = [None]
         for x in range(len(howmany)):
