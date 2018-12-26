@@ -135,7 +135,7 @@ async def main_loop():
                             bumMemb = mStrip[0].rstrip()
                             m.close()
                             pMemb = '<@' + bumMemb + '>'
-                            await bot.send_message(channel, '%s Friendly reminder to \`!disboard bump\` again!' % pMemb)
+                            await bot.send_message(channel, '%s Friendly reminder to `!disboard bump` again!' % pMemb)
 
                 # Has it been an hour since last ping?
                 else:
