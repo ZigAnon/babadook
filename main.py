@@ -274,6 +274,111 @@ async def define(ctx):
         await asyncio.sleep(15)
         await bot.delete_message(msg)
 
+@bot.command(pass_context = True, description = "Defines word using Merriam-Webster Dictionary.")
+async def wdefine(ctx):
+    raw = ctx.message.clean_content.lower()
+    curTime = datetime.now()
+    endTime = curTime + timedelta(seconds=10)
+    word_id = raw.split('.wdefine ')[1]
+    word_id = word_id.replace(' ', '_')
+    language = 'en'
+    url = 'https://www.dictionaryapi.com/api/v3/references/collegiate/json/' + word_id.lower() + '?key=' + web_key
+    linkurl = '<https://www.merriam-webster.com/dictionary/' + word_id.lower() + '>'
+
+    #url Normalized frequency
+    r = requests.get(url)
+
+    # Checks for 404 or if Definitions is found
+    if r.status_code is 200:
+        # Builds the list to reduce API calls
+        try:
+            data = r.json()
+            howmany = len(list(data))
+            exit = False
+        except:
+            howmany = [None]
+            exit = True
+
+        # Skips if error
+        if exit is False:
+            word_str = word_id.replace('_', ' ')
+            defNumb = 0
+            change = 1
+            addReact = 1
+            first = True
+            firstSet = True
+            forward = 'right'
+            step = 'left'
+
+            # Checks for definition change, if none, it stops
+            while True:
+                if change is 1:
+                    change = 0
+                    embed=discord.Embed(title="Merriam-Webster Dictionary:", url='https://www.merriam-webster.com/dictionary/' + word_id.lower(), color=0xf5d28a)
+                    webster = data[defNumb]['shortdef']
+                    embed.add_field(name=word_str.capitalize() + ':', value=webster[0], inline=False)
+                    embed.set_footer(text=str(defNumb+1) + ' of ' + str(howmany))
+                    if addReact is 0:
+                        await bot.edit_message(msg, embed=embed)
+
+                if addReact is 1:
+                    addReact = 0
+                    msg = await bot.say(embed=embed)
+                    l = await bot.add_reaction(msg, '\U00002B05')
+                    m = await bot.add_reaction(msg, '\U000027A1')
+                    nav = None
+                else:
+                    nav = await bot.wait_for_reaction(timeout=1, emoji=['\U00002B05','\U000027A1'], message=msg)
+                    if first:
+                        first = False
+                        nav = None
+
+                    if nav and firstSet:
+                        firstSet = False
+                        forward = nav.reaction
+                        step = nav.reaction
+                    elif nav:
+                        step = nav.reaction
+
+
+                    if forward is step:
+                        endTime = curTime + timedelta(seconds=10)
+                        nav = None
+                        step = None
+                        change = 1
+                        if defNumb < howmany-1:
+                            defNumb += 1
+                    elif step:
+                        endTime = curTime + timedelta(seconds=10)
+                        nav = None
+                        step = None
+                        change = 1
+                        if defNumb > 0:
+                            defNumb -= 1
+                    else:
+                        pass
+
+                    # time check
+                    # if time is > 10 secs
+                    # exit = True
+
+                curTime = datetime.now()
+                if curTime > endTime:
+                    exit = True
+
+                if exit is True or howmany is 1:
+                    break
+            await bot.clear_reactions(msg)
+
+    else:
+        word_id = word_id.replace('_', ' ')
+        msg = await bot.say('Unable to find **' + word_id.capitalize() + '** in Oxford Living')
+        await asyncio.sleep(15)
+        await bot.delete_message(msg)
+
+
+
+
 @bot.command(pass_context = True, description = "Removes all write permissions from all channels.")
 async def mute(ctx, member: discord.Member):
     if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ:
