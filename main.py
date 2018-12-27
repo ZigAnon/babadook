@@ -40,6 +40,8 @@ logAct = lines[10].rstrip()
 adminChan = lines[11].rstrip()
 ox_id = lines[12].rstrip()
 ox_key = lines[13].rstrip()
+web_id = lines[14].rstrip()
+web_key = lines[15].rstrip()
 config.close()
 
 jR = open(curDir + "/include/jailRoles")
