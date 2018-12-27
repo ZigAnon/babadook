@@ -315,7 +315,14 @@ async def wdefine(ctx):
                 if change is 1:
                     change = 0
                     embed=discord.Embed(title="Merriam-Webster Dictionary:", url='https://www.merriam-webster.com/dictionary/' + word_id.lower(), color=0xf5d28a)
-                    webster = data[defNumb]['shortdef']
+                    try:
+                        webster = data[defNumb]['shortdef']
+                    except:
+                        word_id = word_id.replace('_', ' ')
+                        msg = await bot.say('Unable to find **' + word_id.capitalize() + '** in Merriam-Webster')
+                        await asyncio.sleep(15)
+                        await bot.delete_message(msg)
+                        break
                     embed.add_field(name=word_str.capitalize() + ':', value=webster[0], inline=False)
                     embed.set_footer(text=str(defNumb+1) + ' of ' + str(howmany))
                     if addReact is 0:
@@ -369,15 +376,6 @@ async def wdefine(ctx):
                 if exit is True or howmany is 1:
                     break
             await bot.clear_reactions(msg)
-
-    else:
-        word_id = word_id.replace('_', ' ')
-        msg = await bot.say('Unable to find **' + word_id.capitalize() + '** in Oxford Living')
-        await asyncio.sleep(15)
-        await bot.delete_message(msg)
-
-
-
 
 @bot.command(pass_context = True, description = "Removes all write permissions from all channels.")
 async def mute(ctx, member: discord.Member):
