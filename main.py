@@ -647,12 +647,12 @@ async def on_message(message):
             await bot.send_message(channel, 'I\'ll stop reminding you for now. `!disboard bump` to start again.')
         except:
             await bot.send_message(channel, 'I\'m already set to not remind you. Please `!disboard bump` to start again.')
-
-    if message.content.startswith('.iam'):
+    
+    if message.content.lower().startswith('.iam'):
         Snow1 = discord.utils.get(message.server.roles, id = talkRole)
         Snow2 = discord.utils.get(message.server.roles, id = joinRole)
         # Checks for single role or if user removed all roles
-        if message.content.startswith('.iamn'):
+        if message.content.lower().startswith('.iamn'):
             await asyncio.sleep(1)
             roles = list(message.author.roles)
             rolNum = len(roles)
