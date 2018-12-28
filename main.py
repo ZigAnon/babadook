@@ -171,6 +171,14 @@ async def main_loop():
 ############################
 ############################
 
+@bot.command(pass_context = True, description = "Redirects to roles page")
+async def roles(ctx):
+    await bot.delete_message(ctx.message)
+    roleChan = bot.get_channel('512473259376246808')
+    msg = await bot.say('You can view roles by typing `.lsar` or going to ' + roleChan.mention)
+    await asyncio.sleep(15)
+    await bot.delete_message(msg)
+
 @bot.command(pass_context = True, description = "Defines word using Oxford Living Dictionary.")
 async def define(ctx):
     raw = ctx.message.clean_content.lower()
