@@ -18,7 +18,7 @@ import requests
 
 timeout = 60*5  # 5 minutes
 dateFormat = '%Y-%m-%d %H:%M:%S.%f'
-newAccount = 48 # 48 hours
+newAccount = 72 # 48 hours
 
 curDir = os.path.dirname(os.path.realpath(__file__))
 
