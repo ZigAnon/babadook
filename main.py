@@ -742,6 +742,20 @@ async def on_member_join(member):
     except:
         pass
 
+    # Checks against ban list
+    try:
+        s = open(curDir + '/include/special')
+        specialPeople = s.read().splitlines()
+        s.close()
+        sNum = len(specialPeople) - 1
+
+        if member.id in specialPeople:
+            channel = discord.utils.get(member.server.channels, id = adminChan)
+            await bot.send_message(channel, '@here\nI banned ' + member.mention + ' for stuff and things and reasons.')
+            await bot.ban(member)
+    except:
+        pass
+
 @bot.event
 async def on_ready():
     print('Logged in as')
