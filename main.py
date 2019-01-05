@@ -43,6 +43,7 @@ ox_key = lines[13].rstrip()
 web_id = lines[14].rstrip()
 web_key = lines[15].rstrip()
 welcomeChan = lines[16].rstrip()
+adminLogs = lines[17].rstrip()
 config.close()
 
 jR = open(curDir + "/include/jailRoles")
@@ -765,6 +766,12 @@ async def on_member_join(member):
     if sendWelcome:
         channel = discord.utils.get(member.server.channels, id = welcomeChan)
         await bot.send_message(channel, 'Hey ' + member.mention + ', welcome to **Coffee & Politics** \U0001F389\U0001F917 !')
+
+@bot.event
+async def on_member_remove(member):
+
+    channel = discord.utils.get(member.server.channels, id = adminLogs)
+    await bot.send_message(channel, 'Awww, ' + member.mention + 'just left the server \U0001F641')
 
 @bot.event
 async def on_ready():
