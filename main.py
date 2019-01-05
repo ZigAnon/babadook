@@ -42,6 +42,7 @@ ox_id = lines[12].rstrip()
 ox_key = lines[13].rstrip()
 web_id = lines[14].rstrip()
 web_key = lines[15].rstrip()
+welcomeChan = lines[16].rstrip()
 config.close()
 
 jR = open(curDir + "/include/jailRoles")
@@ -714,12 +715,15 @@ async def on_message(message):
 @bot.event
 async def on_member_join(member):
 
+    sendWelcome = True
+
     # kicks new accounts to prevent raid
     if datetime.utcnow() - timedelta(hours=newAccount) < member.created_at:
         channel = discord.utils.get(member.server.channels, id = adminChan)
         await bot.send_message(member, 'Your account is too new to for "Coffee & Politics".  If you wish to join our discussions please wait a few days and try again.  :D')
         await bot.send_message(channel, '@here\nI kicked ' + member.mention + ' because account was made in the last ' + str(newAccount) + ' hours.')
         await bot.kick(member)
+        sendWelcome = False
 
     # Checks for punishment evasion
     try:
@@ -732,6 +736,7 @@ async def on_member_join(member):
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
         Snow2 = discord.utils.get(member.server.roles, id = joinRole)
         embed=discord.Embed(title="User Jailed!", description="**{0}** was jailed for punishment evasion!".format(member), color=0xd30000)
+        sendWelcome = False
         # await bot.say(embed=embed)
         await bot.send_message(discord.Object(id=logAct),embed=embed)
         await bot.add_roles(member, jail)
@@ -753,8 +758,13 @@ async def on_member_join(member):
             channel = discord.utils.get(member.server.channels, id = adminChan)
             await bot.send_message(channel, '@here\nI banned ' + member.mention + ' for stuff and things and reasons.')
             await bot.ban(member)
+            sendWelcome = False
     except:
         pass
+
+    if sendWelcome:
+        channel = discord.utils.get(member.server.channels, id = welcomeChan)
+        await bot.send_message(channel, 'Hey ' + member.mention + ', welcome to **Coffee & Politics** \U0001F389\U0001F917 !')
 
 @bot.event
 async def on_ready():
