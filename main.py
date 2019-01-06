@@ -44,6 +44,8 @@ web_id = lines[14].rstrip()
 web_key = lines[15].rstrip()
 welcomeChan = lines[16].rstrip()
 adminLogs = lines[17].rstrip()
+oldRole = lines[18].rstrip()
+seriousRole = lines[19].rstrip()
 config.close()
 
 jR = open(curDir + "/include/jailRoles")
@@ -394,6 +396,8 @@ async def mute(ctx, member: discord.Member):
         mute = discord.utils.get(member.server.roles, id = muteRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
         Snow2 = discord.utils.get(member.server.roles, id = joinRole)
+        old = discord.utils.get(member.server.roles, id = oldRole)
+        serious = discord.utils.get(member.server.roles, id = seriousRole)
         embed=discord.Embed(title="User Muted!", description="**{0}** was muted by **{1}**!".format(member, ctx.message.author), color=0xd30000)
         # await bot.say(embed=embed)
         await bot.send_message(discord.Object(id=logAct),embed=embed)
@@ -402,6 +406,10 @@ async def mute(ctx, member: discord.Member):
         await bot.remove_roles(member, Snow1)
         await asyncio.sleep(1)
         await bot.remove_roles(member, Snow2)
+        await asyncio.sleep(1)
+        await bot.remove_roles(member, old)
+        await asyncio.sleep(1)
+        await bot.remove_roles(member, serious)
 
         # punishment evasion
         p = open(filePath + '.punish', 'w+')
@@ -448,6 +456,8 @@ async def jail(ctx, member: discord.Member):
         jail = discord.utils.get(member.server.roles, id = jailRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
         Snow2 = discord.utils.get(member.server.roles, id = joinRole)
+        old = discord.utils.get(member.server.roles, id = oldRole)
+        serious = discord.utils.get(member.server.roles, id = seriousRole)
         embed=discord.Embed(title="User Jailed!", description="**{0}** was jailed by **{1}**!".format(member, ctx.message.author), color=0xd30000)
         # await bot.say(embed=embed)
         await bot.send_message(discord.Object(id=logAct),embed=embed)
@@ -456,6 +466,10 @@ async def jail(ctx, member: discord.Member):
         await bot.remove_roles(member, Snow1)
         await asyncio.sleep(1)
         await bot.remove_roles(member, Snow2)
+        await asyncio.sleep(1)
+        await bot.remove_roles(member, old)
+        await asyncio.sleep(1)
+        await bot.remove_roles(member, serious)
 
         # punishment evasion
         p = open(filePath + '.punish', 'w+')
@@ -503,6 +517,8 @@ async def shitpost(ctx, member: discord.Member):
         shit = discord.utils.get(member.server.roles, id = shetRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
         Snow2 = discord.utils.get(member.server.roles, id = joinRole)
+        old = discord.utils.get(member.server.roles, id = oldRole)
+        serious = discord.utils.get(member.server.roles, id = seriousRole)
         embed=discord.Embed(title="Shitposter!", description="**{0}** was given Shitposter by **{1}**!".format(member, ctx.message.author), color=0xd30000)
         channel = discord.Object(id='509243584143425537')
         msg = '<@' + member.id + '>'
@@ -514,6 +530,10 @@ async def shitpost(ctx, member: discord.Member):
         await bot.remove_roles(member, Snow1)
         await asyncio.sleep(1)
         await bot.remove_roles(member, Snow2)
+        await asyncio.sleep(1)
+        await bot.remove_roles(member, old)
+        await asyncio.sleep(1)
+        await bot.remove_roles(member, serious)
 
         # punishment evasion
         p = open(filePath + '.punish', 'w+')
