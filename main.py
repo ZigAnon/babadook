@@ -711,6 +711,7 @@ async def on_message(message):
         message.content = message.content.lower()
         for x in range(len(memeRoles)):
             if message.content.startswith(memeRoles[x-1]):
+                filePath = curDir + '/logs/db/' + message.author.id
                 shit = discord.utils.get(message.server.roles, id = shetRole)
                 Snow1 = discord.utils.get(message.server.roles, id = talkRole)
                 Snow2 = discord.utils.get(message.server.roles, id = joinRole)
@@ -722,8 +723,10 @@ async def on_message(message):
                 await bot.remove_roles(message.author, Snow1)
                 await asyncio.sleep(1)
                 await bot.remove_roles(message.author, Snow2)
-                await asyncio.sleep(30)
+                await asyncio.sleep(120)
                 await bot.delete_message(msg)
+                p = open(filePath + '.punish', 'w+')
+                p.close()
 
 ############################
 ############################
