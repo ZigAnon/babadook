@@ -799,9 +799,10 @@ async def on_member_join(member):
             await asyncio.sleep(600)
             await bot.delete_message(msg)
     except:
-        channel = discord.utils.get(member.server.channels, id = adminChan)
-        await bot.send_message(member, '**"Coffee & Politics"** is currently not accepting members at this time.  If you wish to join our discussions please wait a few days and try again.\nhttps://discord.gg/jpKHVyA')
-        await bot.send_message(channel, '@here\n' + member.mention + ' tried to join but I kicked them because server is closed.  To open server, please `!disboard bump`.')
+        if sendWelcome:
+            channel = discord.utils.get(member.server.channels, id = adminChan)
+            await bot.send_message(member, '**"Coffee & Politics"** is currently not accepting members at this time.  If you wish to join our discussions please wait a few days and try again.\nhttps://discord.gg/jpKHVyA')
+            await bot.send_message(channel, '@here\n' + member.mention + ' tried to join but I kicked them because server is closed.  To open server, please `!disboard bump`.')
         await bot.kick(member)
 
 @bot.event
