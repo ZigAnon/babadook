@@ -46,6 +46,9 @@ welcomeChan = lines[16].rstrip()
 adminLogs = lines[17].rstrip()
 oldRole = lines[18].rstrip()
 seriousRole = lines[19].rstrip()
+botChan = lines[20].rstrip()
+ruleChan = lines[21].rstrip()
+genChan = lines[22].rstrip()
 config.close()
 
 jR = open(curDir + "/include/jailRoles")
@@ -743,7 +746,7 @@ async def on_member_join(member):
         channel = discord.utils.get(member.server.channels, id = adminChan)
         await bot.send_message(member, 'Your account is too new to for "Coffee & Politics".  If you wish to join our discussions please wait a few days and try again.  :D')
         await bot.send_message(channel, '@here\nI kicked ' + member.mention + ' because account was made in the last ' + str(newAccount) + ' hours.')
-        await bot.kick(member)
+        await bot.ban(member)
         sendWelcome = False
 
     # Checks for punishment evasion
@@ -786,6 +789,10 @@ async def on_member_join(member):
     if sendWelcome:
         channel = discord.utils.get(member.server.channels, id = welcomeChan)
         await bot.send_message(channel, 'Hey ' + member.mention + ', welcome to **Coffee & Politics** \U0001F389\U0001F917 !')
+        channel = discord.utils.get(member.server.channels, id = botChan)
+        msg = await bot.send_message(channel, 'Welcome ' + member.mention + '! To access <#' + genChan + '> and other channels you need a role.\nIf you agree with <#' + ruleChan + '> give yourself an ideology role!\nExample:```.iam liberal\n.iamnot liberal```\nTo see available roles type `.LSAR`')
+        await asyncio.sleep(600)
+        await bot.delete_message(msg)
 
 @bot.event
 async def on_member_remove(member):
