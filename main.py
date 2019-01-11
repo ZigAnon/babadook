@@ -49,6 +49,7 @@ seriousRole = lines[19].rstrip()
 botChan = lines[20].rstrip()
 ruleChan = lines[21].rstrip()
 genChan = lines[22].rstrip()
+shetChan = lines[23].rstrip()
 config.close()
 
 jR = open(curDir + "/include/jailRoles")
@@ -108,8 +109,10 @@ async def main_loop():
         # Auto purge channels
         try:
             channel = discord.Object(id=botChan)
+            sChannel = discord.Object(id=shetChan)
             beforeTime = datetime.now() - timedelta(hours=12)
             await bot.purge_from(channel, limit=100, before=beforeTime)
+            await bot.purge_from(sChannel, limit=100, before=beforeTime)
         except:
             pass
 
