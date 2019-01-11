@@ -105,6 +105,14 @@ async def main_loop():
         # Needed vars
         curTime = datetime.now()
 
+        # Auto purge channels
+        try:
+            channel = discord.Object(id=botChan)
+            beforeTime = datetime.now() - timedelta(hours=12)
+            await bot.purge_from(channel, limit=100, before=beforeTime)
+        except:
+            pass
+
         for x in range(len(servers)):
             filePath = curDir + '/logs/db/' + str(servers[x-1].id)
 
@@ -181,7 +189,7 @@ async def main_loop():
 @bot.command(pass_context = True, description = "Posts hot chicks")
 async def hotchicks(ctx):
     await bot.delete_message(ctx.message)
-    msg = await bot.say('https://media.giphy.com/media/madDH4fTGefvvL8P96/giphy.gif')
+    msg = await bot.say('**All these hot chicks**\nhttps://media.giphy.com/media/madDH4fTGefvvL8P96/giphy.gif')
     await asyncio.sleep(30)
     await bot.delete_message(msg)
 
