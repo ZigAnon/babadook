@@ -602,6 +602,10 @@ async def cleanpost(ctx, member: discord.Member):
 async def on_message(message):
     # Stops bot from replying to self
     if message.author == bot.user or message.author.bot:
+        if 'There are ' in message.content and ' self assignable roles' in message.content:
+            msg = message
+            await asyncio.sleep(120)
+            await bot.delete_message(msg)
         return
 
 ############################
