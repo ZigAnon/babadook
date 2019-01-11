@@ -827,7 +827,7 @@ async def on_member_join(member):
 async def on_member_remove(member):
 
     channel = discord.utils.get(member.server.channels, id = adminLogs)
-    await bot.send_message(channel, 'Awww, ' + member.mention + 'just left the server \U0001F641')
+    await bot.send_message(channel, 'Awww, ' + member.mention + ' just left the server \U0001F641')
 
 @bot.event
 async def on_ready():
