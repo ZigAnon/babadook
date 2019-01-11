@@ -538,7 +538,7 @@ async def shitpost(ctx, member: discord.Member):
         old = discord.utils.get(member.server.roles, id = oldRole)
         serious = discord.utils.get(member.server.roles, id = seriousRole)
         embed=discord.Embed(title="Shitposter!", description="**{0}** was given Shitposter by **{1}**!".format(member, ctx.message.author), color=0xd30000)
-        channel = discord.Object(id='509243584143425537')
+        channel = discord.Object(id='533390486845653027')
         msg = '<@' + member.id + '>'
         await bot.send_message(channel, 'Looks like you pushed it too far ' + msg + '. You live here now. Enjoy!!')
         # await bot.say(embed=embed)
@@ -730,7 +730,7 @@ async def on_message(message):
                 shit = discord.utils.get(message.server.roles, id = shetRole)
                 Snow1 = discord.utils.get(message.server.roles, id = talkRole)
                 Snow2 = discord.utils.get(message.server.roles, id = joinRole)
-                channel = discord.Object(id='509243584143425537')
+                channel = discord.Object(id='533390486845653027')
                 await bot.add_roles(message.author, shit)
                 await bot.send_message(message.channel, '**' + message.author.name + '** was shitposted pending manual approval.')
                 msg = await bot.send_message(channel, message.author.mention + ', this role is commonly used by memers and raiders. Please contact admin/mod to regain access.')
