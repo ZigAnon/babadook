@@ -178,6 +178,13 @@ async def main_loop():
 ############################
 ############################
 
+@bot.command(pass_context = True, description = "Posts hot chicks")
+async def hotchicks(ctx):
+    await bot.delete_message(ctx.message)
+    msg = await bot.say('https://media.giphy.com/media/madDH4fTGefvvL8P96/giphy.gif')
+    await asyncio.sleep(30)
+    await bot.delete_message(msg)
+
 @bot.command(pass_context = True, description = "Redirects to roles page")
 async def roles(ctx):
     await bot.delete_message(ctx.message)
