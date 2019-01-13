@@ -111,7 +111,7 @@ async def main_loop():
 
         # Auto purge channels
         beforeTime = datetime.now() - timedelta(hours=12)
-        oldNews = datetime.now() - timedelta(days=10)
+        oldNews = datetime.now() - timedelta(days=5)
         try:
             channel = discord.Object(id=botChan)
             await bot.purge_from(channel, limit=100, before=beforeTime)
