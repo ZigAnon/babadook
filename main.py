@@ -52,6 +52,7 @@ genChan = lines[22].rstrip()
 shetChan = lines[23].rstrip()
 newsChan = lines[24].rstrip()
 nsfwChan = lines[25].rstrip()
+offtChan = lines[26].rstrip()
 config.close()
 
 jR = open(curDir + "/include/jailRoles")
@@ -129,6 +130,11 @@ async def main_loop():
         try:
             gChannel = discord.Object(id=genChan)
             await bot.purge_from(gChannel, limit=100, before=beforeTime, check=is_bot)
+        except:
+            pass
+        try:
+            oChannel = discord.Object(id=offtChan)
+            await bot.purge_from(oChannel, limit=100, before=beforeTime, check=is_bot)
         except:
             pass
         try:
