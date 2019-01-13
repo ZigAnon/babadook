@@ -119,7 +119,7 @@ async def main_loop():
             pass
         try:
             sChannel = discord.Object(id=shetChan)
-            await bot.purge_from(sChannel, limit=100, before=beforeTime)
+            await bot.purge_from(sChannel, limit=100, before=oldNews)
         except:
             pass
         try:
