@@ -51,6 +51,7 @@ ruleChan = lines[21].rstrip()
 genChan = lines[22].rstrip()
 shetChan = lines[23].rstrip()
 newsChan = lines[24].rstrip()
+nsfwChan = lines[25].rstrip()
 config.close()
 
 jR = open(curDir + "/include/jailRoles")
@@ -108,17 +109,31 @@ async def main_loop():
         curTime = datetime.now()
 
         # Auto purge channels
+        beforeTime = datetime.now() - timedelta(hours=12)
+        oldNews = datetime.now() - timedelta(days=10)
         try:
             channel = discord.Object(id=botChan)
-            sChannel = discord.Object(id=shetChan)
-            nChannel = discord.Object(id=newsChan)
-            gChannel = discord.Object(id=genChan)
-            beforeTime = datetime.now() - timedelta(hours=12)
-            oldNews = datetime.now() - timedelta(days=10)
             await bot.purge_from(channel, limit=100, before=beforeTime)
+        except:
+            pass
+        try:
+            sChannel = discord.Object(id=shetChan)
             await bot.purge_from(sChannel, limit=100, before=beforeTime)
+        except:
+            pass
+        try:
+            nChannel = discord.Object(id=newsChan)
             await bot.purge_from(nChannel, limit=100, before=oldNews)
+        except:
+            pass
+        try:
+            gChannel = discord.Object(id=genChan)
             await bot.purge_from(gChannel, limit=100, before=beforeTime, check=is_bot)
+        except:
+            pass
+        try:
+            nsChannel = discord.Object(id=nsfwChan)
+            await bot.purge_from(nsChannel, limit=100, before=beforeTime, check=is_text)
         except:
             pass
 
@@ -200,6 +215,15 @@ def is_bot(m):
         return True
     else:
         return False
+
+def is_text(m):
+    if 'http' in m.content.lower():
+        return False
+    try:
+        url = str(m.attachments[0]['url'])
+        return False
+    except:
+        return True
 
 ############################
 ############################
