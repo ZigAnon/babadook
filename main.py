@@ -112,11 +112,13 @@ async def main_loop():
             channel = discord.Object(id=botChan)
             sChannel = discord.Object(id=shetChan)
             nChannel = discord.Object(id=newsChan)
+            gChannel = discord.Object(id=genChan)
             beforeTime = datetime.now() - timedelta(hours=12)
             oldNews = datetime.now() - timedelta(days=10)
             await bot.purge_from(channel, limit=100, before=beforeTime)
             await bot.purge_from(sChannel, limit=100, before=beforeTime)
             await bot.purge_from(nChannel, limit=100, before=oldNews)
+            await bot.purge_from(gChannel, limit=100, before=beforeTime, check=is_bot)
         except:
             pass
 
@@ -184,6 +186,20 @@ async def main_loop():
         reboot = 60 - timeoff
         await asyncio.sleep(reboot) # task runs every 60 seconds less mx time
 
+
+############################
+############################
+
+#   Start of functions     #
+
+############################
+############################
+
+def is_bot(m):
+    if m.author.bot:
+        return True
+    else:
+        return False
 
 ############################
 ############################
