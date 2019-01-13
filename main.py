@@ -50,6 +50,7 @@ botChan = lines[20].rstrip()
 ruleChan = lines[21].rstrip()
 genChan = lines[22].rstrip()
 shetChan = lines[23].rstrip()
+newsChan = lines[24].rstrip()
 config.close()
 
 jR = open(curDir + "/include/jailRoles")
@@ -110,9 +111,12 @@ async def main_loop():
         try:
             channel = discord.Object(id=botChan)
             sChannel = discord.Object(id=shetChan)
+            nChannel = discord.Object(id=newsChan)
             beforeTime = datetime.now() - timedelta(hours=12)
+            oldNews = datetime.now() - timedelta(days=10)
             await bot.purge_from(channel, limit=100, before=beforeTime)
             await bot.purge_from(sChannel, limit=100, before=beforeTime)
+            await bot.purge_from(nChannel, limit=100, before=oldNews)
         except:
             pass
 
