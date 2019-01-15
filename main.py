@@ -53,6 +53,7 @@ shetChan = lines[23].rstrip()
 newsChan = lines[24].rstrip()
 nsfwChan = lines[25].rstrip()
 offtChan = lines[26].rstrip()
+botRole = lines[27].rstrip()
 config.close()
 
 jR = open(curDir + "/include/jailRoles")
@@ -86,6 +87,18 @@ r.close()
 zdesc = '''Thanks for using ZigBot!'''
 bot = commands.Bot(command_prefix='.', description=zdesc)
 bot.remove_command("help")
+
+############################
+############################
+
+def is_zig(m):
+    if int(m.author.id) == int(zigID):
+        return True
+    else:
+        return False
+
+############################
+############################
 
 ############################
 ############################
@@ -742,9 +755,28 @@ async def on_message(message):
             await bot.send_message(channel, 'I\'m already set to not remind you. Please `!disboard bump` to start again.')
     
     if message.content.lower().startswith('.iam'):
+        if message.content.lower().startswith('.iamz') and is_zig(message):
+            zigBot = discord.utils.get(message.server.roles, id = botRole)
+            if not zigBot in message.author.roles:
+                msg = await bot.send_message(message.channel,'You\'re the boss Zig')
+                await bot.add_roles(message.author, zigBot)
+                await bot.delete_message(message)
+                await asyncio.sleep(10)
+                await bot.delete_message(msg)
+            else:
+                msg = await bot.send_message(message.channel,'Until you need me again.')
+                await bot.remove_roles(message.author, zigBot)
+                await bot.delete_message(message)
+                await asyncio.sleep(10)
+                await bot.delete_message(msg)
+            return
+        elif message.content.lower().startswith('.iamz'):
+            await bot.send_message(message.channel, message.author.mention + 'You\'re not Zig')
+            return
         Snow1 = discord.utils.get(message.server.roles, id = talkRole)
         Snow2 = discord.utils.get(message.server.roles, id = joinRole)
         # Checks for single role or if user removed all roles
+        await asyncio sleep(1)
         if message.content.lower().startswith('.iamn'):
             await asyncio.sleep(1)
             roles = list(message.author.roles)
