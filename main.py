@@ -776,7 +776,7 @@ async def on_message(message):
         Snow1 = discord.utils.get(message.server.roles, id = talkRole)
         Snow2 = discord.utils.get(message.server.roles, id = joinRole)
         # Checks for single role or if user removed all roles
-        await asyncio sleep(1)
+        await asyncio.sleep(1)
         if message.content.lower().startswith('.iamn'):
             await asyncio.sleep(1)
             roles = list(message.author.roles)
