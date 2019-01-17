@@ -244,6 +244,15 @@ def is_text(m):
     except:
         return True
 
+def is_legacy(m):
+    N = 30 # number of days before serious role
+    oldmember = datetime.now() - timedelta(days=N)
+    if m.author.joined_at < oldmember:
+        Snow1 = discord.utils.get(m.author.server.roles, id = talkRole)
+        if Snow1 in m.author.roles:
+            return True
+    return False
+
 ############################
 ############################
 
@@ -669,6 +678,9 @@ async def on_message(message):
 
 ############################
 ############################
+    if is_legacy(message):
+        serious = discord.utils.get(message.author.server.roles, id = seriousRole)
+        await bot.add_roles(message.author, serious)
 
     if ' iq' in message.content.lower() or 'iq ' in message.content.lower():
         msg = await bot.send_message(message.channel, message.author.mention + ', there are better arguments than IQ to make your case.\nhttps://www.independent.co.uk/news/science/iq-tests-are-fundamentally-flawed-and-using-them-alone-to-measure-intelligence-is-a-fallacy-study-8425911.html\nhttps://www.cell.com/neuron/fulltext/S0896-6273(12)00584-3')
