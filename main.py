@@ -247,6 +247,10 @@ def is_legacy(m):
             return True
     return False
 
+def num_roles(m):
+    x = len(list(m.author.roles))
+    return x
+
 ############################
 ############################
 
@@ -785,11 +789,9 @@ async def on_message(message):
         await asyncio.sleep(1)
         if message.content.lower().startswith('.iamn'):
             await asyncio.sleep(1)
-            roles = list(message.author.roles)
-            rolNum = len(roles)
-            if rolNum is 2:
+            if num_roles(message) is 2:
                 # User removed role, revert
-                msg = await bot.send_message(message.channel, 'You aren\'t allowed to chat without an ideology.  Please chose a role from #roles or `.lsar`')
+                msg = await bot.send_message(message.channel, 'You aren\'t allowed to chat without an ideology.  Please choose a role from #roles or `.lsar`')
                 await bot.add_roles(message.author, Snow2)
                 await asyncio.sleep(1)
                 await bot.remove_roles(message.author, Snow1)
@@ -797,21 +799,16 @@ async def on_message(message):
                 await bot.delete_message(msg)
 
         # Checks for initial role to remove undecided
-        elif discord.utils.get(message.author.roles, id = talkRole) is None and discord.utils.get(message.author.roles, id = joinRole) is not None:
+        elif discord.utils.get(message.author.roles, id = talkRole) is None and discord.utils.get(message.author.roles, id = joinRole) is not None and num_roles(message) > 2:
             await bot.add_roles(message.author, Snow1)
             await asyncio.sleep(1)
             await bot.remove_roles(message.author, Snow2)
-            await asyncio.sleep(10)
-            roles = list(message.author.roles)
-            rolNum = len(roles)
-            '''if rolNum is 2:
-                # No role assigned, revert
-                msg = await bot.send_message(message.channel, 'This role does not exist.  Please chose a role from #roles or `.lsar`')
-                await bot.add_roles(message.author, Snow2)
-                await asyncio.sleep(1)
-                await bot.remove_roles(message.author, Snow1)
-                await asyncio.sleep(7)
-                await bot.delete_message(msg)'''
+
+        # If role doesn't exist
+        elif num_roles(message) == 2:
+            msg = await bot.send_message(message.channel, 'Please choose a role from #roles or `.lsar`')
+            await asyncio.sleep(7)
+            await bot.delete_message(msg)
 
         # Checks for meme roles to shitpost
         message.content = message.content.lower()
