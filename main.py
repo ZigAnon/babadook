@@ -91,18 +91,6 @@ bot.remove_command("help")
 ############################
 ############################
 
-def is_zig(m):
-    if int(m.author.id) == int(zigID):
-        return True
-    else:
-        return False
-
-############################
-############################
-
-############################
-############################
-
 # Main loop, do not comment this area out
 async def main_loop():
     await bot.wait_until_ready()
@@ -228,6 +216,12 @@ async def main_loop():
 
 ############################
 ############################
+
+def is_zig(m):
+    if int(m.author.id) == int(zigID):
+        return True
+    else:
+        return False
 
 def is_bot(m):
     if m.author.bot:
