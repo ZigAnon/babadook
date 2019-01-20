@@ -681,6 +681,30 @@ async def on_message(message):
         serious = discord.utils.get(message.author.server.roles, id = seriousRole)
         await bot.add_roles(message.author, serious)
 
+    if not message.mentions == []:
+        mentionZig = discord.utils.get(message.server.members, id = zigID)
+   
+        if mentionZig.mention in message.content and '513083567014936616' in str(message.channel.id):
+            if discord.utils.get(mentionZig.roles, id = busyRole) is None:
+                pass
+            else:
+                filePath = curDir + '/logs/db/' + message.author.id
+                shit = discord.utils.get(message.server.roles, id = shetRole)
+                Snow1 = discord.utils.get(message.server.roles, id = talkRole)
+                Snow2 = discord.utils.get(message.server.roles, id = joinRole)
+                await bot.add_roles(message.author, shit)
+                msg = await bot.send_message(message.channel, '**' + message.author.name + '** Zig is busy and has the busy role. DO NOT mention Zig when they are busy.')
+                await asyncio.sleep(1)
+                await bot.remove_roles(message.author, Snow1)
+                await asyncio.sleep(1)
+                await bot.remove_roles(message.author, Snow2)
+                embed=discord.Embed(title="Shitposter!", description="**{0}** was given Shitposter by **ZigBot#1002** to stop further mentions!".format(message.author), color=0xd30000)
+                await bot.send_message(discord.Object(id=logAct),embed=embed)
+                await asyncio.sleep(120)
+                await bot.delete_message(msg)
+                p = open(filePath + '.punish', 'w+')
+                p.close()
+
     if ' iq' in message.content.lower() or 'iq ' in message.content.lower():
         msg = await bot.send_message(message.channel, message.author.mention + ', there are better arguments than IQ to make your case.\nhttps://www.independent.co.uk/news/science/iq-tests-are-fundamentally-flawed-and-using-them-alone-to-measure-intelligence-is-a-fallacy-study-8425911.html\nhttps://www.cell.com/neuron/fulltext/S0896-6273(12)00584-3')
         await asyncio.sleep(timeout)
