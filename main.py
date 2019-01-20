@@ -766,8 +766,10 @@ async def on_message(message):
             await bot.send_message(channel, 'I\'m already set to not remind you. Please `!disboard bump` to start again.')
 
     if message.content.lower().startswith('.iam busy') and message.author.server.id == mainServ:
+        error = discord.utils.get(message.server.members, name='ZigBot')
+        msg = await bot.wait_for_message(timeout=3, author=error)
+        await bot.delete_message(msg)
         filePath = curDir + '/logs/db/' + message.author.id
-        await bot.delete_message(message)
         roles_busy = list(message.author.roles)
         with open(filePath + '.busy', 'w+') as f:
             for x in range(len(roles_busy)):
@@ -776,11 +778,14 @@ async def on_message(message):
                 await asyncio.sleep(1)
         addRole = discord.utils.get(message.server.roles, id = busyRole)
         await bot.add_roles(message.author, addRole)
+        await bot.delete_message(message)
         return
 
     if message.content.lower().startswith('.iamn busy') and message.author.server.id == mainServ:
+        error = discord.utils.get(message.server.members, name='ZigBot')
+        msg = await bot.wait_for_message(timeout=3, author=error)
+        await bot.delete_message(msg)
         filePath = curDir + '/logs/db/' + message.author.id
-        await bot.delete_message(message)
         with open(filePath + '.busy') as f:
             roles_active = [line.strip('\n') for line in f]
             print(roles_active)
@@ -796,6 +801,7 @@ async def on_message(message):
             os.remove(filePath + '.busy')
         except:
             pass
+        await bot.delete_message(message)
         return
     
     if message.content.lower().startswith('.iam'):
