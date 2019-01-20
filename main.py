@@ -684,7 +684,7 @@ async def on_message(message):
     if not message.mentions == []:
         mentionZig = discord.utils.get(message.server.members, id = zigID)
    
-        if mentionZig.mention in message.content and '513083567014936616' in str(message.channel.id):
+        if mentionZig.mention in message.content and '513083567014936616' in str(message.channel.id) and not message.author.server_permissions.administrator:
             if discord.utils.get(mentionZig.roles, id = busyRole) is None:
                 pass
             else:
