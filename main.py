@@ -835,6 +835,7 @@ async def on_message(message):
                 await bot.remove_roles(message.author, Snow1)
                 await asyncio.sleep(7)
                 await bot.delete_message(msg)
+                await bot.delete_message(message)
 
         # Checks for initial role to remove undecided
         elif discord.utils.get(message.author.roles, id = talkRole) is None and discord.utils.get(message.author.roles, id = joinRole) is not None and num_roles(message) > 2:
@@ -844,9 +845,13 @@ async def on_message(message):
 
         # If role doesn't exist
         elif num_roles(message) == 2:
-            msg = await bot.send_message(message.channel, 'Please choose a role from #roles or `.lsar`')
+            if discord.utils.get(message.author.roles, id = busyRole) is None:
+                msg = await bot.send_message(message.channel, 'Please choose a role from #roles or `.lsar`')
+            else:
+                msg = await bot.send_message(message.channel, 'Your status is still set to busy.\n Please `.iamn busy` to get your roles back.')
             await asyncio.sleep(7)
             await bot.delete_message(msg)
+            await bot.delete_message(message)
 
         # Checks for meme roles to shitpost
         message.content = message.content.lower()
