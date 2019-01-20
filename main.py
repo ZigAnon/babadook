@@ -788,9 +788,7 @@ async def on_message(message):
         filePath = curDir + '/logs/db/' + message.author.id
         with open(filePath + '.busy') as f:
             roles_active = [line.strip('\n') for line in f]
-            print(roles_active)
         for x in range(len(roles_active)):
-            print(roles_active[x-1])
             addRole = discord.utils.get(message.server.roles, id = str(roles_active[x-1]))
             await bot.add_roles(message.author, addRole)
             await asyncio.sleep(1)
@@ -827,7 +825,7 @@ async def on_message(message):
         Snow2 = discord.utils.get(message.server.roles, id = joinRole)
         # Checks for single role or if user removed all roles
         await asyncio.sleep(1)
-        if message.content.lower().startswith('.iamn'):
+        if message.content.lower().startswith('.iamn') and discord.utils.get(message.author.roles, id = busyRole) is None:
             await asyncio.sleep(1)
             if num_roles(message) is 2:
                 # User removed role, revert
