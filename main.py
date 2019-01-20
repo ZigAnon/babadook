@@ -923,8 +923,11 @@ async def on_member_join(member):
         specialPeople = s.read().splitlines()
         s.close()
         sNum = len(specialPeople) - 1
+        w = open(curDir + '/include/whitelist')
+        whitelist = s.read().splitlines()
+        w.close()
 
-        if member.id in specialPeople:
+        if member.id in specialPeople and not member.id in whitelist:
             channel = discord.utils.get(member.server.channels, id = adminChan)
             await bot.send_message(channel, '@here\nI banned ' + member.mention + ' for stuff and things and reasons.')
             await bot.ban(member,0)
