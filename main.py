@@ -790,6 +790,13 @@ async def on_message(message):
             await bot.send_message(channel, 'I\'m already set to not remind you. Please `!disboard bump` to start again.')
 
     if message.content.lower().startswith('.iam busy') and message.author.server.id == mainServ:
+        if message.author.server_permissions.administrator:
+            msg = await bot.send_message(message.channel,'As much as I would like to, I\'m not able to set you to busy.\n It\'s out of my power.')
+            await bot.delete_message(message)
+            await asyncio.sleep(10)
+            await bot.delete_message(msg)
+            return
+
         error = discord.utils.get(message.server.members, name='ZigBot')
         msg = await bot.wait_for_message(timeout=3, author=error)
         await bot.delete_message(msg)
