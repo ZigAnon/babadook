@@ -54,6 +54,7 @@ newsChan = lines[24].rstrip()
 nsfwChan = lines[25].rstrip()
 offtChan = lines[26].rstrip()
 botRole = lines[27].rstrip()
+busyRole = lines[28].rstrip()
 config.close()
 
 jR = open(curDir + "/include/jailRoles")
@@ -763,6 +764,39 @@ async def on_message(message):
             await bot.send_message(channel, 'I\'ll stop reminding you for now. `!disboard bump` to start again.')
         except:
             await bot.send_message(channel, 'I\'m already set to not remind you. Please `!disboard bump` to start again.')
+
+    if message.content.lower().startswith('.iam busy') and message.author.server.id == mainServ:
+        filePath = curDir + '/logs/db/' + message.author.id
+        await bot.delete_message(message)
+        roles_busy = list(message.author.roles)
+        with open(filePath + '.busy', 'w+') as f:
+            for x in range(len(roles_busy)):
+                f.write('%s\n' % roles_busy[x-1].id)
+                await bot.remove_roles(message.author, roles_busy[x-1])
+                await asyncio.sleep(1)
+        addRole = discord.utils.get(message.server.roles, id = busyRole)
+        await bot.add_roles(message.author, addRole)
+        return
+
+    if message.content.lower().startswith('.iamn busy') and message.author.server.id == mainServ:
+        filePath = curDir + '/logs/db/' + message.author.id
+        await bot.delete_message(message)
+        with open(filePath + '.busy') as f:
+            roles_active = [line.strip('\n') for line in f]
+            print(roles_active)
+        for x in range(len(roles_active)):
+            print(roles_active[x-1])
+            addRole = discord.utils.get(message.server.roles, id = str(roles_active[x-1]))
+            await bot.add_roles(message.author, addRole)
+            await asyncio.sleep(1)
+        rmRole = discord.utils.get(message.server.roles, id = busyRole)
+        await bot.remove_roles(message.author, rmRole)
+
+        try:
+            os.remove(filePath + '.busy')
+        except:
+            pass
+        return
     
     if message.content.lower().startswith('.iam'):
         if message.content.lower().startswith('.iamz') and is_zig(message):
@@ -781,7 +815,7 @@ async def on_message(message):
                 await bot.delete_message(msg)
             return
         elif message.content.lower().startswith('.iamz'):
-            await bot.send_message(message.channel, message.author.mention + 'You\'re not Zig')
+            await bot.send_message(message.channel, message.author.mention + ' You\'re not Zig')
             return
         Snow1 = discord.utils.get(message.server.roles, id = talkRole)
         Snow2 = discord.utils.get(message.server.roles, id = joinRole)
