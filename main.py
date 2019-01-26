@@ -704,9 +704,11 @@ async def on_voice_state_update(before,after):
             if int(after.voice.voice_channel.id) == int(voiceID[x-1][0]):
                 see = discord.utils.get(after.server.roles, id = voiceID[x-1][1])
                 await bot.add_roles(after, see)
-                await asyncio.sleep(1)
-                see = discord.utils.get(after.server.roles, id = voiceID[x-1][1])
-                await bot.add_roles(after, see)
+                while True:
+                    if see in after.roles:
+                        break
+                    else:
+                        await bot.add_roles(after, see)
                 await asyncio.sleep(1)
                 break
     if before.voice.voice_channel is not None:
