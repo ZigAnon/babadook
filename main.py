@@ -695,6 +695,30 @@ async def cleanpost(ctx, member: discord.Member):
 ############################
 
 @bot.event
+async def on_voice_state_update(before,after):
+    with open(curDir + '/include/voice') as v:
+        voiceID = [line.strip('\n').split(',') for line in v]
+    if after.voice.voice_channel is not None:
+        for x in range(len(voiceID)):
+            if int(after.voice.voice_channel.id) == int(voiceID[x-1][0]):
+                see = discord.utils.get(after.server.roles, id = voiceID[x-1][1])
+                await bot.add_roles(after, see)
+                break
+    if before.voice.voice_channel is not None:
+        await asyncio.sleep(1)
+        for x in range(len(voiceID)):
+            if int(before.voice.voice_channel.id) == int(voiceID[x-1][0]):
+                hide = discord.utils.get(after.server.roles, id = voiceID[x-1][1])
+                await bot.remove_roles(after, hide)
+                break
+
+############################
+############################
+
+############################
+############################
+
+@bot.event
 async def on_message(message):
     # Stops bot from replying to self
     if message.author == bot.user or message.author.bot:
@@ -711,7 +735,6 @@ async def on_message(message):
    
         if mentionZig.mention in message.content and voiceChan in str(message.channel.id) and not message.author.server_permissions.administrator:
             if discord.utils.get(mentionZig.roles, id = busyRole) is None:
-                print('Not busy')
                 pass
             else:
                 filePath = curDir + '/logs/db/' + message.author.id
