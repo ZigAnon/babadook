@@ -963,6 +963,7 @@ async def on_message(message):
 async def on_member_join(member):
 
     sendWelcome = True
+    Snow2 = discord.utils.get(member.server.roles, id = joinRole)
 
     # kicks new accounts to prevent raid
     if datetime.utcnow() - timedelta(hours=newAccount) < member.created_at:
@@ -1018,6 +1019,7 @@ async def on_member_join(member):
         t.close()
 
         if sendWelcome:
+            await bot.add_roles(member, Snow2)
             channel = discord.utils.get(member.server.channels, id = welcomeChan)
             await bot.send_message(channel, 'Hey ' + member.mention + ', welcome to **Coffee & Politics** \U0001F389\U0001F917 !')
             channel = discord.utils.get(member.server.channels, id = botChan)
