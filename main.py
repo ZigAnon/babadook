@@ -55,6 +55,9 @@ nsfwChan = lines[25].rstrip()
 offtChan = lines[26].rstrip()
 botRole = lines[27].rstrip()
 busyRole = lines[28].rstrip()
+voiceChan = lines[29].rstrip()
+gen2Chan = lines[30].rstrip()
+cheetiID = lines[31].rstrip()
 config.close()
 
 jR = open(curDir + "/include/jailRoles")
@@ -132,6 +135,11 @@ async def main_loop():
         try:
             gChannel = discord.Object(id=genChan)
             await bot.purge_from(gChannel, limit=100, before=beforeTime, check=is_bot)
+        except:
+            pass
+        try:
+            g2Channel = discord.Object(id=gen2Chan)
+            await bot.purge_from(g2Channel, limit=100, before=beforeTime, check=is_bot)
         except:
             pass
         try:
@@ -224,6 +232,12 @@ def is_zig(m):
     else:
         return False
 
+def is_cheeti(m):
+    if int(m.author.id) == int(cheetiID):
+        return True
+    else:
+        return False
+
 def is_bot(m):
     if m.author.bot:
         return True
@@ -247,6 +261,17 @@ def is_legacy(m):
         if Snow1 in m.author.roles:
             return True
     return False
+
+def is_in_trouble(m):
+    try:
+        filePath = curDir + '/logs/db/' + str(member.id)
+
+        # Looks for punish file
+        t = open(filePath + '.punish')
+        t.close()
+        return True
+    except:
+        return False
 
 def num_roles(m):
     x = len(list(m.author.roles))
@@ -677,15 +702,16 @@ async def on_message(message):
 
 ############################
 ############################
-    if is_legacy(message):
+    if is_legacy(message) and not is_in_trouble(message):
         serious = discord.utils.get(message.author.server.roles, id = seriousRole)
         await bot.add_roles(message.author, serious)
 
     if not message.mentions == []:
         mentionZig = discord.utils.get(message.server.members, id = zigID)
    
-        if mentionZig.mention in message.content and '513083567014936616' in str(message.channel.id) and not message.author.server_permissions.administrator:
+        if mentionZig.mention in message.content and voiceChan in str(message.channel.id) and not message.author.server_permissions.administrator:
             if discord.utils.get(mentionZig.roles, id = busyRole) is None:
+                print('Not busy')
                 pass
             else:
                 filePath = curDir + '/logs/db/' + message.author.id
@@ -837,7 +863,7 @@ async def on_message(message):
         if message.content.lower().startswith('.iamz') and is_zig(message):
             zigBot = discord.utils.get(message.server.roles, id = botRole)
             if not zigBot in message.author.roles:
-                msg = await bot.send_message(message.channel,'You\'re the boss Zig')
+                msg = await bot.send_message(message.channel,'You\'re the boss')
                 await bot.add_roles(message.author, zigBot)
                 await bot.delete_message(message)
                 await asyncio.sleep(10)
@@ -850,7 +876,25 @@ async def on_message(message):
                 await bot.delete_message(msg)
             return
         elif message.content.lower().startswith('.iamz'):
-            await bot.send_message(message.channel, message.author.mention + ' You\'re not Zig')
+            await bot.send_message(message.channel, message.author.mention + ' You\'re not Zig.')
+            return
+        if message.content.lower().startswith('.iam epic') and is_cheeti(message):
+            zigBot = discord.utils.get(message.server.roles, id = botRole)
+            if not zigBot in message.author.roles:
+                msg = await bot.send_message(message.channel,'You\'re epic!')
+            #     await bot.add_roles(message.author, zigBot)
+                await asyncio.sleep(timeout)
+                await bot.delete_message(msg)
+                await bot.delete_message(message)
+            else:
+                msg = await bot.send_message(message.channel,'You\'re epic!')
+            #     await bot.remove_roles(message.author, zigBot)
+                await asyncio.sleep(timeout)
+                await bot.delete_message(msg)
+                await bot.delete_message(message)
+            return
+        elif message.content.lower().startswith('.iam epic'):
+            await bot.send_message(message.channel, message.author.mention + ' You\'re not epic.')
             return
         Snow1 = discord.utils.get(message.server.roles, id = talkRole)
         Snow2 = discord.utils.get(message.server.roles, id = joinRole)

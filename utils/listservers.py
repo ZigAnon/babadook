@@ -25,6 +25,6 @@ async def on_ready():
     print("\nConnected on " + str(len(client.servers)) + " servers:")
     for x in range(len(servers)):
         print('  ' + servers[x-1].name + '\n    id: ' + servers[x-1].id)
-    client.close()
+    await client.close()
 
 client.run(TOKEN)
