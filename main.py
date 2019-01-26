@@ -230,12 +230,20 @@ async def main_loop():
 def is_admin(m):
     with open(curDir + '/include/modRoles') as a:
         admin = [line.strip('\n').split(',') for line in a]
-        for x in range(len(admin)):
-            role = discord.utils.get(m.server.roles, id = admin[x-1][0])
-            if role in m.author.roles:
-                return True
-        print('Not found')
-        return False
+    for x in range(len(admin)):
+        role = discord.utils.get(m.server.roles, id = admin[x-1][0])
+        if role in m.author.roles:
+            return True
+    return False
+
+def is_trusted(m):
+    with open(curDir + '/include/trustedRoles') as t:
+        trusted = [line.strip('\n').split(',') for line in t]
+    for x in range(len(trusted)):
+        role = discord.utils.get(m.server.roles, id = trusted[x-1][0])
+        if role in m.author.roles:
+            return True
+    return False
 
 def is_zig(m):
     if int(m.author.id) == int(zigID):
@@ -271,6 +279,24 @@ def is_legacy(m):
         Snow1 = discord.utils.get(m.author.server.roles, id = talkRole)
         if Snow1 in m.author.roles:
             return True
+    return False
+
+def is_invite(m):
+    if '://discord.gg' in m.content.lower():
+        return True
+    if 'disboard.org/server/' in m.content.lower():
+        return True
+    if '://discord.me/' in m.content.lower():
+        return True
+    return False
+
+def is_caps(m): # 70%+ caps
+    stripped = m.content.replace(' ','')
+    allLetters = len(stripped)
+    capLetters = sum(1 for c in m.content if c.isupper())
+    percentage = capLetters / allLetters
+    if percentage >= 0.70:
+        return True
     return False
 
 def is_in_trouble(m):
@@ -756,7 +782,17 @@ async def on_message(message):
 #++++++++++++++++++++++++++#
 
     if is_admin(message):
-        print('Admin message')
+        pass
+    elif is_trusted(message):
+        pass
+    else:
+        if is_invite(message):
+            await bot.send_message(message.author, 'It\'s in the rules, no sharing discord links.\n Bye bye!')
+            await bot.kick(message.author)
+            await bot.delete_message(message)
+            return
+        if is_caps(message):
+            await bot.send_message(message.channel, 'Alright, ' + message.author.mention + ' has been warned for \'**Capital letters**\'.')
 
 #++++++++++++++++++++++++++#
 #++++++++++++++++++++++++++#
