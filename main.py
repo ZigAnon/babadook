@@ -227,6 +227,16 @@ async def main_loop():
 ############################
 ############################
 
+def is_admin(m):
+    with open(curDir + '/include/modRoles') as a:
+        admin = [line.strip('\n').split(',') for line in a]
+        for x in range(len(admin)):
+            role = discord.utils.get(m.server.roles, id = admin[x-1][0])
+            if role in m.author.roles:
+                return True
+        print('Not found')
+        return False
+
 def is_zig(m):
     if int(m.author.id) == int(zigID):
         return True
@@ -742,6 +752,15 @@ async def on_message(message):
         serious = discord.utils.get(message.author.server.roles, id = seriousRole)
         await bot.add_roles(message.author, serious)
 
+#++++++++++++++++++++++++++#
+#++++++++++++++++++++++++++#
+
+    if is_admin(message):
+        print('Admin message')
+
+#++++++++++++++++++++++++++#
+#++++++++++++++++++++++++++#
+    
     if message.content.lower().startswith('!refuel'):
         msg = await bot.send_message(message.channel,'Helicopter is refueled and ready to... physically remove... so to speak...\nhttps://cdn.discordapp.com/attachments/509245339664908299/522448178138578964/1512796577930.gif')
         await bot.delete_message(message)
