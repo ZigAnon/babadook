@@ -838,6 +838,7 @@ async def on_message(message):
 
 ############################
 ############################
+
     if is_legacy(message) and not is_in_trouble(message):
         serious = discord.utils.get(message.author.server.roles, id = seriousRole)
         await bot.add_roles(message.author, serious)
@@ -1178,6 +1179,17 @@ async def on_member_remove(member):
 
     channel = discord.utils.get(member.server.channels, id = adminLogs)
     await bot.send_message(channel, 'Awww, ' + member.mention + ' just left the server \U0001F641')
+
+@bot.event
+async def on_message_delete(message):
+    try:
+        logit = discord.utils.get(message.server.channels, id = adminLogs)
+    except:
+        pass
+    embed=discord.Embed(description="**Message sent by " + message.author.mention + " deleted in " + message.channel.mention + "**\n" + message.clean_content, color=0xff470f)
+    embed.set_author(name=message.author, icon_url=message.author.avatar_url)
+    embed.set_footer(text="ID: " + message.author.id + " • Today at " + f"{datetime.now():%I:%M %p}")
+    await bot.send_message(logit, embed=embed)
 
 @bot.event
 async def on_ready():
