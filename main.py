@@ -313,6 +313,12 @@ def is_in_trouble(m):
     except:
         return False
 
+# Message ignore check
+def is_ignore(m):
+    if '.iamz' in m.content.lower():
+        return True
+    return False
+
 # member or author object
 def get_avatar(m):
     if m.avatar_url is '':
@@ -1159,9 +1165,7 @@ async def on_message(message):
 
 @bot.event
 async def on_member_update(before, after):
-    if str(before.nick) == str(after.nick):
-        pass
-    else:
+    if str(before.nick) != str(after.nick):
         embed=discord.Embed(description=before.mention + " **nickname changed**", color=0x117ea6)
         embed.add_field(name="Before", value=before.nick, inline=False)
         embed.add_field(name="After", value=after.nick, inline=False)
@@ -1170,6 +1174,24 @@ async def on_member_update(before, after):
         embed.set_footer(text="ID: " + before.id + " • Today at " + f"{datetime.now():%I:%M %p}")
         await bot.send_message(discord.Object(id=adminLogs),embed=embed)
         await log_backup_embed(embed)
+    elif before.roles is not after.roles:
+        if before.roles > after.roles:
+#            testout = [before.roles[x] for x in before.roles]
+#             embed=discord.Embed(description=before.mention + " **nickname changed**", color=0x117ea6)
+#             embed.add_field(name=before.mention + " **was given the" , value=before.nick, inline=False)
+#             pfp = get_avatar(before)
+#             embed.set_author(name=before, icon_url=pfp)
+#             embed.set_footer(text="ID: " + before.id + " • Today at " + f"{datetime.now():%I:%M %p}")
+#             await bot.send_message(discord.Object(id=adminLogs),embed=embed)
+#             await log_backup_embed(embed)
+            print('roles changed')
+        elif after.roles > before.roles:
+            print('less')
+            print('roles changed')
+        else:
+            pass
+    else:
+        return
 
 @bot.event
 async def on_member_join(member):
@@ -1300,8 +1322,11 @@ async def on_message_edit(before, after):
     if is_bot(before):
         return
 
+    #TODO: Isolate hit on embed update/refresh
+    print('Embed found in after: ' + str(len(after.embeds)))
+
     # Member before text
-    embed=discord.Embed(description="**Message edited in " + before.channel.mention + "**", color=0xff470f)
+    embed=discord.Embed(description="**Message edited in " + before.channel.mention + "**", color=0x117ea6)
     embed.add_field(name="Before", value=before.clean_content, inline=False)
     pfp = get_avatar(before.author)
     embed.set_author(name=before.author, icon_url=pfp)
@@ -1327,6 +1352,8 @@ async def on_message_edit(before, after):
 @bot.event
 async def on_message_delete(message):
     if is_bot(message):
+        return
+    if is_ignore(message):
         return
 
     try:
