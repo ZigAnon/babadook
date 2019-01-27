@@ -773,18 +773,26 @@ async def on_voice_state_update(before,after):
     with open(curDir + '/include/voice') as v:
         voiceID = [line.strip('\n').split(',') for line in v]
     for x in range(len(voiceID)):
-        if int(after.voice.voice_channel.id) == int(voiceID[x-1][0]):
-            add = discord.utils.get(after.server.roles, id = voiceID[x-1][1])
-
-        if int(before.voice.voice_channel.id) == int(voiceID[x-1][0]):
-            rmv = discord.utils.get(before.server.roles, id = voiceID[x-1][1])
+        try:
+            if int(after.voice.voice_channel.id) == int(voiceID[x-1][0]):
+                add = discord.utils.get(after.server.roles, id = voiceID[x-1][1])
+        except:
+            pass
+        try:
+            if int(before.voice.voice_channel.id) == int(voiceID[x-1][0]):
+                rmv = discord.utils.get(before.server.roles, id = voiceID[x-1][1])
+        except:
+            pass
 
     if after.voice.voice_channel is not None:
         await bot.add_roles(after, add)
         while True:
             if add in after.roles:
-                await bot.remove_roles(after, rmv)
-                break
+                try:
+                    await bot.remove_roles(after, rmv)
+                    break
+                except:
+                    break
             else:
                 await bot.add_roles(after, add)
     elif after.voice.voice_channel is None:
