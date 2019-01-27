@@ -1159,7 +1159,9 @@ async def on_message(message):
 
 @bot.event
 async def on_member_update(before, after):
-    if before.nick is not after.nick:
+    if str(before.nick) == str(after.nick):
+        pass
+    else:
         embed=discord.Embed(description=before.mention + " **nickname changed**", color=0x117ea6)
         embed.add_field(name="Before", value=before.nick, inline=False)
         embed.add_field(name="After", value=after.nick, inline=False)
@@ -1301,8 +1303,11 @@ async def on_message_edit(before, after):
     pfp = get_avatar(before.author)
     embed.set_author(name=before.author, icon_url=pfp)
     embed.set_footer(text="ID: " + before.author.id + " • Today at " + f"{datetime.now():%I:%M %p}")
-    await bot.send_message(discord.Object(id=adminLogs),embed=embed)
-    await log_backup_embed(embed)
+    try:
+        await bot.send_message(discord.Object(id=adminLogs),embed=embed)
+        await log_backup_embed(embed)
+    except:
+        pass
 
     # Member after text
     embed=discord.Embed(description="**Message edited in " + after.channel.mention + "**", color=0x117ea6)
@@ -1310,8 +1315,11 @@ async def on_message_edit(before, after):
     pfp = get_avatar(after.author)
     embed.set_author(name=after.author, icon_url=pfp)
     embed.set_footer(text="ID: " + after.author.id + " • Today at " + f"{datetime.now():%I:%M %p}")
-    await bot.send_message(discord.Object(id=adminLogs),embed=embed)
-    await log_backup_embed(embed)
+    try:
+        await bot.send_message(discord.Object(id=adminLogs),embed=embed)
+        await log_backup_embed(embed)
+    except:
+        pass
 
 @bot.event
 async def on_message_delete(message):
