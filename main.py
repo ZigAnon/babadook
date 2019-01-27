@@ -793,18 +793,19 @@ async def on_voice_state_update(before,after):
             await bot.send_message(logit, embed=embed)
 
     if after.voice_channel is before.voice_channel:
-        print(before)
-        print(after)
         return
     else:
         try:
             logit = discord.utils.get(before.server.channels, id = adminLogs)
         except:
             pass
-        embed=discord.Embed(description="**" + after.mention + " switched voice channel `#" + before.voice.voice_channel.name + "` -> `#" + after.voice.voice_channel.name + "`**", color=0x23d160)
-        embed.set_author(name=after, icon_url=after.avatar_url)
-        embed.set_footer(text="ID: " + after.id + " • Today at " + f"{datetime.now():%I:%M %p}")
-        await bot.send_message(logit, embed=embed)
+        try:
+            embed=discord.Embed(description="**" + after.mention + " switched voice channel `#" + before.voice.voice_channel.name + "` -> `#" + after.voice.voice_channel.name + "`**", color=0x23d160)
+            embed.set_author(name=after, icon_url=after.avatar_url)
+            embed.set_footer(text="ID: " + after.id + " • Today at " + f"{datetime.now():%I:%M %p}")
+            await bot.send_message(logit, embed=embed)
+        except:
+            pass
 
     # Unhide voice channels
     with open(curDir + '/include/voice') as v:
@@ -820,6 +821,12 @@ async def on_voice_state_update(before,after):
                 rmv = discord.utils.get(before.server.roles, id = voiceID[x-1][1])
         except:
             pass
+
+    try:
+        if rmv is add:
+            return
+    except:
+        pass
 
     if after.voice.voice_channel is not None:
         await bot.add_roles(after, add)
