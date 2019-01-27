@@ -313,6 +313,14 @@ def is_in_trouble(m):
     except:
         return False
 
+# member or author object
+def get_avatar(m):
+    if m.avatar_url is '':
+        pfp = m.default_avatar_url
+    else:
+        pfp = m.avatar_url
+    return pfp
+
 def num_roles(m):
     x = len(list(m.author.roles))
     return x
@@ -783,7 +791,8 @@ async def on_voice_state_update(before,after):
             except:
                 pass
             embed=discord.Embed(description="**" + before.mention + " joined voice channel #" + after.voice_channel.name + "**\n", color=0x23d160)
-            embed.set_author(name=before, icon_url=before.avatar_url)
+            pfp = get_avatar(before)
+            embed.set_author(name=before, icon_url=pfp)
             embed.set_footer(text="ID: " + before.id + " • Today at " + f"{datetime.now():%I:%M %p}")
             await bot.send_message(logit, embed=embed)
             await log_backup_embed(embed)
@@ -794,7 +803,8 @@ async def on_voice_state_update(before,after):
             except:
                 pass
             embed=discord.Embed(description="**" + after.mention + " left voice channel #" + before.voice_channel.name + "**\n", color=0x23d160)
-            embed.set_author(name=after, icon_url=after.avatar_url)
+            pfp = get_avatar(after)
+            embed.set_author(name=after, icon_url=pfp)
             embed.set_footer(text="ID: " + after.id + " • Today at " + f"{datetime.now():%I:%M %p}")
             await bot.send_message(logit, embed=embed)
             await log_backup_embed(embed)
@@ -808,7 +818,8 @@ async def on_voice_state_update(before,after):
             pass
         try:
             embed=discord.Embed(description="**" + after.mention + " switched voice channel `#" + before.voice.voice_channel.name + "` -> `#" + after.voice.voice_channel.name + "`**", color=0x23d160)
-            embed.set_author(name=after, icon_url=after.avatar_url)
+            pfp = get_avatar(after)
+            embed.set_author(name=after, icon_url=pfp)
             embed.set_footer(text="ID: " + after.id + " • Today at " + f"{datetime.now():%I:%M %p}")
             await bot.send_message(logit, embed=embed)
             await log_backup_embed(embed)
@@ -1152,6 +1163,16 @@ async def on_member_join(member):
     sendWelcome = True
     Snow2 = discord.utils.get(member.server.roles, id = joinRole)
 
+    # Member join log
+    embed=discord.Embed(description=member.mention + " " + member.name, color=0x23d160)
+    embed.add_field(name="Account Creation Date", value=member.created_at, inline=False)
+    pfp = get_avatar(member)
+    embed.set_thumbnail(url=pfp)
+    embed.set_author(name="Member Joined", icon_url=pfp)
+    embed.set_footer(text="ID: " + member.id + " • Today at " + f"{datetime.now():%I:%M %p}")
+    await bot.send_message(discord.Object(id=adminLogs),embed=embed)
+    await log_backup_embed(embed)
+
     # kicks new accounts to prevent raid
     if datetime.utcnow() - timedelta(hours=newAccount) < member.created_at:
         channel = discord.utils.get(member.server.channels, id = adminChan)
@@ -1223,8 +1244,30 @@ async def on_member_join(member):
 @bot.event
 async def on_member_remove(member):
 
-    channel = discord.utils.get(member.server.channels, id = adminLogs)
-    await bot.send_message(channel, 'Awww, ' + member.mention + ' just left the server \U0001F641')
+    # Member leave log
+    embed=discord.Embed(description=member.mention + " " + member.name, color=0xff470f)
+    embed.add_field(name="Join Date", value=member.joined_at, inline=False)
+    pfp = get_avatar(member)
+    embed.set_thumbnail(url=pfp)
+    embed.set_author(name="Member Left", icon_url=pfp)
+    embed.set_footer(text="ID: " + member.id + " • Today at " + f"{datetime.now():%I:%M %p}")
+    await bot.send_message(discord.Object(id=adminLogs),embed=embed)
+    await log_backup_embed(embed)
+
+
+    # channel = discord.utils.get(member.server.channels, id = adminLogs)
+    # await bot.send_message(channel, 'Awww, ' + member.mention + ' just left the server \U0001F641')
+
+async def on_member_ban(member):
+    # Member ban log
+    embed=discord.Embed(description=member.mention + " " + member.name, color=0xff470f)
+    embed.add_field(name="Join Date", value=member.joined_at, inline=False)
+    pfp = get_avatar(member)
+    embed.set_thumbnail(url=pfp)
+    embed.set_author(name="Member Banned", icon_url=pfp)
+    embed.set_footer(text="ID: " + member.id + " • Today at " + f"{datetime.now():%I:%M %p}")
+    await bot.send_message(discord.Object(id=adminLogs),embed=embed)
+    await log_backup_embed(embed)
 
 @bot.event
 async def on_message_delete(message):
@@ -1236,7 +1279,8 @@ async def on_message_delete(message):
     except:
         pass
     embed=discord.Embed(description="**Message sent by " + message.author.mention + " deleted in " + message.channel.mention + "**\n" + message.clean_content, color=0xff470f)
-    embed.set_author(name=message.author, icon_url=message.author.avatar_url)
+    pfp = get_avatar(message.author)
+    embed.set_author(name=message.author, icon_url=pfp)
     embed.set_footer(text="ID: " + message.author.id + " • Today at " + f"{datetime.now():%I:%M %p}")
     await bot.send_message(logit, embed=embed)
     await log_backup_embed(embed)
