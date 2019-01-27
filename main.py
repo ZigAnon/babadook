@@ -316,6 +316,41 @@ def num_roles(m):
     x = len(list(m.author.roles))
     return x
 
+async def punish_shitpost(m):
+    if (m.author.server_permissions.administrator or discord.utils.get(m.author.roles, id=servMod) or discord.utils.get(m.author.roles, id=servRep)) and m.server.id == mainServ:
+        filePath = curDir + '/logs/db/' + m.author.id
+        shit = discord.utils.get(m.author.server.roles, id = shetRole)
+        Snow1 = discord.utils.get(m.author.server.roles, id = talkRole)
+        Snow2 = discord.utils.get(m.author.server.roles, id = joinRole)
+        old = discord.utils.get(m.author.server.roles, id = oldRole)
+        serious = discord.utils.get(m.author.server.roles, id = seriousRole)
+        embed=discord.Embed(title="Shitposter!", description="**{0}** was given Shitposter by **ZigBot#1002**!".format(m.author), color=0xd30000)
+        channel = discord.Object(id=shetChan)
+        msg = '<@' + m.author.id + '>'
+        await bot.send_message(channel, 'Looks like you pushed it too far ' + msg + '. You live here now. Enjoy!!')
+        # await bot.say(embed=embed)
+        await bot.send_message(discord.Object(id=logAct),embed=embed)
+        await bot.add_roles(m.author, shit)
+        await asyncio.sleep(1)
+        await bot.remove_roles(m.author, Snow1)
+        await asyncio.sleep(1)
+        await bot.remove_roles(m.author, Snow2)
+        await asyncio.sleep(1)
+        await bot.remove_roles(m.author, old)
+        await asyncio.sleep(1)
+        await bot.remove_roles(m.author, serious)
+
+        # punishment evasion
+        p = open(filePath + '.punish', 'w+')
+        p.close()
+
+        # Kick from voice channel
+        kick_channel = await bot.create_channel(m.server, "kick", type=discord.ChannelType.voice)
+        await bot.move_member(m.author, kick_channel)
+        await bot.delete_channel(kick_channel)
+    return
+
+
 ############################
 ############################
 
@@ -676,7 +711,7 @@ async def shitpost(ctx, member: discord.Member):
         old = discord.utils.get(member.server.roles, id = oldRole)
         serious = discord.utils.get(member.server.roles, id = seriousRole)
         embed=discord.Embed(title="Shitposter!", description="**{0}** was given Shitposter by **{1}**!".format(member, ctx.message.author), color=0xd30000)
-        channel = discord.Object(id='533390486845653027')
+        channel = discord.Object(id=shetChan)
         msg = '<@' + member.id + '>'
         await bot.send_message(channel, 'Looks like you pushed it too far ' + msg + '. You live here now. Enjoy!!')
         # await bot.say(embed=embed)
@@ -795,6 +830,9 @@ async def on_message(message):
             return
         if is_caps(message) and int(message.channel.id) != int(shetChan):
             await bot.send_message(message.channel, 'Alright, ' + message.author.mention + ' has been warned for \'**Capital letters**\'.')
+        if len(message.mentions) >= 5:
+            await bot.send_message(message.channel, 'Alright, ' + message.author.mention + ' has been shitposted for \'**Mass mentions**\'.')
+            await punish_shitpost(message)
 
 #++++++++++++++++++++++++++#
 #++++++++++++++++++++++++++#
@@ -1010,7 +1048,7 @@ async def on_message(message):
                 shit = discord.utils.get(message.server.roles, id = shetRole)
                 Snow1 = discord.utils.get(message.server.roles, id = talkRole)
                 Snow2 = discord.utils.get(message.server.roles, id = joinRole)
-                channel = discord.Object(id='533390486845653027')
+                channel = discord.Object(id=shetChan)
                 await bot.add_roles(message.author, shit)
                 await bot.send_message(message.channel, '**' + message.author.name + '** was shitposted pending manual approval.')
                 msg = await bot.send_message(channel, message.author.mention + ', this role is commonly used by memers and raiders. Please contact admin/mod to regain access.')
