@@ -777,7 +777,7 @@ async def on_voice_state_update(before,after):
                 logit = discord.utils.get(before.server.channels, id = adminLogs)
             except:
                 pass
-            embed=discord.Embed(description="**" + before.mention + " left voice channel #" + after.voice_channel.name + "**\n", color=0x23d160)
+            embed=discord.Embed(description="**" + before.mention + " joined voice channel #" + after.voice_channel.name + "**\n", color=0x23d160)
             embed.set_author(name=before, icon_url=before.avatar_url)
             embed.set_footer(text="ID: " + before.id + " • Today at " + f"{datetime.now():%I:%M %p}")
             await bot.send_message(logit, embed=embed)
@@ -787,7 +787,7 @@ async def on_voice_state_update(before,after):
                 logit = discord.utils.get(after.server.channels, id = adminLogs)
             except:
                 pass
-            embed=discord.Embed(description="**" + after.mention + " joined voice channel #" + before.voice_channel.name + "**\n", color=0x23d160)
+            embed=discord.Embed(description="**" + after.mention + " left voice channel #" + before.voice_channel.name + "**\n", color=0x23d160)
             embed.set_author(name=after, icon_url=after.avatar_url)
             embed.set_footer(text="ID: " + after.id + " • Today at " + f"{datetime.now():%I:%M %p}")
             await bot.send_message(logit, embed=embed)
