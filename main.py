@@ -59,6 +59,7 @@ voiceChan = lines[29].rstrip()
 gen2Chan = lines[30].rstrip()
 cheetiID = lines[31].rstrip()
 haRole = lines[32].rstrip()
+logBackup = lines[33].rstrip()
 config.close()
 
 jR = open(curDir + "/include/jailRoles")
@@ -350,6 +351,10 @@ async def punish_shitpost(m):
         await bot.delete_channel(kick_channel)
     return
 
+async def log_backup_embed(e):
+    if logBackup is not '':
+        channel = discord.Object(id=logBackup)
+        await bot.send_message(channel, embed=e)
 
 ############################
 ############################
@@ -781,6 +786,7 @@ async def on_voice_state_update(before,after):
             embed.set_author(name=before, icon_url=before.avatar_url)
             embed.set_footer(text="ID: " + before.id + " • Today at " + f"{datetime.now():%I:%M %p}")
             await bot.send_message(logit, embed=embed)
+            await log_backup_embed(embed)
 
         if after.voice.voice_channel is None and before.voice.voice_channel is not None:
             try:
@@ -791,6 +797,7 @@ async def on_voice_state_update(before,after):
             embed.set_author(name=after, icon_url=after.avatar_url)
             embed.set_footer(text="ID: " + after.id + " • Today at " + f"{datetime.now():%I:%M %p}")
             await bot.send_message(logit, embed=embed)
+            await log_backup_embed(embed)
 
     if after.voice_channel is before.voice_channel:
         return
@@ -804,6 +811,7 @@ async def on_voice_state_update(before,after):
             embed.set_author(name=after, icon_url=after.avatar_url)
             embed.set_footer(text="ID: " + after.id + " • Today at " + f"{datetime.now():%I:%M %p}")
             await bot.send_message(logit, embed=embed)
+            await log_backup_embed(embed)
         except:
             pass
 
@@ -1231,6 +1239,7 @@ async def on_message_delete(message):
     embed.set_author(name=message.author, icon_url=message.author.avatar_url)
     embed.set_footer(text="ID: " + message.author.id + " • Today at " + f"{datetime.now():%I:%M %p}")
     await bot.send_message(logit, embed=embed)
+    await log_backup_embed(embed)
 
 @bot.event
 async def on_ready():
