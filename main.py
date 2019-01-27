@@ -1213,6 +1213,9 @@ async def on_member_remove(member):
 
 @bot.event
 async def on_message_delete(message):
+    if is_bot(message):
+        return
+
     try:
         logit = discord.utils.get(message.server.channels, id = adminLogs)
     except:
