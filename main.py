@@ -784,6 +784,9 @@ async def on_voice_state_update(before,after):
         except:
             pass
 
+    if rmv is add:
+        return
+
     if after.voice.voice_channel is not None:
         await bot.add_roles(after, add)
         while True:
