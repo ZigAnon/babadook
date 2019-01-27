@@ -788,8 +788,10 @@ async def on_voice_state_update(before,after):
         for x in range(len(voiceID)):
             if int(before.voice.voice_channel.id) == int(voiceID[x-1][0]):
                 hide = discord.utils.get(after.server.roles, id = voiceID[x-1][1])
-                await bot.remove_roles(after, hide)
-                break
+                await asyncio.sleep(5)
+                if int(before.voice.voice_channel.id) == int(voiceID[x-1][0]):
+                    await bot.remove_roles(after, hide)
+                    break
     elif before.voice.voice_channel is None and after.voice.voice_channel is not None:
         for x in range(len(voiceID)):
             if int(after.voice.voice_channel.id) == int(voiceID[x-1][0]):
