@@ -1282,6 +1282,26 @@ async def on_member_unban(server, member):
     await log_backup_embed(embed)
 
 @bot.event
+async def on_message_edit(before, after):
+    # Member before text
+    embed=discord.Embed(description="**Message editied in " + before.channel.mention + "**", color=0xff470f)
+    embed.add_field(name="Before", value=before.clean_content, inline=False)
+    pfp = get_avatar(before.author)
+    embed.set_author(name=before.author, icon_url=pfp)
+    embed.set_footer(text="ID: " + before.author.id + " • Today at " + f"{datetime.now():%I:%M %p}")
+    await bot.send_message(discord.Object(id=adminLogs),embed=embed)
+    await log_backup_embed(embed)
+
+    # Member after text
+    embed=discord.Embed(description="**Message editied in " + after.channel.mention + "**", color=0x117ea6)
+    embed.add_field(name="After", value=after.clean_content, inline=False)
+    pfp = get_avatar(after.author)
+    embed.set_author(name=after.author, icon_url=pfp)
+    embed.set_footer(text="ID: " + after.author.id + " • Today at " + f"{datetime.now():%I:%M %p}")
+    await bot.send_message(discord.Object(id=adminLogs),embed=embed)
+    await log_backup_embed(embed)
+
+@bot.event
 async def on_message_delete(message):
     if is_bot(message):
         return
