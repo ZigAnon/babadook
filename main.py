@@ -1158,6 +1158,18 @@ async def on_message(message):
 ############################
 
 @bot.event
+async def on_member_update(before, after):
+    if before.nick is not after.nick:
+        embed=discord.Embed(description=before.mention + " **nickname changed**", color=0x117ea6)
+        embed.add_field(name="Before", value=before.nick, inline=False)
+        embed.add_field(name="After", value=after.nick, inline=False)
+        pfp = get_avatar(before)
+        embed.set_author(name=before, icon_url=pfp)
+        embed.set_footer(text="ID: " + before.id + " • Today at " + f"{datetime.now():%I:%M %p}")
+        await bot.send_message(discord.Object(id=adminLogs),embed=embed)
+        await log_backup_embed(embed)
+
+@bot.event
 async def on_member_join(member):
 
     sendWelcome = True
@@ -1284,7 +1296,7 @@ async def on_member_unban(server, member):
 @bot.event
 async def on_message_edit(before, after):
     # Member before text
-    embed=discord.Embed(description="**Message editied in " + before.channel.mention + "**", color=0xff470f)
+    embed=discord.Embed(description="**Message edited in " + before.channel.mention + "**", color=0xff470f)
     embed.add_field(name="Before", value=before.clean_content, inline=False)
     pfp = get_avatar(before.author)
     embed.set_author(name=before.author, icon_url=pfp)
@@ -1293,7 +1305,7 @@ async def on_message_edit(before, after):
     await log_backup_embed(embed)
 
     # Member after text
-    embed=discord.Embed(description="**Message editied in " + after.channel.mention + "**", color=0x117ea6)
+    embed=discord.Embed(description="**Message edited in " + after.channel.mention + "**", color=0x117ea6)
     embed.add_field(name="After", value=after.clean_content, inline=False)
     pfp = get_avatar(after.author)
     embed.set_author(name=after.author, icon_url=pfp)
