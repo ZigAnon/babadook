@@ -1297,6 +1297,9 @@ async def on_member_unban(server, member):
 
 @bot.event
 async def on_message_edit(before, after):
+    if is_bot(before):
+        return
+
     # Member before text
     embed=discord.Embed(description="**Message edited in " + before.channel.mention + "**", color=0xff470f)
     embed.add_field(name="Before", value=before.clean_content, inline=False)
