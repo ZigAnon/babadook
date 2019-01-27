@@ -293,6 +293,8 @@ def is_invite(m):
 def is_caps(m): # 70%+ caps
     stripped = m.content.replace(' ','')
     allLetters = len(stripped)
+    if allLetters < 10:
+        return False
     capLetters = sum(1 for c in m.content if c.isupper())
     percentage = capLetters / allLetters
     if percentage >= 0.70:
@@ -791,7 +793,7 @@ async def on_message(message):
             await bot.kick(message.author)
             await bot.delete_message(message)
             return
-        if is_caps(message):
+        if is_caps(message) and int(message.channel.id) != int(shetChan):
             await bot.send_message(message.channel, 'Alright, ' + message.author.mention + ' has been warned for \'**Capital letters**\'.')
 
 #++++++++++++++++++++++++++#
