@@ -60,6 +60,7 @@ gen2Chan = lines[30].rstrip()
 cheetiID = lines[31].rstrip()
 haRole = lines[32].rstrip()
 logBackup = lines[33].rstrip()
+afkChan = lines[34].rstrip()
 config.close()
 
 jR = open(curDir + "/include/jailRoles")
@@ -360,9 +361,8 @@ async def punish_shitpost(m):
         p.close()
 
         # Kick from voice channel
-        kick_channel = await bot.create_channel(m.server, "kick", type=discord.ChannelType.voice)
+        kick_channel = discord.Object(id=afkChan)
         await bot.move_member(m.author, kick_channel)
-        await bot.delete_channel(kick_channel)
     return
 
 async def log_backup_embed(e):
@@ -626,9 +626,8 @@ async def mute(ctx, member: discord.Member):
         p.close()
 
         # Kick from voice channel
-        kick_channel = await bot.create_channel(ctx.message.server, "kick", type=discord.ChannelType.voice)
+        kick_channel = discord.Object(id=afkChan)
         await bot.move_member(member, kick_channel)
-        await bot.delete_channel(kick_channel)
                     
 #    else:
         # embed=discord.Embed(title="Permission Denied.", description="You don't have permission to use this command.", color=0xff00f6)
@@ -686,9 +685,8 @@ async def jail(ctx, member: discord.Member):
         p.close()
 
         # Kick from voice channel
-        kick_channel = await bot.create_channel(ctx.message.server, "kick", type=discord.ChannelType.voice)
+        kick_channel = discord.Object(id=afkChan)
         await bot.move_member(member, kick_channel)
-        await bot.delete_channel(kick_channel)
  
 #    else:
         # embed=discord.Embed(title="Permission Denied.", description="You don't have permission to use this command.", color=0xff00f6)
@@ -750,9 +748,8 @@ async def shitpost(ctx, member: discord.Member):
         p.close()
 
         # Kick from voice channel
-        kick_channel = await bot.create_channel(ctx.message.server, "kick", type=discord.ChannelType.voice)
+        kick_channel = discord.Object(id=afkChan)
         await bot.move_member(member, kick_channel)
-        await bot.delete_channel(kick_channel)
  
 #    else:
         # embed=discord.Embed(title="Permission Denied.", description="You don't have permission to use this command.", color=0xff00f6)
@@ -1323,7 +1320,8 @@ async def on_message_edit(before, after):
         return
 
     #TODO: Isolate hit on embed update/refresh
-    print('Embed found in after: ' + str(len(after.embeds)))
+    if str(before.clean_content) == str(after.clean_content) and len(after.embeds) > 0:
+        return
 
     # Member before text
     embed=discord.Embed(description="**Message edited in " + before.channel.mention + "**", color=0x117ea6)
@@ -1338,10 +1336,7 @@ async def on_message_edit(before, after):
         pass
 
     # Member after text
-    embed=discord.Embed(description="**Message edited in " + after.channel.mention + "**", color=0x117ea6)
-    embed.add_field(name="After", value=after.clean_content, inline=False)
-    pfp = get_avatar(after.author)
-    embed.set_author(name=after.author, icon_url=pfp)
+    embed=discord.Embed(title="After", description=after.clean_content, color=0x117ea6)
     embed.set_footer(text="ID: " + after.author.id + " • Today at " + f"{datetime.now():%I:%M %p}")
     try:
         await bot.send_message(discord.Object(id=adminLogs),embed=embed)
