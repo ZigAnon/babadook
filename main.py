@@ -252,6 +252,15 @@ def is_trusted(m):
             return True
     return False
 
+def is_political(m):
+    with open(curDir + '/include/polRoles') as p:
+        political = [line.strip('\n').split(',') for line in p]
+    for x in range(len(political)):
+        role = discord.utils.get(m.server.roles, id = political[x-1][0])
+        if role in m.author.roles:
+            return True
+    return False
+
 def is_zig(m):
     if int(m.author.id) == int(zigID):
         return True
