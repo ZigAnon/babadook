@@ -28,6 +28,6 @@ async def on_ready():
         roles = list(servers[x-1].roles)
         for x in range (len(roles)):
             print('  --' + roles[x-1].id + ' - ' + roles[x-1].name)
-    client.close()
+    await client.close()
 
 client.run(TOKEN)
