@@ -333,7 +333,7 @@ def num_roles(m):
     return x
 
 async def punish_shitpost(m):
-    if (m.author.server_permissions.administrator or discord.utils.get(m.author.roles, id=servMod) or discord.utils.get(m.author.roles, id=servRep)) and m.server.id == mainServ:
+    if (m.author.server_permissions.administrator or discord.utils.get(m.author.roles, id=servMod) or discord.utils.get(m.author.roles, id=servRep)) and m.server.id == mainServ and is_admin(ctx.message):
         filePath = curDir + '/logs/db/' + m.author.id
         shit = discord.utils.get(m.author.server.roles, id = shetRole)
         Snow1 = discord.utils.get(m.author.server.roles, id = talkRole)
@@ -601,7 +601,7 @@ async def wdefine(ctx):
 
 @bot.command(pass_context = True, description = "Removes all write permissions from all channels.")
 async def mute(ctx, member: discord.Member):
-    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ:
+    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ and is_admin(ctx.message):
         filePath = curDir + '/logs/db/' + member.id
         mute = discord.utils.get(member.server.roles, id = muteRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
@@ -635,7 +635,7 @@ async def mute(ctx, member: discord.Member):
 
 @bot.command(pass_context = True, description = "Removes mute status.")
 async def unmute(ctx, member: discord.Member):
-    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ:
+    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ and is_admin(ctx.message):
         filePath = curDir + '/logs/db/' + member.id
         mute = discord.utils.get(member.server.roles, id = muteRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
@@ -660,7 +660,7 @@ async def unmute(ctx, member: discord.Member):
 
 @bot.command(pass_context = True, description = "Removes all chats and allows user to state case in jail chat.")
 async def jail(ctx, member: discord.Member):
-    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ:
+    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ and is_admin(ctx.message):
         filePath = curDir + '/logs/db/' + member.id
         jail = discord.utils.get(member.server.roles, id = jailRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
@@ -694,7 +694,7 @@ async def jail(ctx, member: discord.Member):
 
 @bot.command(pass_context = True, description = "Frees member from jail")
 async def free(ctx, member: discord.Member):
-    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ:
+    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ and is_admin(ctx.message):
         filePath = curDir + '/logs/db/' + member.id
         jail = discord.utils.get(member.server.roles, id = jailRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
@@ -720,7 +720,7 @@ async def free(ctx, member: discord.Member):
 
 @bot.command(pass_context = True, description = "Banishes member to shitpost chat.")
 async def shitpost(ctx, member: discord.Member):
-    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ:
+    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ and is_admin(ctx.message):
         filePath = curDir + '/logs/db/' + member.id
         shit = discord.utils.get(member.server.roles, id = shetRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
@@ -757,7 +757,7 @@ async def shitpost(ctx, member: discord.Member):
 
 @bot.command(pass_context = True, description = "Removes shitpost tag.")
 async def cleanpost(ctx, member: discord.Member):
-    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ:
+    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ and is_admin(ctx.message):
         filePath = curDir + '/logs/db/' + member.id
         shit = discord.utils.get(member.server.roles, id = shetRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
@@ -1063,17 +1063,11 @@ async def on_message(message):
         if message.content.lower().startswith('.iamz') and is_zig(message):
             zigBot = discord.utils.get(message.server.roles, id = botRole)
             if not zigBot in message.author.roles:
-                msg = await bot.send_message(message.channel,'You\'re the boss')
                 await bot.add_roles(message.author, zigBot)
                 await bot.delete_message(message)
-                await asyncio.sleep(10)
-                await bot.delete_message(msg)
             else:
-                msg = await bot.send_message(message.channel,'Until you need me again.')
                 await bot.remove_roles(message.author, zigBot)
                 await bot.delete_message(message)
-                await asyncio.sleep(10)
-                await bot.delete_message(msg)
             return
         elif message.content.lower().startswith('.iamz'):
             await bot.send_message(message.channel, message.author.mention + ' You\'re not Zig.')
