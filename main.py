@@ -11,16 +11,21 @@ from datetime import datetime
 from datetime import timedelta
 from random import randint
 from time import sleep
+import requests
 import asyncio
 import json
+import sys
 import os
-import requests
 
 timeout = 60*5  # 5 minutes
 dateFormat = '%Y-%m-%d %H:%M:%S.%f'
 newAccount = 72 # 48 hours
 
 curDir = os.path.dirname(os.path.realpath(__file__))
+sys.path.insert(0, curDir + "/src/")
+
+# Local modules
+import zbdb
 
 # Your config file may not need all these conditions
 # I find it helps keep the code clean
