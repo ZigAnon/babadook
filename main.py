@@ -937,6 +937,12 @@ async def on_message(message):
     if message.author == bot.user or message.author.bot:
         return
 
+#    with open(curDir + '/include/special') as a:
+#        special = [line.strip('\n').split(',') for line in a]
+#    #TODO: [var] is not good solution
+#    if [str(message.author.id)] in special:
+#        print('found ' + str(message.name))
+
     no = discord.Object(id=ignoreServ)
     if message.server is no:
         return
@@ -1287,23 +1293,16 @@ async def on_member_join(member):
     except:
         pass
 
-    # Checks against ban list
-    try:
-        s = open(curDir + '/include/special')
-        specialPeople = s.read().splitlines()
-        s.close()
-        sNum = len(specialPeople) - 1
-        w = open(curDir + '/include/whitelist')
-        whitelist = s.read().splitlines()
-        w.close()
+    with open(curDir + '/include/special') as txt:
+        specialPeople  = [line.strip('\n').split(',') for line in txt]
+    with open(curDir + '/include/whitelist') as txt:
+        whitelist = [line.strip('\n').split(',') for line in txt]
 
-        if member.id in specialPeople and not member.id in whitelist:
-            channel = discord.utils.get(member.server.channels, id = adminChan)
-            await bot.send_message(channel, '@here\nI banned ' + member.mention + ' for stuff and things and reasons.')
-            await bot.ban(member,0)
-            sendWelcome = False
-    except:
-        pass
+    if [str(member.id)] in specialPeople and not [str(member.id)] in whitelist:
+        channel = discord.utils.get(member.server.channels, id = adminChan)
+        await bot.send_message(channel, '@here\nI banned ' + member.mention + ' for stuff and things and reasons.')
+        await bot.ban(member,0)
+        sendWelcome = False
 
     # Looks for time file
     try:
