@@ -66,6 +66,7 @@ cheetiID = lines[31].rstrip()
 haRole = lines[32].rstrip()
 logBackup = lines[33].rstrip()
 afkChan = lines[34].rstrip()
+repRole = lines[35].rstrip()
 ignoreServ = '533701082283638797'
 config.close()
 
@@ -235,13 +236,19 @@ async def main_loop():
 ############################
 ############################
 
-def is_admin(m):
+def is_mod(m):
     with open(curDir + '/include/modRoles') as a:
         admin = [line.strip('\n').split(',') for line in a]
     for x in range(len(admin)):
         role = discord.utils.get(m.server.roles, id = admin[x-1][0])
         if role in m.author.roles:
             return True
+    return False
+
+def is_rep(m):
+    rep = discord.utils.get(m.server.roles, id = repRole)
+    if rep in m.author.roles:
+        return True
     return False
 
 def is_trusted(m):
@@ -360,7 +367,7 @@ def num_roles(m):
     return x
 
 async def punish_shitpost(m):
-    if (m.author.server_permissions.administrator or discord.utils.get(m.author.roles, id=servMod) or discord.utils.get(m.author.roles, id=servRep)) and m.server.id == mainServ and is_admin(ctx.message):
+    if m.server.id == mainServ and (not is_mod(m) or not is_rep(m)):
         filePath = curDir + '/logs/db/' + m.author.id
         shit = discord.utils.get(m.author.server.roles, id = shetRole)
         Snow1 = discord.utils.get(m.author.server.roles, id = talkRole)
@@ -628,7 +635,7 @@ async def wdefine(ctx):
 
 @bot.command(pass_context = True, description = "Removes all write permissions from all channels.")
 async def mute(ctx, member: discord.Member):
-    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ and is_admin(ctx.message):
+    if ctx.message.server.id == mainServ and (is_mod(ctx.message) or is_rep(ctx.message)):
         filePath = curDir + '/logs/db/' + member.id
         mute = discord.utils.get(member.server.roles, id = muteRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
@@ -662,7 +669,7 @@ async def mute(ctx, member: discord.Member):
 
 @bot.command(pass_context = True, description = "Removes mute status.")
 async def unmute(ctx, member: discord.Member):
-    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ and is_admin(ctx.message):
+    if ctx.message.server.id == mainServ and (is_mod(ctx.message) or is_rep(ctx.message)):
         filePath = curDir + '/logs/db/' + member.id
         mute = discord.utils.get(member.server.roles, id = muteRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
@@ -687,7 +694,7 @@ async def unmute(ctx, member: discord.Member):
 
 @bot.command(pass_context = True, description = "Removes all chats and allows user to state case in jail chat.")
 async def jail(ctx, member: discord.Member):
-    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ and is_admin(ctx.message):
+    if ctx.message.server.id == mainServ and (is_mod(ctx.message) or is_rep(ctx.message)):
         filePath = curDir + '/logs/db/' + member.id
         jail = discord.utils.get(member.server.roles, id = jailRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
@@ -721,7 +728,7 @@ async def jail(ctx, member: discord.Member):
 
 @bot.command(pass_context = True, description = "Frees member from jail")
 async def free(ctx, member: discord.Member):
-    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ and is_admin(ctx.message):
+    if ctx.message.server.id == mainServ and (is_mod(ctx.message) or is_rep(ctx.message)):
         filePath = curDir + '/logs/db/' + member.id
         jail = discord.utils.get(member.server.roles, id = jailRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
@@ -747,7 +754,7 @@ async def free(ctx, member: discord.Member):
 
 @bot.command(pass_context = True, description = "Banishes member to shitpost chat.")
 async def shitpost(ctx, member: discord.Member):
-    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ and is_admin(ctx.message):
+    if ctx.message.server.id == mainServ and (is_mod(ctx.message) or is_rep(ctx.message)):
         filePath = curDir + '/logs/db/' + member.id
         shit = discord.utils.get(member.server.roles, id = shetRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
@@ -784,7 +791,7 @@ async def shitpost(ctx, member: discord.Member):
 
 @bot.command(pass_context = True, description = "Removes shitpost tag.")
 async def cleanpost(ctx, member: discord.Member):
-    if (ctx.message.author.server_permissions.administrator or discord.utils.get(ctx.message.author.roles, id=servMod) or discord.utils.get(ctx.message.author.roles, id=servRep)) and ctx.message.server.id == mainServ and is_admin(ctx.message):
+    if ctx.message.server.id == mainServ and (is_mod(ctx.message) or is_rep(ctx.message)):
         filePath = curDir + '/logs/db/' + member.id
         shit = discord.utils.get(member.server.roles, id = shetRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
@@ -941,7 +948,7 @@ async def on_message(message):
 #++++++++++++++++++++++++++#
 #++++++++++++++++++++++++++#
 
-    if is_admin(message):
+    if is_mod(message):
         pass
     elif is_trusted(message):
         pass
