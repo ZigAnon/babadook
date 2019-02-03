@@ -66,6 +66,7 @@ cheetiID = lines[31].rstrip()
 haRole = lines[32].rstrip()
 logBackup = lines[33].rstrip()
 afkChan = lines[34].rstrip()
+ignoreServ = '533701082283638797'
 config.close()
 
 jR = open(curDir + "/include/jailRoles")
@@ -115,7 +116,7 @@ async def main_loop():
     pinged = [0] * len(servers)
     timeoff = 0
     count = 0
-    
+
     # Checks each server for disboard bump
     # Uses existing data to remind if needed
     while not bot.is_closed:
@@ -279,6 +280,12 @@ def is_bot(m):
     else:
         return False
 
+def is_serious(m):
+    serious = discord.utils.get(m.author.server.roles, id = seriousRole)
+    if serious in m.author.roles:
+        return True
+    return False
+
 def is_text(m):
     if 'http' in m.content.lower():
         return False
@@ -314,6 +321,12 @@ def is_caps(m): # 70%+ caps
     capLetters = sum(1 for c in m.content if c.isupper())
     percentage = capLetters / allLetters
     if percentage >= 0.70:
+        return True
+    return False
+
+def is_aids(m): # too many spoilers
+    message = m.content
+    if sum(x is "|" for x in message) > 10:
         return True
     return False
 
@@ -642,7 +655,7 @@ async def mute(ctx, member: discord.Member):
         # Kick from voice channel
         kick_channel = discord.Object(id=afkChan)
         await bot.move_member(member, kick_channel)
-                    
+
 #    else:
         # embed=discord.Embed(title="Permission Denied.", description="You don't have permission to use this command.", color=0xff00f6)
         # await bot.say(embed=embed)
@@ -668,9 +681,9 @@ async def unmute(ctx, member: discord.Member):
             os.remove(filePath + '.punish')
         except:
             pass
-#    else:
-        # embed=discord.Embed(title="Permission Denied.", description="You don't have permission to use this command.", color=0xff00f6)
-        # await bot.say(embed=embed)
+    #else:
+       # embed=discord.Embed(title="Permission Denied.", description="You don't have permission to use this command.", color=0xff00f6)
+       # await bot.say(embed=embed)
 
 @bot.command(pass_context = True, description = "Removes all chats and allows user to state case in jail chat.")
 async def jail(ctx, member: discord.Member):
@@ -701,7 +714,7 @@ async def jail(ctx, member: discord.Member):
         # Kick from voice channel
         kick_channel = discord.Object(id=afkChan)
         await bot.move_member(member, kick_channel)
- 
+
 #    else:
         # embed=discord.Embed(title="Permission Denied.", description="You don't have permission to use this command.", color=0xff00f6)
         # await bot.say(embed=embed)
@@ -764,7 +777,7 @@ async def shitpost(ctx, member: discord.Member):
         # Kick from voice channel
         kick_channel = discord.Object(id=afkChan)
         await bot.move_member(member, kick_channel)
- 
+
 #    else:
         # embed=discord.Embed(title="Permission Denied.", description="You don't have permission to use this command.", color=0xff00f6)
         # await bot.say(embed=embed)
@@ -800,6 +813,10 @@ async def cleanpost(ctx, member: discord.Member):
 
 @bot.event
 async def on_voice_state_update(before,after):
+    no = discord.Object(id=ignoreServ)
+    if before.server is no:
+        return
+
     if before.voice.voice_channel is None or after.voice.voice_channel is None:
         if before.voice.voice_channel is None and after.voice.voice_channel is not None:
             # role color 117EA6 green 23D160
@@ -910,6 +927,10 @@ async def on_message(message):
     if message.author == bot.user or message.author.bot:
         return
 
+    no = discord.Object(id=ignoreServ)
+    if message.server is no:
+        return
+
 ############################
 ############################
 
@@ -930,6 +951,11 @@ async def on_message(message):
             await bot.kick(message.author)
             await bot.delete_message(message)
             return
+        if is_aids(message) and int(message.channel.id) != int(shetChan):
+            msg = await bot.send_message(message.channel, 'Alright, ' + message.author.mention + ' stop abusing the new toy.')
+            await bot.delete_message(message)
+            await asyncio.sleep(10)
+            await bot.delete_message(msg)
         if is_caps(message) and int(message.channel.id) != int(shetChan):
             await bot.send_message(message.channel, 'Alright, ' + message.author.mention + ' has been warned for \'**Capital letters**\'.')
         if len(message.mentions) >= 5:
@@ -938,7 +964,7 @@ async def on_message(message):
 
 #++++++++++++++++++++++++++#
 #++++++++++++++++++++++++++#
-    
+
     if message.content.lower().startswith('!refuel'):
         msg = await bot.send_message(message.channel,'Helicopter is refueled and ready to... physically remove... so to speak...\nhttps://cdn.discordapp.com/attachments/509245339664908299/522448178138578964/1512796577930.gif')
         await bot.delete_message(message)
@@ -978,7 +1004,7 @@ async def on_message(message):
         curTime = datetime.now()
         newTime = datetime.now() + timedelta(hours=2)
         filePath = curDir + '/logs/db/' + bumServ
- 
+
         # Replaces member and channel
         # Old info not needed only updated
         oldMemb = open(filePath + '.member', 'w+')
@@ -1072,7 +1098,7 @@ async def on_message(message):
             pass
         await bot.delete_message(message)
         return
-    
+
     if message.content.lower().startswith('.iam'):
         if message.content.lower().startswith('.iamz') and is_zig(message):
             zigBot = discord.utils.get(message.server.roles, id = botRole)
@@ -1139,7 +1165,7 @@ async def on_message(message):
         # Checks for meme roles to shitpost
         message.content = message.content.lower()
         for x in range(len(memeRoles)):
-            if message.content.startswith(memeRoles[x-1]):
+            if message.content.startswith(memeRoles[x-1]) and not is_serious(message):
                 filePath = curDir + '/logs/db/' + message.author.id
                 shit = discord.utils.get(message.server.roles, id = shetRole)
                 Snow1 = discord.utils.get(message.server.roles, id = talkRole)
@@ -1170,6 +1196,10 @@ async def on_message(message):
 
 @bot.event
 async def on_member_update(before, after):
+    no = discord.Object(id=ignoreServ)
+    if before.server is no:
+        return
+
     if str(before.nick) != str(after.nick):
         embed=discord.Embed(description=before.mention + " **nickname changed**", color=0x117ea6)
         embed.add_field(name="Before", value=before.nick, inline=False)
@@ -1200,6 +1230,9 @@ async def on_member_update(before, after):
 
 @bot.event
 async def on_member_join(member):
+    no = discord.Object(id=ignoreServ)
+    if member.server is no:
+        return
 
     sendWelcome = True
     Snow2 = discord.utils.get(member.server.roles, id = joinRole)
@@ -1284,6 +1317,9 @@ async def on_member_join(member):
 
 @bot.event
 async def on_member_remove(member):
+    no = discord.Object(id=ignoreServ)
+    if member.server is no:
+        return
 
     # Member leave log
     embed=discord.Embed(description=member.mention + " " + member.name, color=0xff470f)
@@ -1301,6 +1337,10 @@ async def on_member_remove(member):
 
 @bot.event
 async def on_member_ban(member):
+    no = discord.Object(id=ignoreServ)
+    if member.server is no:
+        return
+
     # Member ban log
     embed=discord.Embed(description=member.mention + " " + member.name, color=0xff470f)
     embed.add_field(name="Join Date", value=member.joined_at, inline=False)
@@ -1313,6 +1353,10 @@ async def on_member_ban(member):
 
 @bot.event
 async def on_member_unban(server, member):
+    no = discord.Object(id=ignoreServ)
+    if member.server is no:
+        return
+
     # Member ban log
     embed=discord.Embed(description=member.mention + " " + member.name, color=0x117ea6)
     pfp = get_avatar(member)
@@ -1324,6 +1368,10 @@ async def on_member_unban(server, member):
 
 @bot.event
 async def on_message_edit(before, after):
+    no = discord.Object(id=ignoreServ)
+    if int(after.server.id) == int(no.id):
+        return
+
     if is_bot(before):
         return
 
@@ -1354,6 +1402,10 @@ async def on_message_edit(before, after):
 
 @bot.event
 async def on_message_delete(message):
+    no = discord.Object(id=ignoreServ)
+    if message.server is no:
+        return
+
     if is_bot(message):
         return
     if is_ignore(message):
@@ -1365,8 +1417,13 @@ async def on_message_delete(message):
         pass
     embed=discord.Embed(description="**Message sent by " + message.author.mention + " deleted in " + message.channel.mention + "**\n" + message.clean_content, color=0xff470f)
     pfp = get_avatar(message.author)
-    embed.set_author(name=message.author, icon_url=pfp)
-    embed.set_footer(text="ID: " + message.author.id + " • Today at " + f"{datetime.now():%I:%M %p}")
+    try:
+        atch = str(message.attachments[0]['url'])
+        embed.set_author(name=message.author, url=atch, icon_url=pfp)
+        embed.set_thumbnail(url=atch)
+    except:
+        embed.set_author(name=message.author, icon_url=pfp)
+    embed.set_footer(text="MSG ID: " + str(message.id) + " • Today at " + f"{datetime.now():%I:%M %p}")
     await bot.send_message(logit, embed=embed)
     await log_backup_embed(embed)
 
