@@ -964,7 +964,8 @@ async def on_message(message):
     else:
         if is_invite(message):
             await bot.send_message(message.author, 'It\'s in the rules, no sharing discord links.\n Bye bye!')
-            await bot.kick(message.author)
+            await bot.ban(message.author,0)
+            # await bot.kick(message.author)
             await bot.delete_message(message)
             return
         if is_aids(message) and int(message.channel.id) != int(shetChan):
@@ -998,18 +999,6 @@ async def on_message(message):
         msg = await bot.send_message(message.channel, 'I is r b smartr den u.\n' + brainletURL)
         await asyncio.sleep(5)
         await bot.delete_message(msg)
-
-    # Eastereggs - disabled 181221 due to distracting
-    '''for x in range(len(funEggs)):
-        eEgg = funEggs[x-1].rstrip()
-        if eEgg in message.content.lower():
-            y = (x-1) * 2
-            z = y+1
-            phrase = funLinks[y].rstrip()
-            phraseURL = funLinks[z].rstrip()
-            msg = await bot.send_message(message.channel, message.author.mention + ' ' + phrase + '\n' + phraseURL)
-            await asyncio.sleep(8)
-            await bot.delete_message(msg)'''
 
     if message.content.startswith('!disboard bump'):
         # Needed vars
