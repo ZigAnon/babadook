@@ -1132,13 +1132,11 @@ async def on_message(message):
             zigBot = discord.utils.get(message.server.roles, id = botRole)
             if not zigBot in message.author.roles:
                 msg = await bot.send_message(message.channel,'You\'re epic!')
-            #     await bot.add_roles(message.author, zigBot)
                 await asyncio.sleep(timeout)
                 await bot.delete_message(msg)
                 await bot.delete_message(message)
             else:
                 msg = await bot.send_message(message.channel,'You\'re epic!')
-            #     await bot.remove_roles(message.author, zigBot)
                 await asyncio.sleep(timeout)
                 await bot.delete_message(msg)
                 await bot.delete_message(message)
@@ -1152,7 +1150,7 @@ async def on_message(message):
         await asyncio.sleep(1)
         if message.content.lower().startswith('.iamn') and discord.utils.get(message.author.roles, id = busyRole) is None:
             await asyncio.sleep(1)
-            if num_roles(message) is 2:
+            if not is_political(message):
                 # User removed role, revert
                 msg = await bot.send_message(message.channel, 'You aren\'t allowed to chat without an ideology.  Please choose a role from #roles or `.lsar`')
                 await bot.add_roles(message.author, Snow2)
@@ -1163,15 +1161,15 @@ async def on_message(message):
                 await bot.delete_message(message)
 
         # Checks for initial role to remove undecided
-        elif discord.utils.get(message.author.roles, id = talkRole) is None and discord.utils.get(message.author.roles, id = joinRole) is not None and num_roles(message) > 2:
+        elif discord.utils.get(message.author.roles, id = talkRole) is None and discord.utils.get(message.author.roles, id = joinRole) is not None and is_political(message):
             await bot.add_roles(message.author, Snow1)
             await asyncio.sleep(1)
             await bot.remove_roles(message.author, Snow2)
 
         # If role doesn't exist
-        elif num_roles(message) == 2:
+        elif not is_political(message):
             if discord.utils.get(message.author.roles, id = busyRole) is None:
-                msg = await bot.send_message(message.channel, 'Please choose a role from #roles or `.lsar`')
+                msg = await bot.send_message(message.channel, 'Please choose a political role from #roles or `.lsar`')
             else:
                 msg = await bot.send_message(message.channel, 'Your status is still set to busy.\n Please `.iamn busy` to get your roles back.')
             await asyncio.sleep(7)
@@ -1432,7 +1430,7 @@ async def on_message_delete(message):
         embed.set_thumbnail(url=atch)
     except:
         embed.set_author(name=message.author, icon_url=pfp)
-    embed.set_footer(text="MSG ID: " + str(message.id) + " • Today at " + f"{datetime.now():%I:%M %p}")
+    embed.set_footer(text="Chan-Msg ID: " + str(message.channel.id) + "-" + str(message.id))
     await bot.send_message(logit, embed=embed)
     await log_backup_embed(embed)
 
