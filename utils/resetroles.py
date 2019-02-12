@@ -67,9 +67,19 @@ async def on_ready():
 
     server = client.get_server(mainServ)
     members = list(server.members)
+    ignore = discord.utils.get(server.roles, id = '509242768401629204')
+    ignore1 = discord.utils.get(server.roles, id = '513156267024449556')
+    ignore2 = discord.utils.get(server.roles, id = '509861871193423873')
+    ignore3 = discord.utils.get(server.roles, id = '509866307857154048')
+    learn = discord.utils.get(server.roles, id ='537776821593440256')
     for x in range(len(members)):
         if not is_political(members[x-1]) and not is_bot(members[x-1]) and not is_rep(members[x-1]) and not is_new(members[x-1]):
             print('    ' + members[x-1].id + ' - ' + members[x-1].name)
+            await client.add_roles(members[x-1], learn)
+            roles = list(members[x-1].roles)
+            for x in range(len(roles)):
+                if roles[x-1] is not ignore and roles[x-1] is not ignore1 and roles[x-1] is not ignore2 and roles[x-1] is not ignore3:
+                    print('      - ' + roles[x-1].name)
 
     # member = server.get_member(userid)
     # Snow1 = discord.utils.get(server.roles, id = talkRole)

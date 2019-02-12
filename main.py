@@ -1076,11 +1076,16 @@ async def on_message(message):
         with open(filePath + '.busy', 'w+') as f:
             for x in range(len(roles_busy)):
                 f.write('%s\n' % roles_busy[x-1].id)
-                await bot.remove_roles(message.author, roles_busy[x-1])
-                await asyncio.sleep(1)
-        addRole = discord.utils.get(message.server.roles, id = busyRole)
-        await bot.add_roles(message.author, addRole)
-        await bot.delete_message(message)
+            while True:
+                for x in range(len(roles_busy)):
+                    await bot.remove_roles(message.author, roles_busy[x-1])
+                    await asyncio.sleep(2e-2)
+                if num_roles(message) is 1:
+                    await asyncio.sleep(2e-2)
+                    addRole = discord.utils.get(message.server.roles, id = busyRole)
+                    await bot.add_roles(message.author, addRole)
+                    await bot.delete_message(message)
+                    break
         return
 
     if message.content.lower().startswith('.iamn busy') and message.author.server.id == mainServ:
@@ -1093,7 +1098,7 @@ async def on_message(message):
         for x in range(len(roles_active)):
             addRole = discord.utils.get(message.server.roles, id = str(roles_active[x-1]))
             await bot.add_roles(message.author, addRole)
-            await asyncio.sleep(1)
+            await asyncio.sleep(2e-2)
         rmRole = discord.utils.get(message.server.roles, id = busyRole)
         await bot.remove_roles(message.author, rmRole)
 
@@ -1301,7 +1306,7 @@ async def on_member_join(member):
             channel = discord.utils.get(member.server.channels, id = welcomeChan)
             await bot.send_message(channel, 'Hey ' + member.mention + ', welcome to **Coffee & Politics** \U0001F389\U0001F917 !')
             channel = discord.utils.get(member.server.channels, id = botChan)
-            msg = await bot.send_message(channel, 'Welcome ' + member.mention + '! To access <#' + genChan + '> and other channels you need a role.\nIf you agree with <#' + ruleChan + '> give yourself an ideology role!\nExample:```.iam liberal\n.iamnot liberal```\nTo see available roles type `.LSAR`')
+            msg = await bot.send_message(channel, 'Welcome ' + member.mention + '! To access <#' + genChan + '> and other channels you need a political role. (If you are learning select the learning role)\nIf you agree with <#' + ruleChan + '> give yourself an ideology role!\nExample:```.iam conservative\n.iamnot conservative```\nTo see available roles type `.LSAR`')
             await asyncio.sleep(600)
             await bot.delete_message(msg)
     except:
