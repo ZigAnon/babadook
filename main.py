@@ -982,6 +982,13 @@ async def on_message(message):
 #++++++++++++++++++++++++++#
 #++++++++++++++++++++++++++#
 
+    if is_caps(message):
+        lowered = message.content.lower()
+        msg = await bot.send_message(message.channel, str(message.author) + " ||needs help finding their capslock key.|| ***Said:*** - " + lowered)
+        await bot.delete_message(message)
+        await asyncio.sleep(60)
+        await bot.delete_message(msg)
+
     if message.content.lower().startswith('!refuel'):
         msg = await bot.send_message(message.channel,'Helicopter is refueled and ready to... physically remove... so to speak...\nhttps://cdn.discordapp.com/attachments/509245339664908299/522448178138578964/1512796577930.gif')
         await bot.delete_message(message)
@@ -1076,16 +1083,11 @@ async def on_message(message):
         with open(filePath + '.busy', 'w+') as f:
             for x in range(len(roles_busy)):
                 f.write('%s\n' % roles_busy[x-1].id)
-            while True:
-                for x in range(len(roles_busy)):
-                    await bot.remove_roles(message.author, roles_busy[x-1])
-                    await asyncio.sleep(2e-2)
-                if num_roles(message) is 1:
-                    await asyncio.sleep(2e-2)
-                    addRole = discord.utils.get(message.server.roles, id = busyRole)
-                    await bot.add_roles(message.author, addRole)
-                    await bot.delete_message(message)
-                    break
+                await bot.remove_roles(message.author, roles_busy[x-1])
+                await asyncio.sleep(2e-2)
+            addRole = discord.utils.get(message.server.roles, id = busyRole)
+            await bot.add_roles(message.author, addRole)
+            await bot.delete_message(message)
         return
 
     if message.content.lower().startswith('.iamn busy') and message.author.server.id == mainServ:
