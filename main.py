@@ -984,10 +984,11 @@ async def on_message(message):
 
     if is_caps(message):
         lowered = message.content.lower()
-        msg = await bot.send_message(message.channel, str(message.author) + " ||needs help finding their capslock key.|| ***Said:*** - " + lowered)
+        msg = await bot.send_message(message.channel, "||*turns caps off*|| " + str(message.author) + " ***Said:*** - " + lowered)
         await bot.delete_message(message)
-        await asyncio.sleep(60)
-        await bot.delete_message(msg)
+        if not is_mod:
+            await asyncio.sleep(60)
+            await bot.delete_message(msg)
 
     if message.content.lower().startswith('!refuel'):
         msg = await bot.send_message(message.channel,'Helicopter is refueled and ready to... physically remove... so to speak...\nhttps://cdn.discordapp.com/attachments/509245339664908299/522448178138578964/1512796577930.gif')
