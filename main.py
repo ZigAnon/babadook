@@ -982,13 +982,13 @@ async def on_message(message):
 #++++++++++++++++++++++++++#
 #++++++++++++++++++++++++++#
 
-    if is_caps(message):
-        lowered = message.content.lower()
-        msg = await bot.send_message(message.channel, "||*turns caps off*|| " + str(message.author) + " ***Said:*** - " + lowered)
-        await bot.delete_message(message)
-        if not is_mod:
-            await asyncio.sleep(60)
-            await bot.delete_message(msg)
+    # if is_caps(message):
+    #     lowered = message.content.lower()
+    #     msg = await bot.send_message(message.channel, "||*turns caps off*|| " + str(message.author) + " ***Said:*** - " + lowered)
+    #     await bot.delete_message(message)
+    #     if not is_mod:
+    #         await asyncio.sleep(60)
+    #         await bot.delete_message(msg)
 
     if message.content.lower().startswith('!refuel'):
         msg = await bot.send_message(message.channel,'Helicopter is refueled and ready to... physically remove... so to speak...\nhttps://cdn.discordapp.com/attachments/509245339664908299/522448178138578964/1512796577930.gif')
@@ -1309,7 +1309,7 @@ async def on_member_join(member):
             channel = discord.utils.get(member.server.channels, id = welcomeChan)
             await bot.send_message(channel, 'Hey ' + member.mention + ', welcome to **Coffee & Politics** \U0001F389\U0001F917 !')
             channel = discord.utils.get(member.server.channels, id = botChan)
-            msg = await bot.send_message(channel, 'Welcome ' + member.mention + '! To access <#' + genChan + '> and other channels you need a political role. (If you are learning select the learning role)\nIf you agree with <#' + ruleChan + '> give yourself an ideology role!\nExample:```.iam conservative\n.iamnot conservative```\nTo see available roles type `.LSAR`')
+            msg = await bot.send_message(channel, 'Welcome ' + member.mention + '! To access <#' + genChan + '> and other channels you need a political role.\n(If you are learning select the learning role)\nIf you agree with <#' + ruleChan + '> give yourself an ideology role!\nExample:```.iam conservative\n.iamnot conservative```\nTo see available roles type `.LSAR`\n\nWe understand these may be painful instructions for a few people to follow.\nThose people include but not limited to:\nChildren\nPeople whom can\'t read\nTrolls\nPeople who want to learn but can\'t read\n\nNot every community is for you.')
             await asyncio.sleep(600)
             await bot.delete_message(msg)
     except:
