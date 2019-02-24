@@ -996,6 +996,11 @@ async def on_message(message):
         await asyncio.sleep(timeout)
         await bot.delete_message(msg)
 
+    if message.content.lower().startswith('poll:'):
+        await bot.add_reaction(message, '\U0001F44D')
+        await bot.add_reaction(message, '\U0001F44E')
+        await bot.add_reaction(message, '\U0001F937')
+
     if ' iq' in message.content.lower() or 'iq ' in message.content.lower():
         msg = await bot.send_message(message.channel, message.author.mention + ', there are better arguments than IQ to make your case.\nhttps://www.independent.co.uk/news/science/iq-tests-are-fundamentally-flawed-and-using-them-alone-to-measure-intelligence-is-a-fallacy-study-8425911.html\nhttps://www.cell.com/neuron/fulltext/S0896-6273(12)00584-3')
         await asyncio.sleep(timeout)
