@@ -1019,12 +1019,12 @@ async def on_message(message):
         await asyncio.sleep(timeout)
         await bot.delete_message(msg)
 
-    if 'smart' in message.content.lower():
-        x = randint(0,5)
-        brainletURL = brainlet[x].rstrip()
-        msg = await bot.send_message(message.channel, 'I is r b smartr den u.\n' + brainletURL)
-        await asyncio.sleep(5)
-        await bot.delete_message(msg)
+    # if 'smart' in message.content.lower():
+    #     x = randint(0,5)
+    #     brainletURL = brainlet[x].rstrip()
+    #     msg = await bot.send_message(message.channel, 'I is r b smartr den u.\n' + brainletURL)
+    #     await asyncio.sleep(5)
+    #     await bot.delete_message(msg)
 
     if message.content.startswith('!disboard bump'):
         # Needed vars
