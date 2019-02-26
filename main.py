@@ -67,6 +67,7 @@ haRole = lines[32].rstrip()
 logBackup = lines[33].rstrip()
 afkChan = lines[34].rstrip()
 repRole = lines[35].rstrip()
+polChan = lines[36].rstrip()
 ignoreServ = '533701082283638797'
 config.close()
 
@@ -312,6 +313,11 @@ def is_legacy(m):
         Snow1 = discord.utils.get(m.author.server.roles, id = talkRole)
         if Snow1 in m.author.roles:
             return True
+    return False
+
+def is_polchan(m):
+    if m.channel.id == polChan:
+        return True
     return False
 
 def is_invite(m):
@@ -996,10 +1002,17 @@ async def on_message(message):
         await asyncio.sleep(timeout)
         await bot.delete_message(msg)
 
-    if message.content.lower().startswith('poll:'):
-        await bot.add_reaction(message, '\U0001F44D')
-        await bot.add_reaction(message, '\U0001F44E')
-        await bot.add_reaction(message, '\U0001F937')
+    if is_polchan(message):
+        if message.content.lower().startswith('poll:'):
+            await bot.add_reaction(message, '\U0001F44D')
+            await bot.add_reaction(message, '\U0001F44E')
+            await bot.add_reaction(message, '\U0001F937')
+        else:
+            msg = await bot.send_message(message.channel, '**Your message will be removed. __Copy it now!__**\nYou can read this message after you copy yours.\n\nThis is not in a valid poll format "Poll: ".\nIf this was  poll, please type "Poll: " first, then paste in your message.\nIf this is not a poll, continue the discussion in <#549269596926902282>.\nThank you.')
+            await asyncio.sleep(30)
+            await bot.delete_message(message)
+            await asyncio.sleep(60)
+            await bot.delete_message(msg)
 
     if ' iq' in message.content.lower() or 'iq ' in message.content.lower():
         msg = await bot.send_message(message.channel, message.author.mention + ', there are better arguments than IQ to make your case.\nhttps://www.independent.co.uk/news/science/iq-tests-are-fundamentally-flawed-and-using-them-alone-to-measure-intelligence-is-a-fallacy-study-8425911.html\nhttps://www.cell.com/neuron/fulltext/S0896-6273(12)00584-3')
