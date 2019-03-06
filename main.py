@@ -179,6 +179,20 @@ async def main_loop():
 
             # If time file exists
             if found:
+                # Member Count
+                members = servers[x-1].members
+                humans = 0
+                bots = 0
+                for member in members:
+                    if member.bot:
+                        bots += 1
+                    else:
+                        humans += 1
+                count = humans
+                game = "with {0} members".format(count)
+                await bot.change_presence(game=discord.Game(name=game))
+
+                # Checks for ping
                 if pinged[x-1] == 0:
                     lastBump = datetime.strptime(oldTime, dateFormat)
                     c = open(filePath + '.channel')
