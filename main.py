@@ -327,6 +327,8 @@ def is_invite(m):
         return True
     if '://discord.me/' in m.content.lower():
         return True
+    if '://discordapp.com/invite/' in m.content.lower():
+        return True
     return False
 
 def is_caps(m): # 70%+ caps
@@ -969,8 +971,10 @@ async def on_message(message):
         pass
     else:
         if is_invite(message):
+            embed=discord.Embed(title="Banned!", description="**{0}** was given Banned by **ZigBot#1002** for violation of rule 8!".format(message.author), color=0xd30000)
+            await bot.send_message(discord.Object(id=logAct),embed=embed)
             await bot.send_message(message.author, 'It\'s in the rules, no sharing discord links.\n Bye bye!')
-            await bot.ban(message.author,0)
+            await bot.ban(message.author)
             # await bot.kick(message.author)
             await bot.delete_message(message)
             return
