@@ -189,7 +189,7 @@ async def main_loop():
                     else:
                         humans += 1
                 count = humans
-                game = "with {0} members".format(count)
+                game = "with {0} humans".format(count)
                 await bot.change_presence(game=discord.Game(name=game))
 
                 # Checks for ping
