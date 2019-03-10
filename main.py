@@ -994,7 +994,7 @@ async def on_message(message):
     elif is_trusted(message):
         pass
     else:
-        if is_invite(message):
+        if is_invite(message) and message.server.id == mainServ:
             embed=discord.Embed(title="Banned!", description="**{0}** was given Banned by **ZigBot#1002** for violation of rule 8!".format(message.author), color=0xd30000)
             await bot.send_message(discord.Object(id=logAct),embed=embed)
             await bot.send_message(message.author, 'It\'s in the rules, no sharing discord links.\n Bye bye!')
