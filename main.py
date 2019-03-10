@@ -127,43 +127,22 @@ async def main_loop():
         curTime = datetime.now()
 
         # Auto purge channels
-        beforeTime = datetime.now() - timedelta(hours=12)
-        oldNews = datetime.now() - timedelta(days=5)
-        try:
-            channel = discord.Object(id=botChan)
-            await bot.purge_from(channel, limit=100, before=beforeTime)
-        except:
-            pass
-        try:
-            sChannel = discord.Object(id=shetChan)
-            await bot.purge_from(sChannel, limit=100, before=oldNews)
-        except:
-            pass
-        try:
-            nChannel = discord.Object(id=newsChan)
-            await bot.purge_from(nChannel, limit=100, before=oldNews)
-        except:
-            pass
-        try:
-            gChannel = discord.Object(id=genChan)
-            await bot.purge_from(gChannel, limit=100, before=beforeTime, check=is_bot)
-        except:
-            pass
-        try:
-            g2Channel = discord.Object(id=gen2Chan)
-            await bot.purge_from(g2Channel, limit=100, before=beforeTime, check=is_bot)
-        except:
-            pass
-        try:
-            oChannel = discord.Object(id=offtChan)
-            await bot.purge_from(oChannel, limit=100, before=beforeTime, check=is_bot)
-        except:
-            pass
-        try:
-            nsChannel = discord.Object(id=nsfwChan)
-            await bot.purge_from(nsChannel, limit=100, before=beforeTime, check=is_text)
-        except:
-            pass
+        with open(curDir + '/include/autoPurge') as a:
+            purgeChans = [line.strip('\n').split(',') for line in a]
+        for x in range(len(purgeChans)):
+            pChan = discord.Object(id=purgeChans[x-1][0])
+            limit = int(purgeChans[x-1][1])
+            days = int(purgeChans[x-1][2])
+            beforeTime = datetime.now() - timedelta(days=days)
+            try:
+                if purgeChans[x-1][3] == 'bot':
+                    await bot.purge_from(pChan, limit=limit, before=beforeTime, check=is_bot)
+                elif purgeChans[x-1][3] == 'text':
+                    await bot.purge_from(pChan, limit=limit, before=beforeTime, check=is_text)
+                else:
+                    await bot.purge_from(pChan, limit=limit, before=beforeTime)
+            except:
+                pass
 
         for x in range(len(servers)):
             filePath = curDir + '/logs/db/' + str(servers[x-1].id)
