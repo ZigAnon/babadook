@@ -353,7 +353,7 @@ def is_aids(m): # too many spoilers
 
 def is_in_trouble(m):
     try:
-        filePath = curDir + '/logs/db/' + str(member.id)
+        filePath = curDir + '/logs/db/' + str(m.id)
 
         # Looks for punish file
         t = open(filePath + '.punish')
@@ -361,6 +361,22 @@ def is_in_trouble(m):
         return True
     except:
         return False
+
+def is_kicked(m):
+    filePath = curDir + '/logs/db/' + str(m.id)
+    try:
+        # Looks for punish file
+        t = open(filePath + '.kicked')
+        t.close()
+
+        p = open(filePath + '.punish', 'w+')
+        p.close()
+        return True
+    except:
+        t = open(filePath + '.kicked', 'w+')
+        t.close()
+        return False
+
 
 # Message ignore check
 def is_ignore(m):
@@ -1307,10 +1323,15 @@ async def on_member_join(member):
         jail = discord.utils.get(member.server.roles, id = jailRole)
         Snow1 = discord.utils.get(member.server.roles, id = talkRole)
         Snow2 = discord.utils.get(member.server.roles, id = joinRole)
-        embed=discord.Embed(title="User Jailed!", description="**{0}** was jailed for punishment evasion!".format(member), color=0xd30000)
-        sendWelcome = False
+        try:
+            k = open(filePath + '.kicked')
+            k.close()
+            sendWelcome = True
+        except:
+            embed=discord.Embed(title="User Jailed!", description="**{0}** was jailed for punishment evasion!".format(member), color=0xd30000)
+            await bot.send_message(discord.Object(id=logAct),embed=embed)
+            sendWelcome = False
         # await bot.say(embed=embed)
-        await bot.send_message(discord.Object(id=logAct),embed=embed)
         await bot.add_roles(member, jail)
         await asyncio.sleep(1)
         await bot.remove_roles(member, Snow1)
@@ -1346,8 +1367,15 @@ async def on_member_join(member):
     except:
         if sendWelcome:
             channel = discord.utils.get(member.server.channels, id = adminChan)
-            await bot.send_message(member, '**"Coffee & Politics"** is currently not accepting members at this time.  If you wish to join our discussions please wait a few days and try again.\nhttps://discord.gg/jpKHVyA')
-            await bot.send_message(channel, '@here\n' + member.mention + ' tried to join but I kicked them because server is closed.  To open server, please `!disboard bump`.')
+            if is_in_trouble(member):
+                await bot.send_message(channel, '@here\n' + member.mention + ' can\'t read so I banned them.')
+                await bot.ban(member)
+            elif is_kicked(member):
+                await bot.send_message(member, '**"Coffee & Politics"** is currently not accepting members at this time.  If you wish to join our discussions please wait a few days and try again.\nhttps://discord.gg/jpKHVyA')
+                await bot.send_message(channel, '@here\n' + member.mention + ' tried to join but I kicked them because server is closed.  To open server, please `!disboard bump`.')
+            else:
+                await bot.send_message(member, '**"Coffee & Politics"** is currently not accepting members at this time.  If you wish to join our discussions please wait a few days and try again.\nhttps://discord.gg/jpKHVyA')
+                await bot.send_message(channel, '@here\n' + member.mention + ' tried to join but I kicked them because server is closed.  To open server, please `!disboard bump`.')
         await bot.kick(member)
 
 @bot.event
