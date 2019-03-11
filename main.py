@@ -418,39 +418,33 @@ async def remove_roles(m, out):
         w = open(filePath + '.working', 'w+')
         w.write(out)
         w.close
-    loop = True
 
-    while(loop):
-        await bot.remove_roles(m, Snow1)
-        await asyncio.sleep(1)
-        await bot.remove_roles(m, Snow2)
-        await asyncio.sleep(1)
-        await bot.remove_roles(m, shit)
-        await asyncio.sleep(1)
-        await bot.remove_roles(m, jail)
-        await asyncio.sleep(1)
-        await bot.remove_roles(m, mute)
-        await asyncio.sleep(1)
-        await bot.remove_roles(m, old)
-        await asyncio.sleep(1)
-        await bot.remove_roles(m, serious)
-        await asyncio.sleep(1)
-        f = open(filePath + '.working')
-        info = f.readlines()
-        outCheck = info[0].rstrip()
-        f.close()
-        if out == outCheck:
-            if out == 'mute':
-                await bot.add_roles(m, mute)
-            elif out == 'jail':
-                await bot.add_roles(m, jail)
-            elif out == 'shitpost':
-                await bot.add_roles(m, shit)
-            elif out == 'unmute' or out == 'free' or out == 'cleanpost':
-                await bot.add_roles(m, Snow1)
-            loop = False
-        else:
-            out = outCheck
+    await bot.remove_roles(m, Snow1)
+    await asyncio.sleep(1)
+    await bot.remove_roles(m, Snow2)
+    await asyncio.sleep(1)
+    await bot.remove_roles(m, shit)
+    await asyncio.sleep(1)
+    await bot.remove_roles(m, jail)
+    await asyncio.sleep(1)
+    await bot.remove_roles(m, mute)
+    await asyncio.sleep(1)
+    await bot.remove_roles(m, old)
+    await asyncio.sleep(1)
+    await bot.remove_roles(m, serious)
+    await asyncio.sleep(1)
+    f = open(filePath + '.working')
+    info = f.readlines()
+    out = info[0].rstrip()
+    f.close()
+    if out == 'mute':
+        await bot.add_roles(m, mute)
+    elif out == 'jail':
+        await bot.add_roles(m, jail)
+    elif out == 'shitpost':
+        await bot.add_roles(m, shit)
+    else:
+        await bot.add_roles(m, Snow1)
     os.remove(filePath + '.working')
     return
 
