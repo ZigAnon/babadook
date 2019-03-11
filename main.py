@@ -396,7 +396,7 @@ def num_roles(m):
     x = len(list(m.author.roles))
     return x
 
-async def remove_roles(m):
+async def remove_roles(m, out):
     # Roles to Remove
     filePath = curDir + '/logs/db/' + m.id
     Snow1 = discord.utils.get(m.server.roles, id = talkRole)
@@ -406,31 +406,51 @@ async def remove_roles(m):
     mute = discord.utils.get(m.server.roles, id = muteRole)
     old = discord.utils.get(m.server.roles, id = oldRole)
     serious = discord.utils.get(m.server.roles, id = seriousRole)
-    loop = True
-    while(loop):
-        try:
-            t = open(filePath + '.working')
-            t.close()
-            await asyncio.sleep(1)
-        except:
-            t = open(filePath + '.working', 'w+')
-            t.close()
-            loop = False
+    try:
+        w = open(filePath + '.working')
+        w.close()
 
-    await bot.remove_roles(m, Snow1)
-    await asyncio.sleep(1)
-    await bot.remove_roles(m, Snow2)
-    await asyncio.sleep(1)
-    await bot.remove_roles(m, shit)
-    await asyncio.sleep(1)
-    await bot.remove_roles(m, jail)
-    await asyncio.sleep(1)
-    await bot.remove_roles(m, mute)
-    await asyncio.sleep(1)
-    await bot.remove_roles(m, old)
-    await asyncio.sleep(1)
-    await bot.remove_roles(m, serious)
-    await asyncio.sleep(1)
+        w = open(filePath + '.working', 'w+')
+        w.write(out)
+        w.close
+        return
+    except:
+        w = open(filePath + '.working', 'w+')
+        w.write(out)
+        w.close
+    loop = True
+
+    while(loop):
+        await bot.remove_roles(m, Snow1)
+        await asyncio.sleep(1)
+        await bot.remove_roles(m, Snow2)
+        await asyncio.sleep(1)
+        await bot.remove_roles(m, shit)
+        await asyncio.sleep(1)
+        await bot.remove_roles(m, jail)
+        await asyncio.sleep(1)
+        await bot.remove_roles(m, mute)
+        await asyncio.sleep(1)
+        await bot.remove_roles(m, old)
+        await asyncio.sleep(1)
+        await bot.remove_roles(m, serious)
+        await asyncio.sleep(1)
+        f = open(filePath + '.working')
+        info = f.readlines()
+        outCheck = info[0].rstrip()
+        f.close()
+        if out == outCheck:
+            if out == 'mute':
+                await bot.add_roles(m, mute)
+            elif out == 'jail':
+                await bot.add_roles(m, jail)
+            elif out == 'shitpost':
+                await bot.add_roles(m, shit)
+            elif out == 'unmute' or out == 'free' or out == 'cleanpost':
+                await bot.add_roles(m, Snow1)
+            loop = False
+        else:
+            out = outCheck
     os.remove(filePath + '.working')
     return
 
@@ -705,12 +725,10 @@ async def wdefine(ctx):
 async def mute(ctx, member: discord.Member):
     if ctx.message.server.id == mainServ and is_rep(ctx.message):
         filePath = curDir + '/logs/db/' + member.id
-        mute = discord.utils.get(member.server.roles, id = muteRole)
         embed=discord.Embed(title="User Muted!", description="**{0}** was muted by **{1}**!".format(member, ctx.message.author), color=0xd30000)
         # await bot.say(embed=embed)
         await bot.send_message(discord.Object(id=logAct),embed=embed)
-        await remove_roles(member)
-        await bot.add_roles(member, mute)
+        await remove_roles(member, 'mute')
 
         # punishment evasion
         p = open(filePath + '.punish', 'w+')
@@ -728,12 +746,10 @@ async def mute(ctx, member: discord.Member):
 async def unmute(ctx, member: discord.Member):
     if ctx.message.server.id == mainServ and is_rep(ctx.message):
         filePath = curDir + '/logs/db/' + member.id
-        Snow1 = discord.utils.get(member.server.roles, id = talkRole)
         embed=discord.Embed(title="User unmuted.", description="**{0}** follow the rules.".format(member, ctx.message.author), color=0x27d300)
         # await bot.say(embed=embed)
         await bot.send_message(discord.Object(id=logAct),embed=embed)
-        await remove_roles(member)
-        await bot.add_roles(member, Snow1)
+        await remove_roles(member, 'unmute')
 
         # Clear punishment
         try:
@@ -748,12 +764,10 @@ async def unmute(ctx, member: discord.Member):
 async def jail(ctx, member: discord.Member):
     if ctx.message.server.id == mainServ and is_rep(ctx.message):
         filePath = curDir + '/logs/db/' + member.id
-        jail = discord.utils.get(member.server.roles, id = jailRole)
         embed=discord.Embed(title="User Jailed!", description="**{0}** was jailed by **{1}**!".format(member, ctx.message.author), color=0xd30000)
         # await bot.say(embed=embed)
         await bot.send_message(discord.Object(id=logAct),embed=embed)
-        await remove_roles(member)
-        await bot.add_roles(member, jail)
+        await remove_roles(member, 'jail')
 
         # punishment evasion
         p = open(filePath + '.punish', 'w+')
@@ -771,12 +785,10 @@ async def jail(ctx, member: discord.Member):
 async def free(ctx, member: discord.Member):
     if ctx.message.server.id == mainServ and is_rep(ctx.message):
         filePath = curDir + '/logs/db/' + member.id
-        Snow1 = discord.utils.get(member.server.roles, id = talkRole)
         embed=discord.Embed(title="User Freed!", description="**{0}** was freed by **{1}**!".format(member, ctx.message.author), color=0x27d300)
         # await bot.say(embed=embed)
         await bot.send_message(discord.Object(id=logAct),embed=embed)
-        await remove_roles(member)
-        await bot.add_roles(member, Snow1)
+        await remove_roles(member, 'free')
 
         # Clear punishment
         try:
@@ -792,15 +804,13 @@ async def free(ctx, member: discord.Member):
 async def shitpost(ctx, member: discord.Member):
     if ctx.message.server.id == mainServ and is_rep(ctx.message):
         filePath = curDir + '/logs/db/' + member.id
-        shit = discord.utils.get(member.server.roles, id = shetRole)
         embed=discord.Embed(title="Shitposter!", description="**{0}** was given Shitposter by **{1}**!".format(member, ctx.message.author), color=0xd30000)
         channel = discord.Object(id=shetChan)
         msg = '<@' + member.id + '>'
         await bot.send_message(channel, 'Looks like you pushed it too far ' + msg + '. You live here now. Enjoy!!')
         # await bot.say(embed=embed)
         await bot.send_message(discord.Object(id=logAct),embed=embed)
-        await remove_roles(member)
-        await bot.add_roles(member, shit)
+        await remove_roles(member, 'shitpost')
 
         # punishment evasion
         p = open(filePath + '.punish', 'w+')
@@ -818,12 +828,10 @@ async def shitpost(ctx, member: discord.Member):
 async def cleanpost(ctx, member: discord.Member):
     if ctx.message.server.id == mainServ and is_rep(ctx.message):
         filePath = curDir + '/logs/db/' + member.id
-        Snow1 = discord.utils.get(member.server.roles, id = talkRole)
         embed=discord.Embed(title="Good Job!", description="**{0}** it seems **{1}** has faith in you.".format(member, ctx.message.author), color=0x27d300)
         # await bot.say(embed=embed)
         await bot.send_message(discord.Object(id=logAct),embed=embed)
-        await remove_roles(member)
-        await bot.add_roles(member, Snow1)
+        await remove_roles(member, 'cleanpost')
 
         # Clear punishment
         try:
