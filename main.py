@@ -406,6 +406,8 @@ async def remove_roles(m, out):
     mute = discord.utils.get(m.server.roles, id = muteRole)
     old = discord.utils.get(m.server.roles, id = oldRole)
     serious = discord.utils.get(m.server.roles, id = seriousRole)
+
+    # Look for working file, if not found make one
     try:
         w = open(filePath + '.working')
         w.close()
@@ -419,6 +421,7 @@ async def remove_roles(m, out):
         w.write(out)
         w.close
 
+    # Remove all roles
     await bot.remove_roles(m, Snow1)
     await asyncio.sleep(1)
     await bot.remove_roles(m, Snow2)
@@ -433,10 +436,17 @@ async def remove_roles(m, out):
     await asyncio.sleep(1)
     await bot.remove_roles(m, serious)
     await asyncio.sleep(1)
-    f = open(filePath + '.working')
-    info = f.readlines()
-    out = info[0].rstrip()
-    f.close()
+
+    # Try to open new updated working file
+    try:
+        f = open(filePath + '.working')
+        info = f.readlines()
+        out = info[0].rstrip()
+        f.close()
+    except:
+        pass
+
+    # add last chosen role
     if out == 'mute':
         await bot.add_roles(m, mute)
     elif out == 'jail':
@@ -445,6 +455,8 @@ async def remove_roles(m, out):
         await bot.add_roles(m, shit)
     else:
         await bot.add_roles(m, Snow1)
+
+    # Remove working files
     os.remove(filePath + '.working')
     return
 
