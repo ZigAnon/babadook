@@ -1372,13 +1372,14 @@ async def on_member_join(member):
         if sendWelcome:
             channel = discord.utils.get(member.server.channels, id = adminChan)
             if is_in_trouble(member):
+                await bot.send_message(member, '**"Coffee & Politics"** has banned you for being unable to read. Sorry, go play roblox elsewhere.')
                 await bot.send_message(channel, '@here\n' + member.mention + ' can\'t read so I banned them.')
                 await bot.ban(member)
             elif is_kicked(member):
-                await bot.send_message(member, '**"Coffee & Politics"** is currently not accepting members at this time.  If you wish to join our discussions please wait a few days and try again.\nhttps://discord.gg/jpKHVyA')
+                await bot.send_message(member, '**"Coffee & Politics"** is currently not accepting members at this time.  If you wish to join our discussions please wait a few days and try again.\nhttps://discord.gg/xVtZbn8')
                 await bot.send_message(channel, '@here\n' + member.mention + ' tried to join but I kicked them because server is closed.  To open server, please `!disboard bump`.')
             else:
-                await bot.send_message(member, '**"Coffee & Politics"** is currently not accepting members at this time.  If you wish to join our discussions please wait a few days and try again.\nhttps://discord.gg/jpKHVyA')
+                await bot.send_message(member, '**"Coffee & Politics"** is currently not accepting members at this time.  If you wish to join our discussions please wait a few days and try again.\nhttps://discord.gg/xVtZbn8')
                 await bot.send_message(channel, '@here\n' + member.mention + ' tried to join but I kicked them because server is closed.  To open server, please `!disboard bump`.')
         await bot.kick(member)
 
