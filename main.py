@@ -858,6 +858,15 @@ async def on_voice_state_update(before,after):
     if before.server is no:
         return
 
+    if before.voice.voice_channel is None and before.id == '153999612485566464':
+        msg = '<@153999612485566464> HEY SHUTUP!!'
+        channel = discord.Object(id=shetChan)
+        temp = await bot.send_message(channel, msg)
+        await bot.server_voice_state(member=after, mute=True)
+        await asyncio.sleep(15)
+        await bot.delete_message(temp)
+        await bot.server_voice_state(member=after, mute=False)
+
     if before.voice.voice_channel is None or after.voice.voice_channel is None:
         if before.voice.voice_channel is None and after.voice.voice_channel is not None:
             # role color 117EA6 green 23D160
