@@ -917,6 +917,12 @@ async def on_voice_state_update(before,after):
         try:
             if int(after.voice.voice_channel.id) == int(voiceID[x-1][0]):
                 add = discord.utils.get(after.server.roles, id = voiceID[x-1][1])
+            elif int(after.voice.voice_channel.id) is None:
+                for x in range(len(voiceID)):
+                    try:
+                        pass
+                    except:
+                        pass
         except:
             pass
         try:
@@ -1172,6 +1178,9 @@ async def on_message(message):
         await bot.delete_message(message)
         return
 
+    if message.content.lower().startswith('owo') and str(message.author.id) == '164869272697438209':
+        print('It\'s working')
+
     if message.content.lower().startswith('.iam'):
         if message.content.lower().startswith('.iamz') and is_zig(message):
             zigBot = discord.utils.get(message.server.roles, id = botRole)
@@ -1309,14 +1318,14 @@ async def on_member_join(member):
     Snow2 = discord.utils.get(member.server.roles, id = joinRole)
 
     # Member join log
-    embed=discord.Embed(description=member.mention + " " + member.name, color=0x23d160)
-    embed.add_field(name="Account Creation Date", value=member.created_at, inline=False)
-    pfp = get_avatar(member)
-    embed.set_thumbnail(url=pfp)
-    embed.set_author(name="Member Joined", icon_url=pfp)
-    embed.set_footer(text="ID: " + member.id + " • Today at " + f"{datetime.now():%I:%M %p}")
-    await bot.send_message(discord.Object(id=adminLogs),embed=embed)
-    await log_backup_embed(embed)
+    # embed=discord.Embed(description=member.mention + " " + member.name, color=0x23d160)
+    # embed.add_field(name="Account Creation Date", value=member.created_at, inline=False)
+    # pfp = get_avatar(member)
+    # embed.set_thumbnail(url=pfp)
+    # embed.set_author(name="Member Joined", icon_url=pfp)
+    # embed.set_footer(text="ID: " + member.id + " • Today at " + f"{datetime.now():%I:%M %p}")
+    # await bot.send_message(discord.Object(id=adminLogs),embed=embed)
+    # await log_backup_embed(embed)
 
     # kicks new accounts to prevent raid
     if datetime.utcnow() - timedelta(hours=newAccount) < member.created_at:
