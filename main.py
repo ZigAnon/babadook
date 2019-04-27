@@ -1379,7 +1379,7 @@ async def on_member_join(member):
         t.close()
 
         if sendWelcome:
-            await bot.add_roles(member, Snow2)
+            # await bot.add_roles(member, Snow2)
             channel = discord.utils.get(member.server.channels, id = welcomeChan)
             await bot.send_message(channel, 'Hey ' + member.mention + ', welcome to **Coffee & Politics** \U0001F389\U0001F917 !')
             channel = discord.utils.get(member.server.channels, id = botChan)
