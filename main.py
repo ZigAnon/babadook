@@ -1380,8 +1380,8 @@ async def on_member_join(member):
 
         if sendWelcome:
             # await bot.add_roles(member, Snow2)
-            channel = discord.utils.get(member.server.channels, id = welcomeChan)
-            await bot.send_message(channel, 'Hey ' + member.mention + ', welcome to **Coffee & Politics** \U0001F389\U0001F917 !')
+            # channel = discord.utils.get(member.server.channels, id = welcomeChan)
+            # await bot.send_message(channel, 'Hey ' + member.mention + ', welcome to **Coffee & Politics** \U0001F389\U0001F917 !')
             channel = discord.utils.get(member.server.channels, id = botChan)
             msg = await bot.send_message(channel, 'Welcome ' + member.mention + '! To access <#' + genChan + '> and other channels you need a political role.\n(If you are learning select the learning role)\nIf you agree with <#' + ruleChan + '> give yourself an ideology role!\nExample:```.iam conservative\n.iamnot conservative```\nTo see available roles type `.LSAR`\n\nWe understand these may be painful instructions for a few people to follow.\nThose people include but not limited to:\nTrolls\nChildren\nPeople who can\'t read\nPeople who want to learn but can\'t read\n\nNot every community is for you.')
             await asyncio.sleep(600)
