@@ -1329,10 +1329,10 @@ async def on_member_join(member):
 
     # kicks new accounts to prevent raid
     if datetime.utcnow() - timedelta(hours=newAccount) < member.created_at:
-        channel = discord.utils.get(member.server.channels, id = adminChan)
-        await bot.send_message(member, 'Your account is too new to for "Coffee & Politics".  If you wish to join our discussions please wait a few days and try again.  :D')
-        await bot.send_message(channel, '@here\nI kicked ' + member.mention + ' because account was made in the last ' + str(newAccount) + ' hours.')
-        await bot.ban(member,0)
+    #     channel = discord.utils.get(member.server.channels, id = adminChan)
+    #     await bot.send_message(member, 'Your account is too new to for "Coffee & Politics".  If you wish to join our discussions please wait a few days and try again.  :D')
+    #     await bot.send_message(channel, '@here\nI kicked ' + member.mention + ' because account was made in the last ' + str(newAccount) + ' hours.')
+    #     await bot.ban(member,0)
         sendWelcome = False
 
     # Checks for punishment evasion
