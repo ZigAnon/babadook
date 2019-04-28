@@ -149,73 +149,75 @@ async def main_loop():
 
             # Looks for time file
             try:
-                t = open(filePath + '.time')
-                tStrip = t.readlines()
-                oldTime = tStrip[0].rstrip()
-                found = 1
-                t.close()
+                found = 0
+                # t = open(filePath + '.time')
+                # tStrip = t.readlines()
+                # oldTime = tStrip[0].rstrip()
+                # found = 1
+                # t.close()
             except:
                 found = 0
 
             # If time file exists
             if found:
-                # Member Count
-                members = servers[x-1].members
-                humans = 0
-                bots = 0
-                for member in members:
-                    if member.bot:
-                        bots += 1
-                    else:
-                        humans += 1
-                count = humans
-                game = "with {0} humans".format(count)
-                await bot.change_presence(game=discord.Game(name=game))
+                pass
+                # # Member Count
+                # members = servers[x-1].members
+                # humans = 0
+                # bots = 0
+                # for member in members:
+                #     if member.bot:
+                #         bots += 1
+                #     else:
+                #         humans += 1
+                # count = humans
+                # game = "with {0} humans".format(count)
+                # await bot.change_presence(game=discord.Game(name=game))
 
-                # Checks for ping
-                if pinged[x-1] == 0:
-                    lastBump = datetime.strptime(oldTime, dateFormat)
-                    c = open(filePath + '.channel')
-                    cStrip = c.readlines()
-                    bumChan = cStrip[0].rstrip()
-                    c.close()
-                    channel = discord.Object(id=bumChan)
+                # # Checks for ping
+                # if pinged[x-1] == 0:
+                #     lastBump = datetime.strptime(oldTime, dateFormat)
+                #     c = open(filePath + '.channel')
+                #     cStrip = c.readlines()
+                #     bumChan = cStrip[0].rstrip()
+                #     c.close()
+                #     channel = discord.Object(id=bumChan)
 
-                    # Check Time
-                    if lastBump < curTime:
-                        pinged[x-1] = 1
-                        lastBump += timedelta(hours=1)
+                #     # Check Time
+                #     if lastBump < curTime:
+                #         pinged[x-1] = 1
+                #         lastBump += timedelta(hours=1)
 
-                        # Ping all Admins
-                        if lastBump < curTime:
-                            await bot.send_message(channel, '@here, helps us grow: ' + '\n Please `!disboard bump` again!')
+                #         # Ping all Admins
+                #         if lastBump < curTime:
+                #             await bot.send_message(channel, '@here, helps us grow: ' + '\n Please `!disboard bump` again!')
 
-                        # Ping member only
-                        else:
-                            m = open(filePath + '.member')
-                            mStrip = m.readlines()
-                            bumMemb = mStrip[0].rstrip()
-                            m.close()
-                            pMemb = '<@' + bumMemb + '>'
-                            await bot.send_message(channel, '%s Friendly reminder to `!disboard bump` again!' % pMemb)
+                #         # Ping member only
+                #         else:
+                #             m = open(filePath + '.member')
+                #             mStrip = m.readlines()
+                #             bumMemb = mStrip[0].rstrip()
+                #             m.close()
+                #             pMemb = '<@' + bumMemb + '>'
+                #             await bot.send_message(channel, '%s Friendly reminder to `!disboard bump` again!' % pMemb)
 
-                # Has it been an hour since last ping?
-                else:
-                    try:
-                        l = open(filePath + '.lping')
-                        lStrip = l.readlines()
-                        lPing = lStrip[0].rstrip()
-                        lastPing = datetime.strptime(lPing, dateFormat) + timedelta(hours=1) - timedelta(minutes=2)
-                    except:
-                        l = open(filePath + '.lping', 'w+')
-                        l.write("%s\r\n" % (curTime))
-                        lastPing = curTime + timedelta(hours=1) - timedelta(minutes=2)
-                    l.close()
+                # # Has it been an hour since last ping?
+                # else:
+                #     try:
+                #         l = open(filePath + '.lping')
+                #         lStrip = l.readlines()
+                #         lPing = lStrip[0].rstrip()
+                #         lastPing = datetime.strptime(lPing, dateFormat) + timedelta(hours=1) - timedelta(minutes=2)
+                #     except:
+                #         l = open(filePath + '.lping', 'w+')
+                #         l.write("%s\r\n" % (curTime))
+                #         lastPing = curTime + timedelta(hours=1) - timedelta(minutes=2)
+                #     l.close()
 
-                    # Resets ping timer
-                    if lastPing < curTime:
-                        pinged[x-1] = 0
-                        os.remove(filePath + '.lping')
+                #     # Resets ping timer
+                #     if lastPing < curTime:
+                #         pinged[x-1] = 0
+                #         os.remove(filePath + '.lping')
 
         # checks again in one min
         # count += 1
