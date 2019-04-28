@@ -1076,65 +1076,65 @@ async def on_message(message):
     #     await asyncio.sleep(5)
     #     await bot.delete_message(msg)
 
-    if message.content.startswith('!disboard bump'):
-        # Needed vars
-        bumServ = message.server.id
-        bumChan = message.channel.id
-        bumMemb = message.author.id
-        channel = discord.Object(id=bumChan)
-        curTime = datetime.now()
-        newTime = datetime.now() + timedelta(hours=2)
-        filePath = curDir + '/logs/db/' + bumServ
+    # if message.content.startswith('!disboard bump'):
+    #     # Needed vars
+    #     bumServ = message.server.id
+    #     bumChan = message.channel.id
+    #     bumMemb = message.author.id
+    #     channel = discord.Object(id=bumChan)
+    #     curTime = datetime.now()
+    #     newTime = datetime.now() + timedelta(hours=2)
+    #     filePath = curDir + '/logs/db/' + bumServ
 
-        # Replaces member and channel
-        # Old info not needed only updated
-        oldMemb = open(filePath + '.member', 'w+')
-        oldMemb.write("%s\r\n" % (bumMemb))
-        oldMemb.close()
-        oldChan = open(filePath + '.channel', 'w+')
-        oldChan.write("%s\r\n" % (bumChan))
-        oldChan.close()
+    #     # Replaces member and channel
+    #     # Old info not needed only updated
+    #     oldMemb = open(filePath + '.member', 'w+')
+    #     oldMemb.write("%s\r\n" % (bumMemb))
+    #     oldMemb.close()
+    #     oldChan = open(filePath + '.channel', 'w+')
+    #     oldChan.write("%s\r\n" % (bumChan))
+    #     oldChan.close()
 
-        # Loads existing needed time data
-        # If not found, creates data
-        try:
-            t = open(filePath + '.time')
-            tStrip = t.readlines()
-            oldTime = tStrip[0].rstrip()
-        except:
-            t = open(filePath + '.time', 'w+')
-            t.write("%s\r\n" % (str(newTime)))
-            oldTime = str(newTime)
-        t.close()
+    #     # Loads existing needed time data
+    #     # If not found, creates data
+    #     try:
+    #         t = open(filePath + '.time')
+    #         tStrip = t.readlines()
+    #         oldTime = tStrip[0].rstrip()
+    #     except:
+    #         t = open(filePath + '.time', 'w+')
+    #         t.write("%s\r\n" % (str(newTime)))
+    #         oldTime = str(newTime)
+    #     t.close()
 
-        lastBump = datetime.strptime(oldTime, dateFormat)
+    #     lastBump = datetime.strptime(oldTime, dateFormat)
 
-        # Tests if 2 hours has passed
-        # If not, it lets you know it'll remind you later
-        # It always updates member and channel
-        if curTime < lastBump:
-            diff = int(int((lastBump - curTime).seconds)/60) + 1
-            await bot.send_message(channel, 'I\'ll remind you to bump here in ' + str(diff) + ' minutes.')
-        else:
-            await bot.send_message(channel, 'I\'ll remind you in 120 mins to bump disboard again.')
-            t = open(filePath + '.time', 'w+')
-            t.write("%s\r\n" % (str(newTime)))
-            t.close()
+    #     # Tests if 2 hours has passed
+    #     # If not, it lets you know it'll remind you later
+    #     # It always updates member and channel
+    #     if curTime < lastBump:
+    #         diff = int(int((lastBump - curTime).seconds)/60) + 1
+    #         await bot.send_message(channel, 'I\'ll remind you to bump here in ' + str(diff) + ' minutes.')
+    #     else:
+    #         await bot.send_message(channel, 'I\'ll remind you in 120 mins to bump disboard again.')
+    #         t = open(filePath + '.time', 'w+')
+    #         t.write("%s\r\n" % (str(newTime)))
+    #         t.close()
 
-    # allow disboard bump stop
-    if message.content.startswith('!disboard stop') and message.author.server_permissions.administrator:
-        disboard = discord.utils.get(message.server.members, name='DISBOARD')
-        bumServ = message.server.id
-        bumChan = message.channel.id
-        filePath = curDir + '/logs/db/' + bumServ
-        channel = discord.Object(id=bumChan)
-        msg = await bot.wait_for_message(timeout=3, author=disboard)
-        try:
-            os.remove(filePath + '.time')
-            await bot.delete_message(msg)
-            await bot.send_message(channel, 'I\'ll stop reminding you for now. `!disboard bump` to start again.')
-        except:
-            await bot.send_message(channel, 'I\'m already set to not remind you. Please `!disboard bump` to start again.')
+    # # allow disboard bump stop
+    # if message.content.startswith('!disboard stop') and message.author.server_permissions.administrator:
+    #     disboard = discord.utils.get(message.server.members, name='DISBOARD')
+    #     bumServ = message.server.id
+    #     bumChan = message.channel.id
+    #     filePath = curDir + '/logs/db/' + bumServ
+    #     channel = discord.Object(id=bumChan)
+    #     msg = await bot.wait_for_message(timeout=3, author=disboard)
+    #     try:
+    #         os.remove(filePath + '.time')
+    #         await bot.delete_message(msg)
+    #         await bot.send_message(channel, 'I\'ll stop reminding you for now. `!disboard bump` to start again.')
+    #     except:
+    #         await bot.send_message(channel, 'I\'m already set to not remind you. Please `!disboard bump` to start again.')
 
     if message.content.lower().startswith('.iam busy') and message.author.server.id == mainServ:
         if message.author.server_permissions.administrator:
