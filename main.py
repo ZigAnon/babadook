@@ -1038,11 +1038,11 @@ async def on_message(message):
     #         await asyncio.sleep(60)
     #         await bot.delete_message(msg)
 
-    if message.content.lower().startswith('!refuel'):
-        msg = await bot.send_message(message.channel,'Helicopter is refueled and ready to... physically remove... so to speak...\nhttps://cdn.discordapp.com/attachments/509245339664908299/522448178138578964/1512796577930.gif')
-        await bot.delete_message(message)
-        await asyncio.sleep(timeout)
-        await bot.delete_message(msg)
+    # if message.content.lower().startswith('!refuel'):
+    #     msg = await bot.send_message(message.channel,'Helicopter is refueled and ready to... physically remove... so to speak...\nhttps://cdn.discordapp.com/attachments/509245339664908299/522448178138578964/1512796577930.gif')
+    #     await bot.delete_message(message)
+    #     await asyncio.sleep(timeout)
+    #     await bot.delete_message(msg)
 
     if is_polchan(message):
         if message.content.lower().startswith('poll:'):
