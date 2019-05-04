@@ -1327,41 +1327,6 @@ async def on_member_join(member):
         pass
 
 @bot.event
-async def on_member_remove(member):
-    no = discord.Object(id=ignoreServ)
-    if member.server is no:
-        return
-
-    # Member leave log
-    embed=discord.Embed(description=member.mention + " " + member.name, color=0xff470f)
-    embed.add_field(name="Join Date", value=member.joined_at, inline=False)
-    pfp = get_avatar(member)
-    embed.set_thumbnail(url=pfp)
-    embed.set_author(name="Member Left", icon_url=pfp)
-    embed.set_footer(text="ID: " + member.id + " • Today at " + f"{datetime.now():%I:%M %p}")
-    await bot.send_message(discord.Object(id=adminLogs),embed=embed)
-    await log_backup_embed(embed)
-
-
-    # channel = discord.utils.get(member.server.channels, id = adminLogs)
-    # await bot.send_message(channel, 'Awww, ' + member.mention + ' just left the server \U0001F641')
-
-@bot.event
-async def on_member_unban(server, member):
-    no = discord.Object(id=ignoreServ)
-    if member.server is no:
-        return
-
-    # Member ban log
-    embed=discord.Embed(description=member.mention + " " + member.name, color=0x117ea6)
-    pfp = get_avatar(member)
-    embed.set_thumbnail(url=pfp)
-    embed.set_author(name="Member Unbanned", icon_url=pfp)
-    embed.set_footer(text="ID: " + member.id + " • Today at " + f"{datetime.now():%I:%M %p}")
-    await bot.send_message(discord.Object(id=adminLogs),embed=embed)
-    await log_backup_embed(embed)
-
-@bot.event
 async def on_message_edit(before, after):
     no = discord.Object(id=ignoreServ)
     if int(after.server.id) == int(no.id):
