@@ -792,49 +792,6 @@ async def on_voice_state_update(before,after):
     #     await bot.delete_message(temp)
     #     await bot.server_voice_state(member=after, mute=False)
 
-    if before.voice.voice_channel is None or after.voice.voice_channel is None:
-        if before.voice.voice_channel is None and after.voice.voice_channel is not None:
-            # role color 117EA6 green 23D160
-            try:
-                logit = discord.utils.get(before.server.channels, id = adminLogs)
-            except:
-                pass
-            embed=discord.Embed(description="**" + before.mention + " joined voice channel #" + after.voice_channel.name + "**\n", color=0x23d160)
-            pfp = get_avatar(before)
-            embed.set_author(name=before, icon_url=pfp)
-            embed.set_footer(text="ID: " + before.id + " • Today at " + f"{datetime.now():%I:%M %p}")
-            await bot.send_message(logit, embed=embed)
-            await log_backup_embed(embed)
-
-        if after.voice.voice_channel is None and before.voice.voice_channel is not None:
-            try:
-                logit = discord.utils.get(after.server.channels, id = adminLogs)
-            except:
-                pass
-            embed=discord.Embed(description="**" + after.mention + " left voice channel #" + before.voice_channel.name + "**\n", color=0x23d160)
-            pfp = get_avatar(after)
-            embed.set_author(name=after, icon_url=pfp)
-            embed.set_footer(text="ID: " + after.id + " • Today at " + f"{datetime.now():%I:%M %p}")
-            await bot.send_message(logit, embed=embed)
-            await log_backup_embed(embed)
-
-    if after.voice_channel is before.voice_channel:
-        return
-    else:
-        try:
-            logit = discord.utils.get(before.server.channels, id = adminLogs)
-        except:
-            pass
-        try:
-            embed=discord.Embed(description="**" + after.mention + " switched voice channel `#" + before.voice.voice_channel.name + "` -> `#" + after.voice.voice_channel.name + "`**", color=0x23d160)
-            pfp = get_avatar(after)
-            embed.set_author(name=after, icon_url=pfp)
-            embed.set_footer(text="ID: " + after.id + " • Today at " + f"{datetime.now():%I:%M %p}")
-            await bot.send_message(logit, embed=embed)
-            await log_backup_embed(embed)
-        except:
-            pass
-
     # Unhide voice channels
     with open(curDir + '/include/voice') as v:
         voiceID = [line.strip('\n').split(',') for line in v]
@@ -1198,40 +1155,6 @@ async def on_message(message):
 
 ############################
 ############################
-
-@bot.event
-async def on_member_update(before, after):
-    no = discord.Object(id=ignoreServ)
-    if before.server is no:
-        return
-
-    if str(before.nick) != str(after.nick):
-        embed=discord.Embed(description=before.mention + " **nickname changed**", color=0x117ea6)
-        embed.add_field(name="Before", value=before.nick, inline=False)
-        embed.add_field(name="After", value=after.nick, inline=False)
-        pfp = get_avatar(before)
-        embed.set_author(name=before, icon_url=pfp)
-        embed.set_footer(text="ID: " + before.id + " • Today at " + f"{datetime.now():%I:%M %p}")
-        await bot.send_message(discord.Object(id=adminLogs),embed=embed)
-        await log_backup_embed(embed)
-    elif before.roles is not after.roles:
-        if before.roles > after.roles:
-#            testout = [before.roles[x] for x in before.roles]
-#             embed=discord.Embed(description=before.mention + " **nickname changed**", color=0x117ea6)
-#             embed.add_field(name=before.mention + " **was given the" , value=before.nick, inline=False)
-#             pfp = get_avatar(before)
-#             embed.set_author(name=before, icon_url=pfp)
-#             embed.set_footer(text="ID: " + before.id + " • Today at " + f"{datetime.now():%I:%M %p}")
-#             await bot.send_message(discord.Object(id=adminLogs),embed=embed)
-#             await log_backup_embed(embed)
-            print('roles changed')
-        elif after.roles > before.roles:
-            print('less')
-            print('roles changed')
-        else:
-            pass
-    else:
-        return
 
 @bot.event
 async def on_member_join(member):
