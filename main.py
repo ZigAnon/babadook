@@ -1327,40 +1327,6 @@ async def on_member_join(member):
         pass
 
 @bot.event
-async def on_message_edit(before, after):
-    no = discord.Object(id=ignoreServ)
-    if int(after.server.id) == int(no.id):
-        return
-
-    if is_bot(before):
-        return
-
-    #TODO: Isolate hit on embed update/refresh
-    if str(before.clean_content) == str(after.clean_content) and len(after.embeds) > 0:
-        return
-
-    # Member before text
-    embed=discord.Embed(description="**Message edited in " + before.channel.mention + "**", color=0x117ea6)
-    embed.add_field(name="Before", value=before.clean_content, inline=False)
-    pfp = get_avatar(before.author)
-    embed.set_author(name=before.author, icon_url=pfp)
-    embed.set_footer(text="ID: " + before.author.id + " • Today at " + f"{datetime.now():%I:%M %p}")
-    try:
-        await bot.send_message(discord.Object(id=adminLogs),embed=embed)
-        await log_backup_embed(embed)
-    except:
-        pass
-
-    # Member after text
-    embed=discord.Embed(title="After", description=after.clean_content, color=0x117ea6)
-    embed.set_footer(text="ID: " + after.author.id + " • Today at " + f"{datetime.now():%I:%M %p}")
-    try:
-        await bot.send_message(discord.Object(id=adminLogs),embed=embed)
-        await log_backup_embed(embed)
-    except:
-        pass
-
-@bot.event
 async def on_ready():
     print('Logged in as')
     print(bot.user.name)
