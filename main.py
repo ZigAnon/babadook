@@ -144,83 +144,6 @@ async def main_loop():
             except:
                 pass
 
-        for x in range(len(servers)):
-            filePath = curDir + '/logs/db/' + str(servers[x-1].id)
-
-            # Looks for time file
-            try:
-                found = 0
-                # t = open(filePath + '.time')
-                # tStrip = t.readlines()
-                # oldTime = tStrip[0].rstrip()
-                # found = 1
-                # t.close()
-            except:
-                found = 0
-
-            # If time file exists
-            if found:
-                pass
-                # # Member Count
-                # members = servers[x-1].members
-                # humans = 0
-                # bots = 0
-                # for member in members:
-                #     if member.bot:
-                #         bots += 1
-                #     else:
-                #         humans += 1
-                # count = humans
-                # game = "with {0} humans".format(count)
-                # await bot.change_presence(game=discord.Game(name=game))
-
-                # # Checks for ping
-                # if pinged[x-1] == 0:
-                #     lastBump = datetime.strptime(oldTime, dateFormat)
-                #     c = open(filePath + '.channel')
-                #     cStrip = c.readlines()
-                #     bumChan = cStrip[0].rstrip()
-                #     c.close()
-                #     channel = discord.Object(id=bumChan)
-
-                #     # Check Time
-                #     if lastBump < curTime:
-                #         pinged[x-1] = 1
-                #         lastBump += timedelta(hours=1)
-
-                #         # Ping all Admins
-                #         if lastBump < curTime:
-                #             await bot.send_message(channel, '@here, helps us grow: ' + '\n Please `!disboard bump` again!')
-
-                #         # Ping member only
-                #         else:
-                #             m = open(filePath + '.member')
-                #             mStrip = m.readlines()
-                #             bumMemb = mStrip[0].rstrip()
-                #             m.close()
-                #             pMemb = '<@' + bumMemb + '>'
-                #             await bot.send_message(channel, '%s Friendly reminder to `!disboard bump` again!' % pMemb)
-
-                # # Has it been an hour since last ping?
-                # else:
-                #     try:
-                #         l = open(filePath + '.lping')
-                #         lStrip = l.readlines()
-                #         lPing = lStrip[0].rstrip()
-                #         lastPing = datetime.strptime(lPing, dateFormat) + timedelta(hours=1) - timedelta(minutes=2)
-                #     except:
-                #         l = open(filePath + '.lping', 'w+')
-                #         l.write("%s\r\n" % (curTime))
-                #         lastPing = curTime + timedelta(hours=1) - timedelta(minutes=2)
-                #     l.close()
-
-                #     # Resets ping timer
-                #     if lastPing < curTime:
-                #         pinged[x-1] = 0
-                #         os.remove(filePath + '.lping')
-
-        # checks again in one min
-        # count += 1
         reboot = 60 - timeoff
         await asyncio.sleep(reboot) # task runs every 60 seconds less mx time
 
@@ -1424,22 +1347,6 @@ async def on_member_remove(member):
     # await bot.send_message(channel, 'Awww, ' + member.mention + ' just left the server \U0001F641')
 
 @bot.event
-async def on_member_ban(member):
-    no = discord.Object(id=ignoreServ)
-    if member.server is no:
-        return
-
-    # Member ban log
-    embed=discord.Embed(description=member.mention + " " + member.name, color=0xff470f)
-    embed.add_field(name="Join Date", value=member.joined_at, inline=False)
-    pfp = get_avatar(member)
-    embed.set_thumbnail(url=pfp)
-    embed.set_author(name="Member Banned", icon_url=pfp)
-    embed.set_footer(text="ID: " + member.id + " • Today at " + f"{datetime.now():%I:%M %p}")
-    await bot.send_message(discord.Object(id=adminLogs),embed=embed)
-    await log_backup_embed(embed)
-
-@bot.event
 async def on_member_unban(server, member):
     no = discord.Object(id=ignoreServ)
     if member.server is no:
@@ -1487,33 +1394,6 @@ async def on_message_edit(before, after):
         await log_backup_embed(embed)
     except:
         pass
-
-@bot.event
-async def on_message_delete(message):
-    no = discord.Object(id=ignoreServ)
-    if message.server is no:
-        return
-
-    if is_bot(message):
-        return
-    if is_ignore(message):
-        return
-
-    try:
-        logit = discord.utils.get(message.server.channels, id = adminLogs)
-    except:
-        pass
-    embed=discord.Embed(description="**Message sent by " + message.author.mention + " deleted in " + message.channel.mention + "**\n" + message.clean_content, color=0xff470f)
-    pfp = get_avatar(message.author)
-    try:
-        atch = str(message.attachments[0]['url'])
-        embed.set_author(name=message.author, url=atch, icon_url=pfp)
-        embed.set_thumbnail(url=atch)
-    except:
-        embed.set_author(name=message.author, icon_url=pfp)
-    embed.set_footer(text="Chan-Msg ID: " + str(message.channel.id) + "-" + str(message.id))
-    await bot.send_message(logit, embed=embed)
-    await log_backup_embed(embed)
 
 @bot.event
 async def on_ready():
