@@ -654,86 +654,8 @@ async def wdefine(ctx):
 
 ############################
 ############################
-
-@bot.event
-async def on_voice_state_update(before,after):
-    no = discord.Object(id=ignoreServ)
-    if before.server is no:
-        return
-
-    # if before.voice.voice_channel is None and before.id == '153999612485566464':
-    #     msg = '<@153999612485566464> HEY SHUTUP!!'
-    #     channel = discord.Object(id=shetChan)
-    #     temp = await bot.send_message(channel, msg)
-    #     await bot.server_voice_state(member=after, mute=True)
-    #     await asyncio.sleep(15)
-    #     await bot.delete_message(temp)
-    #     await bot.server_voice_state(member=after, mute=False)
-
-    # Unhide voice channels
-    with open(curDir + '/include/voice') as v:
-        voiceID = [line.strip('\n').split(',') for line in v]
-    for x in range(len(voiceID)):
-        try:
-            if int(after.voice.voice_channel.id) == int(voiceID[x-1][0]):
-                add = discord.utils.get(after.server.roles, id = voiceID[x-1][1])
-            elif int(after.voice.voice_channel.id) is None:
-                for x in range(len(voiceID)):
-                    try:
-                        pass
-                    except:
-                        pass
-        except:
-            pass
-        try:
-            if int(before.voice.voice_channel.id) == int(voiceID[x-1][0]):
-                rmv = discord.utils.get(before.server.roles, id = voiceID[x-1][1])
-        except:
-            pass
-
-    try:
-        if rmv is add:
-            return
-    except:
-        pass
-
-    if after.voice.voice_channel is not None:
-        await bot.add_roles(after, add)
-        while True:
-            if add in after.roles:
-                try:
-                    await bot.remove_roles(after, rmv)
-                    break
-                except:
-                    break
-            else:
-                await bot.add_roles(after, add)
-    elif after.voice.voice_channel is None:
-        await bot.remove_roles(after, rmv)
-        while True:
-            if rmv in after.roles:
-                await bot.remove_roles(after, rmv)
-            else:
-                break
-    return
-#     if before.voice.voice_channel is not None:
-#         for x in range(len(voiceID)):
-#             if int(before.voice.voice_channel.id) == int(voiceID[x-1][0]):
-#                 hide = discord.utils.get(after.server.roles, id = voiceID[x-1][1])
-#                 await asyncio.sleep(5)
-#                 if int(before.voice.voice_channel.id) == int(voiceID[x-1][0]):
-#                     await bot.remove_roles(after, hide)
-#                     break
-#     elif before.voice.voice_channel is None and after.voice.voice_channel is not None:
-#         for x in range(len(voiceID)):
-#             if int(after.voice.voice_channel.id) == int(voiceID[x-1][0]):
-#                 add = discord.utils.get(after.server.roles, id = voiceID[x-1][1])
-#                 await bot.add_roles(after, add)
-#                 break
-
 ############################
 ############################
-
 ############################
 ############################
 
