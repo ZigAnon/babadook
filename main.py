@@ -1016,5 +1016,4 @@ async def on_ready():
     for x in range(len(servers)):
         print("    " + servers[x-1].id + " - " + servers[x-1].name + " (Members: " + str(len(servers[x-1].members)) + ")")
 
-bot.loop.create_task(main_loop())
 bot.run(TOKEN)
