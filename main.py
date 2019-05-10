@@ -104,49 +104,6 @@ zdesc = '''Thanks for using ZigBot!'''
 bot = commands.Bot(command_prefix='.', description=zdesc)
 bot.remove_command("help")
 
-############################
-############################
-
-# Main loop, do not comment this area out
-async def main_loop():
-    await bot.wait_until_ready()
-
-############################
-############################
-
-    channel = discord.Object(id=testChan)
-    servers = list(bot.servers)
-    pinged = [0] * len(servers)
-    timeoff = 0
-    count = 0
-
-    # Checks each server for disboard bump
-    # Uses existing data to remind if needed
-    while not bot.is_closed:
-        # Needed vars
-        curTime = datetime.now()
-
-        # Auto purge channels
-        with open(curDir + '/include/autoPurge') as a:
-            purgeChans = [line.strip('\n').split(',') for line in a]
-        for x in range(len(purgeChans)):
-            pChan = discord.Object(id=purgeChans[x-1][0])
-            limit = int(purgeChans[x-1][1])
-            days = int(purgeChans[x-1][2])
-            beforeTime = datetime.now() - timedelta(days=days)
-            try:
-                if purgeChans[x-1][3] == 'bot':
-                    await bot.purge_from(pChan, limit=limit, before=beforeTime, check=is_bot)
-                elif purgeChans[x-1][3] == 'text':
-                    await bot.purge_from(pChan, limit=limit, before=beforeTime, check=is_text)
-                else:
-                    await bot.purge_from(pChan, limit=limit, before=beforeTime)
-            except:
-                pass
-
-        reboot = 60 - timeoff
-        await asyncio.sleep(reboot) # task runs every 60 seconds less mx time
-
 
 ############################
 ############################
