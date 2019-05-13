@@ -413,10 +413,6 @@ async def on_message(message):
 ############################
 ############################
 
-    if is_legacy(message) and not is_in_trouble(message):
-        serious = discord.utils.get(message.author.server.roles, id = seriousRole)
-        await bot.add_roles(message.author, serious)
-
 #++++++++++++++++++++++++++#
 #++++++++++++++++++++++++++#
 
